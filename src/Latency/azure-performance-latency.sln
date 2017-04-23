@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Latency.Console", "Common\L
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{E2697F9D-9050-438F-8F82-B6FC0D948A68}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Latency.Common", "Common\Latency.Common\Latency.Common.csproj", "{BA51834B-3ED5-43C6-B3FB-D387D72732BC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,11 +25,20 @@ Global
 		{69FD3AF3-E1EE-4158-AADD-C191ABB59D7D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{69FD3AF3-E1EE-4158-AADD-C191ABB59D7D}.Release|x64.ActiveCfg = Release|x64
 		{69FD3AF3-E1EE-4158-AADD-C191ABB59D7D}.Release|x64.Build.0 = Release|x64
+		{BA51834B-3ED5-43C6-B3FB-D387D72732BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA51834B-3ED5-43C6-B3FB-D387D72732BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA51834B-3ED5-43C6-B3FB-D387D72732BC}.Debug|x64.ActiveCfg = Debug|x64
+		{BA51834B-3ED5-43C6-B3FB-D387D72732BC}.Debug|x64.Build.0 = Debug|x64
+		{BA51834B-3ED5-43C6-B3FB-D387D72732BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA51834B-3ED5-43C6-B3FB-D387D72732BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA51834B-3ED5-43C6-B3FB-D387D72732BC}.Release|x64.ActiveCfg = Release|x64
+		{BA51834B-3ED5-43C6-B3FB-D387D72732BC}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{69FD3AF3-E1EE-4158-AADD-C191ABB59D7D} = {E2697F9D-9050-438F-8F82-B6FC0D948A68}
+		{BA51834B-3ED5-43C6-B3FB-D387D72732BC} = {E2697F9D-9050-438F-8F82-B6FC0D948A68}
 	EndGlobalSection
 EndGlobal
