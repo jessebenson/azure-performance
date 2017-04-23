@@ -1,0 +1,117 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "value": "southcentralus"
+        },
+        "locationName": {
+            "value": "South Central US"
+        },
+
+        "clusterName": {
+            "value": "azure-performance"
+        },
+        "dnsName": {
+            "value": "azure-performance"
+        },
+
+        "documentDbAccountName": {
+            "value": "azure-performance"
+        },
+
+        "eventHubName": {
+            "value": "azure-performance"
+        },
+        "eventHubSku": {
+            "value": "2"
+        },
+        "eventHubMessagingUnits": {
+            "value": "1"
+        },
+
+        "redisDatabaseName": {
+            "value": "azure-performance"
+        },
+        "redisSkuName": {
+            "value": "Basic"
+        },
+        "redisSkuFamily": {
+            "value": "C"
+        },
+        "redisSkuCapacity": {
+            "value": 2
+        },
+
+        "sqlDatabaseName": {
+            "value": "azure-performance"
+        },
+        "sqlEdition": {
+            "value": "Standard"
+        },
+        "sqlVersion": {
+            "value": "12.0"
+        },
+
+        "storageStandardAccountName": {
+            "value": "azureperformancestandard"
+        },
+        "storagePremiumAccountName": {
+            "value": "azureperformancepremium"
+        },
+
+        "adminUserName": {
+            "value": "{{Secret:vm-azure-performance-username}}"
+        },
+        "adminPassword": {
+            "value": "{{Secret:vm-azure-performance-password}}"
+        },
+
+        "vmNodeType0Name": {
+            "value": "system"
+        },
+        "vmNodeType0Size": {
+            "value": "Standard_D1_v2"
+        },
+        "nt0InstanceCount": {
+            "value": 5
+        },
+
+        "vmNodeType1Name": {
+            "value": "latency"
+        },
+        "vmNodeType1Size": {
+            "value": "Standard_D2_v2_Promo"
+        },
+        "nt1InstanceCount": {
+            "value": 5
+        },
+
+        "vmNodeType2Name": {
+            "value": "sf-perf"
+        },
+        "vmNodeType2Size": {
+            "value": "Standard_D3_v2_Promo"
+        },
+        "nt2InstanceCount": {
+            "value": 6
+        },
+
+        "applicationDiagnosticsStorageAccountName": {
+            "value": "sfdiagazureperformance"
+        },
+        "supportLogStorageAccountName": {
+            "value": "sflogsazureperformance"
+        },
+
+        "sourceVaultValue": {
+            "value": "/subscriptions/fc4ea3c9-1d30-4f18-b33b-7404e7da0123/resourceGroups/azure-performance/providers/Microsoft.KeyVault/vaults/azure-performance"
+        },
+        "certificateUrlValue": {
+            "value": "https://azure-performance.vault.azure.net:443/secrets/azure-performance-cert/f5721d88155846aea8223368a27a84dc"
+        },
+        "certificateThumbprint": {
+            "value": "41AEC7DD46696FA88DAC6A5878F92E90C727726F"
+        }
+    }
+}
