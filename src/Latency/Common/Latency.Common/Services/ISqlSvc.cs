@@ -1,4 +1,6 @@
-﻿namespace Azure.Performance.Latency.Common
+﻿using Azure.Performance.Common;
+
+namespace Azure.Performance.Latency.Common
 {
 	public interface ISqlSvc : IPerformanceSvc
 	{

@@ -48,8 +48,8 @@ else
 }
 
 # Start the deployment
-Write-Host "Starting deployment...";
-$deploymentLabel = Get-Date -Format g
+$deploymentLabel = Get-Date -UFormat "%Y-%m-%dT%H.%M.%S"
+Write-Host "Starting deployment... $deploymentLabel";
 if (Test-Path $parametersFilePath)
 {
     New-AzureRmResourceGroupDeployment -Name $deploymentLabel -ResourceGroupName $ResourceGroupName -TemplateFile $TemplateFilePath -TemplateParameterFile $ParametersFilePath;

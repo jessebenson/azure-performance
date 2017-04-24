@@ -4,7 +4,6 @@ namespace Azure.Performance.Latency.Common
 {
 	public static class ServiceConstants
 	{
-		public static readonly Uri WebSvcUri = new Uri("fabric:/Latency.Web/WebSvc");
 		public static readonly Uri DictionarySvcUri = new Uri("fabric:/Latency.App/DictionarySvc");
 		public static readonly Uri QueueSvcUri = new Uri("fabric:/Latency.App/QueueSvc");
 		public static readonly Uri StatefulSvcUri = new Uri("fabric:/Latency.App/StatefulSvc");

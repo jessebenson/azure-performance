@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using Azure.Performance.Common;
 
 namespace Azure.Performance.Latency.Common
 {

@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Application xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Name="fabric:/Latency.App" xmlns="http://schemas.microsoft.com/2011/01/fabric">
+  <Parameters>
+    <Parameter Name="DictionarySvc_PartitionCount" Value="1" />
+    <Parameter Name="DictionarySvc_MinReplicaSetSize" Value="1" />
+    <Parameter Name="DictionarySvc_TargetReplicaSetSize" Value="1" />
+    <Parameter Name="QueueSvc_PartitionCount" Value="1" />
+    <Parameter Name="QueueSvc_MinReplicaSetSize" Value="1" />
+    <Parameter Name="QueueSvc_TargetReplicaSetSize" Value="1" />
+    <Parameter Name="StatefulSvc_PartitionCount" Value="1" />
+    <Parameter Name="StatefulSvc_MinReplicaSetSize" Value="1" />
+    <Parameter Name="StatefulSvc_TargetReplicaSetSize" Value="1" />
+    <Parameter Name="StatelessSvc_InstanceCount" Value="1" />
+  </Parameters>
+</Application>

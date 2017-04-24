@@ -7,65 +7,14 @@ Param
 	[Switch] $Redis,
 	[Switch] $ServiceFabric,
 	[Switch] $SQL,
-	[Switch] $Storage,
-	[Switch] $Telemetry,
-	[Switch] $Web
+	[Switch] $Storage
 )
 
-function Read-XmlElementAsHashtable([System.Xml.XmlElement] $Element)
-{
-	$hashtable = @{}
-	if ($Element.Attributes)
-	{
-		$Element.Attributes |
-			ForEach-Object {
-				$boolVal = $null
-				if ([bool]::TryParse($_.Value, [ref]$boolVal))
-				{
-					$hashtable[$_.Name] = $boolVal
-				}
-				else
-				{
-					$hashtable[$_.Name] = $_.Value
-				}
-			}
-	}
-
-	return $hashtable
-}
-
-function Deploy-Application($Path, $Project)
-{
-	$DeployScript = (Join-Path $Path "Scripts/Deploy-FabricApplication.ps1")
-	$ApplicationPackagePath = (Join-Path $Path "pkg\Release")
-	$PublishProfileFile = (Join-Path $Path "PublishProfiles\Cloud.xml")
-
-	# Package application.
-	msbuild $Project /t:Package /p:Platform=x64 /p:Configuration=Release
-
-	# Connect to cluster.
-	$PublishProfile = [Xml]$(Get-Content $PublishProfileFile)
-	$ClusterConnectionParameters = Read-XmlElementAsHashtable $PublishProfile.PublishProfile.Item("ClusterConnectionParameters")
-	Connect-ServiceFabricCluster @ClusterConnectionParameters
-	$global:clusterConnection = $clusterConnection
-
-	# Deploy application.
-	. $DeployScript `
-		-ApplicationPackagePath $ApplicationPackagePath `
-		-PublishProfileFile $PublishProfileFile `
-		-DeployOnly:$false `
-		-ApplicationParameter:@{} `
-		-UnregisterUnusedApplicationVersionsAfterUpgrade $false `
-		-OverrideUpgradeBehavior 'None' `
-		-OverwriteBehavior 'SameAppTypeAndVersion' `
-		-UseExistingClusterConnection:$true `
-		-SkipPackageValidation:$false `
-		-ErrorAction Stop
-}
+. ".\lib.ps1"
 
 $LocalFolder = (Split-Path $MyInvocation.MyCommand.Path)
 $RootFolder = Split-Path (Split-Path $LocalFolder)
-$SrcFolder = Join-Path (Join-Path $RootFolder "src") "Latency"
+$SrcFolder = Join-Path $RootFolder "src/Latency"
 
 #
 # Build solution.
@@ -119,18 +68,4 @@ if ($Storage -or $All)
 	$StoragePath = (Join-Path $SrcFolder "Storage/Latency.Storage")
 	$StorageProject = (Join-Path $StoragePath "Latency.Storage.sfproj")
 	Deploy-Application $StoragePath $StorageProject
-}
-
-if ($Telemetry -or $All)
-{
-	$TelemetryPath = (Join-Path $SrcFolder "Telemetry/Latency.Telemetry")
-	$TelemetryProject = (Join-Path $TelemetryPath "Latency.Telemetry.sfproj")
-	Deploy-Application $TelemetryPath $TelemetryProject
-}
-
-if ($Web -or $All)
-{
-	$WebPath = (Join-Path $SrcFolder "Web/Latency.Web")
-	$WebProject = (Join-Path $WebPath "Latency.Web.sfproj")
-	Deploy-Application $WebPath $WebProject
 }
