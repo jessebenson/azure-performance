@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Azure.Performance.Latency
@@ -21,47 +22,73 @@ namespace Azure.Performance.Latency
 		{
 			try
 			{
-				using (var sql = new SqlConnection(_connectionString))
-				{
-					Console.WriteLine($"Connecting to Sql '{sql.Database}' ...");
-					await sql.OpenAsync().ConfigureAwait(false);
-					Console.WriteLine("- succeeded.");
+				await CreateDatabaseAsync().ConfigureAwait(false);
+				await PopulateDatabaseAsync().ConfigureAwait(false);
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine(e);
+				throw;
+			}
+		}
 
-					var createTableText = @"
+		private async Task CreateDatabaseAsync()
+		{
+			using (var sql = new SqlConnection(_connectionString))
+			{
+				Console.WriteLine($"Connecting to Sql '{sql.Database}' ...");
+				await sql.OpenAsync().ConfigureAwait(false);
+				Console.WriteLine("- succeeded.");
+
+				var createTableText = @"
 IF NOT EXISTS ( SELECT [Name] FROM sys.tables WHERE [name] = 'Latency' )
-	CREATE TABLE Latency
-	(
-		id             VARCHAR(255) NOT NULL PRIMARY KEY,
-		timestamp      DATETIMEOFFSET,
-		string_value   VARCHAR(512),
-		int_value      INT,
-		double_value   FLOAT,
-		time_value     BIGINT,
-		ttl            INT
-	);
+CREATE TABLE Latency
+(
+	id             VARCHAR(255) NOT NULL PRIMARY KEY,
+	timestamp      DATETIMEOFFSET,
+	string_value   VARCHAR(512),
+	int_value      INT,
+	double_value   FLOAT,
+	time_value     BIGINT,
+	ttl            INT
+);
 ";
 
-					using (var command = new SqlCommand(createTableText, sql))
-					{
-						Console.WriteLine("Ensuring table 'Latency' exists ...");
-						await command.ExecuteNonQueryAsync().ConfigureAwait(false);
-						Console.WriteLine("- succeeded.");
-					}
+				using (var command = new SqlCommand(createTableText, sql))
+				{
+					Console.WriteLine("Ensuring table 'Latency' exists ...");
+					await command.ExecuteNonQueryAsync().ConfigureAwait(false);
+					Console.WriteLine("- succeeded.");
+				}
+			}
+		}
 
-					var insertCommandText = @"
+		private async Task PopulateDatabaseAsync()
+		{
+			var insertCommandText = @"
 INSERT INTO dbo.Latency (id, timestamp, string_value, int_value, double_value, time_value, ttl)
 VALUES (@id, @timestamp, @string_value, @int_value, @double_value, @time_value, @ttl)
 ";
 
-					// Pre-create all the rows in SQL.
-					Console.WriteLine($"Ensuring {Workload.KeysPerTask * Workload.DefaultTaskCount} rows exist ...");
-					for (int i = 0; i < Workload.KeysPerTask * Workload.DefaultTaskCount; i++)
+			// Pre-create all the rows in SQL.
+			int rowId = -1;
+			int rowCount = Workload.KeysPerTask * Workload.DefaultTaskCount;
+
+			Console.WriteLine($"Ensuring {rowCount} rows exist ...");
+			var tasks = new List<Task>();
+			for (int i = 0; i < 1024; i++)
+			{
+				tasks.Add(Task.Run(async () =>
+				{
+					int key = 0;
+					while ((key = Interlocked.Increment(ref rowId)) < rowCount)
 					{
 						try
 						{
+							using (var sql = new SqlConnection(_connectionString))
 							using (var command = new SqlCommand(insertCommandText, sql))
 							{
-								var value = RandomGenerator.GetPerformanceData(i.ToString());
+								var value = RandomGenerator.GetPerformanceData(key.ToString());
 
 								command.Parameters.Add(new SqlParameter("@id", value.Id));
 								command.Parameters.Add(new SqlParameter("@timestamp", value.Timestamp));
@@ -74,21 +101,18 @@ VALUES (@id, @timestamp, @string_value, @int_value, @double_value, @time_value, 
 								await command.ExecuteNonQueryAsync().ConfigureAwait(false);
 							}
 
-							if (i % 1000 == 0)
+							if (key % 1000 == 0)
 								Console.WriteLine($"- inserted row {i}");
 						}
 						catch
 						{
 						}
 					}
-					Console.WriteLine("- succeeded.");
-				}
+				}));
 			}
-			catch (Exception e)
-			{
-				Console.WriteLine(e);
-				throw;
-			}
+
+			await Task.WhenAll(tasks).ConfigureAwait(false);
+			Console.WriteLine("- succeeded.");
 		}
 	}
 }
