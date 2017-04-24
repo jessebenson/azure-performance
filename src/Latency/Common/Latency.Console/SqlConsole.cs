@@ -23,7 +23,11 @@ namespace Azure.Performance.Latency
 			try
 			{
 				await CreateDatabaseAsync().ConfigureAwait(false);
-				await PopulateDatabaseAsync().ConfigureAwait(false);
+
+				var rowCount = await GetCountAsync();
+				Console.WriteLine($"Database contains {rowCount} rows.");
+				if (rowCount < Workload.DefaultTaskCount * Workload.KeysPerTask)
+					await PopulateDatabaseAsync().ConfigureAwait(false);
 			}
 			catch (Exception e)
 			{
@@ -63,6 +67,17 @@ CREATE TABLE Latency
 			}
 		}
 
+		private async Task<int> GetCountAsync()
+		{
+			var commandText = @"SELECT COUNT(*) FROM dbo.Latency";
+			using (var sql = new SqlConnection(_connectionString))
+			using (var command = new SqlCommand(commandText, sql))
+			{
+				await sql.OpenAsync().ConfigureAwait(false);
+				return (int)await command.ExecuteScalarAsync().ConfigureAwait(false);
+			}
+		}
+
 		private async Task PopulateDatabaseAsync()
 		{
 			var insertCommandText = @"
@@ -80,32 +95,36 @@ VALUES (@id, @timestamp, @string_value, @int_value, @double_value, @time_value, 
 			{
 				tasks.Add(Task.Run(async () =>
 				{
-					int key = 0;
-					while ((key = Interlocked.Increment(ref rowId)) < rowCount)
+					using (var sql = new SqlConnection(_connectionString))
 					{
-						try
+						await sql.OpenAsync().ConfigureAwait(false);
+
+						int key = 0;
+						while ((key = Interlocked.Increment(ref rowId)) < rowCount)
 						{
-							using (var sql = new SqlConnection(_connectionString))
-							using (var command = new SqlCommand(insertCommandText, sql))
+							try
 							{
-								var value = RandomGenerator.GetPerformanceData(key.ToString());
+								using (var command = new SqlCommand(insertCommandText, sql))
+								{
+									var value = RandomGenerator.GetPerformanceData(key.ToString());
 
-								command.Parameters.Add(new SqlParameter("@id", value.Id));
-								command.Parameters.Add(new SqlParameter("@timestamp", value.Timestamp));
-								command.Parameters.Add(new SqlParameter("@string_value", value.StringValue));
-								command.Parameters.Add(new SqlParameter("@int_value", value.IntValue));
-								command.Parameters.Add(new SqlParameter("@double_value", value.DoubleValue));
-								command.Parameters.Add(new SqlParameter("@time_value", value.TimeValue.TotalMilliseconds));
-								command.Parameters.Add(new SqlParameter("@ttl", value.TimeToLive));
+									command.Parameters.Add(new SqlParameter("@id", value.Id));
+									command.Parameters.Add(new SqlParameter("@timestamp", value.Timestamp));
+									command.Parameters.Add(new SqlParameter("@string_value", value.StringValue));
+									command.Parameters.Add(new SqlParameter("@int_value", value.IntValue));
+									command.Parameters.Add(new SqlParameter("@double_value", value.DoubleValue));
+									command.Parameters.Add(new SqlParameter("@time_value", value.TimeValue.TotalMilliseconds));
+									command.Parameters.Add(new SqlParameter("@ttl", value.TimeToLive));
 
-								await command.ExecuteNonQueryAsync().ConfigureAwait(false);
+									await command.ExecuteNonQueryAsync().ConfigureAwait(false);
+								}
+
+								if (key % 1000 == 0)
+									Console.WriteLine($"- inserted row {i}");
 							}
-
-							if (key % 1000 == 0)
-								Console.WriteLine($"- inserted row {i}");
-						}
-						catch
-						{
+							catch
+							{
+							}
 						}
 					}
 				}));
