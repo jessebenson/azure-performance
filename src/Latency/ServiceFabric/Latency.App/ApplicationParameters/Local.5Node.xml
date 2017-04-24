@@ -3,13 +3,13 @@
   <Parameters>
     <Parameter Name="DictionarySvc_PartitionCount" Value="1" />
     <Parameter Name="DictionarySvc_MinReplicaSetSize" Value="3" />
-    <Parameter Name="DictionarySvc_TargetReplicaSetSize" Value="4" />
+    <Parameter Name="DictionarySvc_TargetReplicaSetSize" Value="3" />
     <Parameter Name="QueueSvc_PartitionCount" Value="1" />
     <Parameter Name="QueueSvc_MinReplicaSetSize" Value="3" />
-    <Parameter Name="QueueSvc_TargetReplicaSetSize" Value="4" />
+    <Parameter Name="QueueSvc_TargetReplicaSetSize" Value="3" />
     <Parameter Name="StatefulSvc_PartitionCount" Value="1" />
     <Parameter Name="StatefulSvc_MinReplicaSetSize" Value="3" />
-    <Parameter Name="StatefulSvc_TargetReplicaSetSize" Value="4" />
+    <Parameter Name="StatefulSvc_TargetReplicaSetSize" Value="3" />
     <Parameter Name="StatelessSvc_InstanceCount" Value="1" />
   </Parameters>
 </Application>

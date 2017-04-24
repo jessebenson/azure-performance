@@ -2,6 +2,7 @@
 <ApplicationManifest xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ApplicationTypeName="Latency.RedisType" ApplicationTypeVersion="1.0.0" xmlns="http://schemas.microsoft.com/2011/01/fabric">
   <Parameters>
     <Parameter Name="RedisSvc_InstanceCount" DefaultValue="1" />
+    <Parameter Name="RedisSvc_PlacementConstraints" DefaultValue="" />
   </Parameters>
   <!-- Import the ServiceManifest from the ServicePackage. The ServiceManifestName and ServiceManifestVersion 
        should match the Name and Version attributes of the ServiceManifest element defined in the 
@@ -19,6 +20,7 @@
     <Service Name="RedisSvc">
       <StatelessService ServiceTypeName="RedisSvcType" InstanceCount="[RedisSvc_InstanceCount]">
         <SingletonPartition />
+        <PlacementConstraints>[RedisSvc_PlacementConstraints]</PlacementConstraints>
       </StatelessService>
     </Service>
   </DefaultServices>

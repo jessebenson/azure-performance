@@ -2,5 +2,6 @@
 <Application xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Name="fabric:/Latency.EventHub" xmlns="http://schemas.microsoft.com/2011/01/fabric">
   <Parameters>
     <Parameter Name="EventHubSvc_InstanceCount" Value="1" />
+    <Parameter Name="EventHubSvc_PlacementConstraints" Value="NodeType == latency" />
   </Parameters>
 </Application>

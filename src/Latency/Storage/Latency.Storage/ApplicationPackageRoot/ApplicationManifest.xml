@@ -2,7 +2,9 @@
 <ApplicationManifest xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ApplicationTypeName="Latency.StorageType" ApplicationTypeVersion="1.0.0" xmlns="http://schemas.microsoft.com/2011/01/fabric">
   <Parameters>
     <Parameter Name="BlobSvc_InstanceCount" DefaultValue="1" />
+    <Parameter Name="BlobSvc_PlacementConstraints" DefaultValue="" />
     <Parameter Name="TableSvc_InstanceCount" DefaultValue="1" />
+    <Parameter Name="TableSvc_PlacementConstraints" DefaultValue="" />
   </Parameters>
   <!-- Import the ServiceManifest from the ServicePackage. The ServiceManifestName and ServiceManifestVersion 
        should match the Name and Version attributes of the ServiceManifest element defined in the 
@@ -24,11 +26,13 @@
     <Service Name="BlobSvc">
       <StatelessService ServiceTypeName="BlobSvcType" InstanceCount="[BlobSvc_InstanceCount]">
         <SingletonPartition />
+        <PlacementConstraints>[BlobSvc_PlacementConstraints]</PlacementConstraints>
       </StatelessService>
     </Service>
     <Service Name="TableSvc">
       <StatelessService ServiceTypeName="TableSvcType" InstanceCount="[TableSvc_InstanceCount]">
         <SingletonPartition />
+        <PlacementConstraints>[TableSvc_PlacementConstraints]</PlacementConstraints>
       </StatelessService>
     </Service>
   </DefaultServices>

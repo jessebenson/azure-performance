@@ -1,16 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ApplicationManifest xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ApplicationTypeName="Latency.AppType" ApplicationTypeVersion="1.0.0" xmlns="http://schemas.microsoft.com/2011/01/fabric">
   <Parameters>
-    <Parameter Name="DictionarySvc_MinReplicaSetSize" DefaultValue="3" />
     <Parameter Name="DictionarySvc_PartitionCount" DefaultValue="1" />
+    <Parameter Name="DictionarySvc_MinReplicaSetSize" DefaultValue="3" />
     <Parameter Name="DictionarySvc_TargetReplicaSetSize" DefaultValue="3" />
-    <Parameter Name="QueueSvc_MinReplicaSetSize" DefaultValue="3" />
+    <Parameter Name="DictionarySvc_PlacementConstraints" DefaultValue="" />
     <Parameter Name="QueueSvc_PartitionCount" DefaultValue="1" />
+    <Parameter Name="QueueSvc_MinReplicaSetSize" DefaultValue="3" />
     <Parameter Name="QueueSvc_TargetReplicaSetSize" DefaultValue="3" />
-    <Parameter Name="StatefulSvc_MinReplicaSetSize" DefaultValue="3" />
+    <Parameter Name="QueueSvc_PlacementConstraints" DefaultValue="" />
     <Parameter Name="StatefulSvc_PartitionCount" DefaultValue="1" />
+    <Parameter Name="StatefulSvc_MinReplicaSetSize" DefaultValue="3" />
     <Parameter Name="StatefulSvc_TargetReplicaSetSize" DefaultValue="3" />
+    <Parameter Name="StatefulSvc_PlacementConstraints" DefaultValue="" />
     <Parameter Name="StatelessSvc_InstanceCount" DefaultValue="1" />
+    <Parameter Name="StatelessSvc_PlacementConstraints" DefaultValue="" />
   </Parameters>
   <!-- Import the ServiceManifest from the ServicePackage. The ServiceManifestName and ServiceManifestVersion 
        should match the Name and Version attributes of the ServiceManifest element defined in the 
@@ -40,21 +44,25 @@
     <Service Name="DictionarySvc">
       <StatefulService ServiceTypeName="DictionarySvcType" TargetReplicaSetSize="[DictionarySvc_TargetReplicaSetSize]" MinReplicaSetSize="[DictionarySvc_MinReplicaSetSize]">
         <UniformInt64Partition PartitionCount="[DictionarySvc_PartitionCount]" LowKey="-9223372036854775808" HighKey="9223372036854775807" />
+        <PlacementConstraints>[DictionarySvc_PlacementConstraints]</PlacementConstraints>
       </StatefulService>
     </Service>
     <Service Name="QueueSvc">
       <StatefulService ServiceTypeName="QueueSvcType" TargetReplicaSetSize="[QueueSvc_TargetReplicaSetSize]" MinReplicaSetSize="[QueueSvc_MinReplicaSetSize]">
         <UniformInt64Partition PartitionCount="[QueueSvc_PartitionCount]" LowKey="-9223372036854775808" HighKey="9223372036854775807" />
+        <PlacementConstraints>[QueueSvc_PlacementConstraints]</PlacementConstraints>
       </StatefulService>
     </Service>
     <Service Name="StatefulSvc">
       <StatefulService ServiceTypeName="StatefulSvcType" TargetReplicaSetSize="[StatefulSvc_TargetReplicaSetSize]" MinReplicaSetSize="[StatefulSvc_MinReplicaSetSize]">
         <UniformInt64Partition PartitionCount="[StatefulSvc_PartitionCount]" LowKey="-9223372036854775808" HighKey="9223372036854775807" />
+        <PlacementConstraints>[StatefulSvc_PlacementConstraints]</PlacementConstraints>
       </StatefulService>
     </Service>
     <Service Name="StatelessSvc">
       <StatelessService ServiceTypeName="StatelessSvcType" InstanceCount="[StatelessSvc_InstanceCount]">
         <SingletonPartition />
+        <PlacementConstraints>[StatelessSvc_PlacementConstraints]</PlacementConstraints>
       </StatelessService>
     </Service>
   </DefaultServices>

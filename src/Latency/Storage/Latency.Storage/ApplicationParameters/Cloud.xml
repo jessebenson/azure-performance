@@ -2,6 +2,8 @@
 <Application xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Name="fabric:/Latency.Storage" xmlns="http://schemas.microsoft.com/2011/01/fabric">
   <Parameters>
     <Parameter Name="BlobSvc_InstanceCount" Value="1" />
+    <Parameter Name="BlobSvc_PlacementConstraints" Value="NodeType == latency" />
     <Parameter Name="TableSvc_InstanceCount" Value="1" />
+    <Parameter Name="TableSvc_PlacementConstraints" Value="NodeType == latency" />
   </Parameters>
 </Application>
