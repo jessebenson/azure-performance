@@ -79,8 +79,8 @@ namespace Azure.Performance.Latency.SqlSvc
 			return workload.InvokeAsync(async (value) =>
 			{
 				var commandText = @"
-UPDATE dbo.Latency 
-SET timestamp=@timestamp, string_value=@string_value, int_value=@int_value, double_value=@double_value, time_value=@time_value, ttl=@ttl)
+UPDATE dbo.Latency
+SET timestamp=@timestamp, string_value=@string_value, int_value=@int_value, double_value=@double_value, time_value=@time_value, ttl=@ttl
 WHERE id=@id
 ";
 
