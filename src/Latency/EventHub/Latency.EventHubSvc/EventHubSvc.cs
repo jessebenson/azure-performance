@@ -60,36 +60,31 @@ namespace Azure.Performance.Latency.EventHubSvc
 			await base.RunAsync(cancellationToken).ConfigureAwait(false);
 
 			// Spawn worker tasks.
-			await CreateWritersAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
+			await CreateWritersAsync(taskCount: Workload.DefaultTaskCount, cancellationToken: cancellationToken).ConfigureAwait(false);
 		}
 
-		private async Task CreateWritersAsync(CancellationToken cancellationToken)
+		private async Task CreateWritersAsync(int taskCount, CancellationToken cancellationToken)
 		{
-			var eventHubInfo = await _client.GetRuntimeInformationAsync().ConfigureAwait(false);
-
-			var tasks = new List<Task>(eventHubInfo.PartitionCount);
-			foreach (var id in eventHubInfo.PartitionIds)
+			var tasks = new List<Task>(taskCount);
+			for (int i = 0; i < taskCount; i++)
 			{
-				string partitionId = id;
-				tasks.Add(Task.Run(() => CreateWriterAsync(partitionId, cancellationToken)));
+				int taskId = i;
+				tasks.Add(Task.Run(() => CreateWriterAsync(taskId, cancellationToken)));
 			}
 
 			await Task.WhenAll(tasks).ConfigureAwait(false);
 		}
 
-		private async Task CreateWriterAsync(string partitionId, CancellationToken cancellationToken)
+		private async Task CreateWriterAsync(int taskId, CancellationToken cancellationToken)
 		{
-			var sender = await _client.CreatePartitionedSenderAsync(partitionId).ConfigureAwait(false);
 			var workload = new Workload(_logger, "EventHub");
-			await workload.InvokeAsync(async (random) =>
+			await workload.InvokeAsync(async (value) =>
 			{
-				var value = RandomGenerator.GetPerformanceData();
 				var content = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(value));
 				var data = new EventData(content);
 
-				await sender.SendAsync(data).ConfigureAwait(false);
-				_logger.LogMetric($"EventHubPartition-{partitionId}", 1);
-			}, cancellationToken);
+				await _client.SendAsync(data).ConfigureAwait(false);
+			}, taskId, cancellationToken);
 		}
 	}
 }

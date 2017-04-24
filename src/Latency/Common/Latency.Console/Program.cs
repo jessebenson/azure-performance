@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Azure.Performance.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,10 @@ namespace Azure.Performance.Latency
 	{
 		static void Main(string[] args)
 		{
+			new SqlConsole(AppConfig.SqlConnectionString).SetupAsync().Wait();
+
+			Console.WriteLine("Press enter to exit ...");
+			Console.ReadLine();
 		}
 	}
 }

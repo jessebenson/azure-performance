@@ -51,36 +51,30 @@ namespace Azure.Performance.Latency.StatelessSvc
 			await base.RunAsync(cancellationToken).ConfigureAwait(false);
 
 			// Spawn worker tasks.
-			await CreateWritersAsync(taskCount: 10, cancellationToken: cancellationToken).ConfigureAwait(false);
+			await CreateWritersAsync(taskCount: Workload.DefaultTaskCount, cancellationToken: cancellationToken).ConfigureAwait(false);
 		}
 
 		private async Task CreateWritersAsync(int taskCount, CancellationToken cancellationToken)
 		{
+			var service = ServiceProxy.Create<IStatefulSvc>(ServiceConstants.StatefulSvcUri, new ServicePartitionKey(0));
+
 			var tasks = new List<Task>(taskCount);
 			for (int i = 0; i < taskCount; i++)
 			{
 				int taskId = i;
-				tasks.Add(Task.Run(() => CreateWriterAsync(taskId, cancellationToken)));
+				tasks.Add(Task.Run(() => CreateWriterAsync(taskId, service, cancellationToken)));
 			}
 
 			await Task.WhenAll(tasks).ConfigureAwait(false);
 		}
 
-		private async Task CreateWriterAsync(int taskId, CancellationToken cancellationToken)
+		private async Task CreateWriterAsync(int taskId, IStatefulSvc service, CancellationToken cancellationToken)
 		{
-			var service = ServiceProxy.Create<IStatefulSvc>(ServiceConstants.StatefulSvcUri, new ServicePartitionKey(0));
-
-			int minKey = taskId * 10000;
-			int maxKey = (taskId + 1) * 10000;
-
 			var workload = new Workload(_logger, "Stateful");
-			await workload.InvokeAsync(async (random) =>
+			await workload.InvokeAsync(async (value) =>
 			{
-				long key = random.Next(minKey, maxKey);
-				var value = RandomGenerator.GetPerformanceData($"latency-{taskId}-{key}");
-
-				await service.WriteAsync(key, value, cancellationToken).ConfigureAwait(false);
-			}, cancellationToken);
+				await service.WriteAsync(value.Id, value, cancellationToken).ConfigureAwait(false);
+			}, taskId, cancellationToken);
 		}
 	}
 }

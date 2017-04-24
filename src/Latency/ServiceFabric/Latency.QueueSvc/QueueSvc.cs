@@ -55,12 +55,12 @@ namespace Azure.Performance.Latency.QueueSvc
 			await base.RunAsync(cancellationToken);
 
 			// Spawn worker tasks.
-			await CreateWritersAsync(taskCount: 10, cancellationToken: cancellationToken).ConfigureAwait(false);
+			await CreateWritersAsync(taskCount: Workload.DefaultTaskCount, cancellationToken: cancellationToken).ConfigureAwait(false);
 		}
 
 		private async Task CreateWritersAsync(int taskCount, CancellationToken cancellationToken)
 		{
-			var queue = await this.StateManager.GetOrAddAsync<IReliableConcurrentQueue<PerformanceData>>("latency-queue").ConfigureAwait(false);
+			var queue = await this.StateManager.GetOrAddAsync<IReliableConcurrentQueue<PerformanceData>>("latency").ConfigureAwait(false);
 
 			var tasks = new List<Task>(taskCount);
 			for (int i = 0; i < taskCount; i++)
@@ -74,21 +74,21 @@ namespace Azure.Performance.Latency.QueueSvc
 
 		private Task CreateWriterAsync(int taskId, IReliableConcurrentQueue<PerformanceData> queue, CancellationToken cancellationToken)
 		{
-			const int queueThreshold = 100;
+			const int QueueThreshold = 100;
 
 			var workload = new Workload(_logger, "ReliableQueue");
-			return workload.InvokeAsync(async (random) =>
+			return workload.InvokeAsync(async (value) =>
 			{
 				using (var tx = this.StateManager.CreateTransaction())
 				{
-					if (queue.Count < queueThreshold)
-						await queue.EnqueueAsync(tx, RandomGenerator.GetPerformanceData(), cancellationToken).ConfigureAwait(false);
+					if (queue.Count < QueueThreshold)
+						await queue.EnqueueAsync(tx, value, cancellationToken).ConfigureAwait(false);
 					else
 						await queue.DequeueAsync(tx, cancellationToken).ConfigureAwait(false);
 
 					await tx.CommitAsync().ConfigureAwait(false);
 				}
-			}, cancellationToken);
+			}, taskId, cancellationToken);
 		}
 	}
 }

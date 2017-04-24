@@ -22,8 +22,6 @@ namespace Azure.Performance.Latency.BlobSvc
 	/// </summary>
 	internal sealed class BlobSvc : LoggingStatelessService, IBlobSvc
 	{
-		private static readonly TimeSpan TimeToLive = TimeSpan.FromDays(1);
-
 		private readonly CloudBlobClient _client;
 		private readonly string _containerName;
 
@@ -65,75 +63,38 @@ namespace Azure.Performance.Latency.BlobSvc
 			await base.RunAsync(cancellationToken).ConfigureAwait(false);
 
 			// Spawn worker tasks.
-			await Task.WhenAll(
-				CreateCleanupTaskAsync(cancellationToken),
-				CreateWritersAsync(taskCount: 10, cancellationToken: cancellationToken)).ConfigureAwait(false);
+			await CreateWritersAsync(taskCount: Workload.DefaultTaskCount, cancellationToken: cancellationToken).ConfigureAwait(false);
 		}
 
 		private async Task CreateWritersAsync(int taskCount, CancellationToken cancellationToken)
 		{
+			var container = await GetBlobContainer(_containerName, cancellationToken).ConfigureAwait(false);
+
 			var tasks = new List<Task>(taskCount);
 			for (int i = 0; i < taskCount; i++)
 			{
 				int taskId = i;
-				tasks.Add(Task.Run(() => CreateWriterAsync(taskId, cancellationToken)));
+				tasks.Add(Task.Run(() => CreateWriterAsync(taskId, container, cancellationToken)));
 			}
 
 			await Task.WhenAll(tasks).ConfigureAwait(false);
 		}
 
-		private async Task CreateWriterAsync(int taskId, CancellationToken cancellationToken)
+		private async Task CreateWriterAsync(int taskId, CloudBlobContainer container, CancellationToken cancellationToken)
 		{
-			CloudBlobContainer container = null;
-
 			var workload = new Workload(_logger, "Blob");
-			await workload.InvokeAsync(async (random) =>
+			await workload.InvokeAsync(async (value) =>
 			{
-				// Ensure container exists.
-				container = await GetBlobContainer(container, cancellationToken).ConfigureAwait(false);
-				var value = RandomGenerator.GetPerformanceData();
-
 				// Write the blob.
 				var blob = container.GetBlockBlobReference(value.Id);
 				await blob.UploadTextAsync(JsonConvert.SerializeObject(value), cancellationToken).ConfigureAwait(false);
-			}, cancellationToken);
+			}, taskId, cancellationToken);
 		}
 
-		private async Task CreateCleanupTaskAsync(CancellationToken cancellationToken)
+		private async Task<CloudBlobContainer> GetBlobContainer(string containerName, CancellationToken cancellationToken)
 		{
-			while (!cancellationToken.IsCancellationRequested)
-			{
-				try
-				{
-					var containers = _client.ListContainers();
-					foreach (var container in containers)
-					{
-						// Delete old containers
-						if (container.Properties.LastModified < DateTimeOffset.UtcNow.Subtract(TimeToLive))
-						{
-							await container.DeleteAsync(cancellationToken).ConfigureAwait(false);
-						}
-					}
-				}
-				catch (Exception e)
-				{
-					_logger.Error(e, "Unexpected exception {ExceptionType} deleting old blob containers.", e.GetType());
-				}
-
-				// Check hourly.
-				await Task.Delay(TimeSpan.FromHours(1), cancellationToken).ConfigureAwait(false);
-			}
-		}
-
-		private async Task<CloudBlobContainer> GetBlobContainer(CloudBlobContainer container, CancellationToken cancellationToken)
-		{
-			var containerName = $"{DateTimeOffset.UtcNow.ToString("H-dd-MM-yyyy")}-{_containerName}";
-			if (container?.Name != containerName)
-			{
-				container = _client.GetContainerReference(containerName);
-				await container.CreateIfNotExistsAsync(cancellationToken).ConfigureAwait(false);
-			}
-
+			var container = _client.GetContainerReference(containerName);
+			await container.CreateIfNotExistsAsync(cancellationToken).ConfigureAwait(false);
 			return container;
 		}
 	}

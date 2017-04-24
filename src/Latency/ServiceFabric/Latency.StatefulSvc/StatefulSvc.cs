@@ -22,7 +22,7 @@ namespace Azure.Performance.Latency.StatefulSvc
 	{
 		private static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(4);
 
-		private IReliableDictionary<long, PerformanceData> _collection;
+		private IReliableDictionary<string, PerformanceData> _collection;
 
 		public StatefulSvc(StatefulServiceContext context, ILogger logger)
 			: base(context, logger)
@@ -48,7 +48,7 @@ namespace Azure.Performance.Latency.StatefulSvc
 			return Task.FromResult(HttpStatusCode.OK);
 		}
 
-		public async Task<PerformanceData> ReadAsync(long key, CancellationToken cancellationToken)
+		public async Task<PerformanceData> ReadAsync(string key, CancellationToken cancellationToken)
 		{
 			var collection = await GetCollectionAsync().ConfigureAwait(false);
 
@@ -60,7 +60,7 @@ namespace Azure.Performance.Latency.StatefulSvc
 			}
 		}
 
-		public async Task WriteAsync(long key, PerformanceData value, CancellationToken cancellationToken)
+		public async Task WriteAsync(string key, PerformanceData value, CancellationToken cancellationToken)
 		{
 			var collection = await GetCollectionAsync().ConfigureAwait(false);
 
@@ -71,9 +71,9 @@ namespace Azure.Performance.Latency.StatefulSvc
 			}
 		}
 
-		private async Task<IReliableDictionary<long, PerformanceData>> GetCollectionAsync()
+		private async Task<IReliableDictionary<string, PerformanceData>> GetCollectionAsync()
 		{
-			return _collection ?? (_collection = await StateManager.GetOrAddAsync<IReliableDictionary<long, PerformanceData>>("latency").ConfigureAwait(false));
+			return _collection ?? (_collection = await StateManager.GetOrAddAsync<IReliableDictionary<string, PerformanceData>>("latency").ConfigureAwait(false));
 		}
 	}
 }

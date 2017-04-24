@@ -63,80 +63,39 @@ namespace Azure.Performance.Latency.TableSvc
 			await base.RunAsync(cancellationToken).ConfigureAwait(false);
 
 			// Spawn worker tasks.
-			await Task.WhenAll(
-				CreateCleanupTaskAsync(cancellationToken),
-				CreateWritersAsync(taskCount: 10, cancellationToken: cancellationToken)).ConfigureAwait(false);
+			await CreateWritersAsync(taskCount: Workload.DefaultTaskCount, cancellationToken: cancellationToken).ConfigureAwait(false);
 		}
 
 		private async Task CreateWritersAsync(int taskCount, CancellationToken cancellationToken)
 		{
+			var table = await GetTable(_tableName, cancellationToken).ConfigureAwait(false);
+
 			var tasks = new List<Task>(taskCount);
 			for (int i = 0; i < taskCount; i++)
 			{
 				int taskId = i;
-				tasks.Add(Task.Run(() => CreateWriterAsync(taskId, cancellationToken)));
+				tasks.Add(Task.Run(() => CreateWriterAsync(taskId, table, cancellationToken)));
 			}
 
 			await Task.WhenAll(tasks).ConfigureAwait(false);
 		}
 
-		private async Task CreateWriterAsync(int taskId, CancellationToken cancellationToken)
+		private async Task CreateWriterAsync(int taskId, CloudTable table, CancellationToken cancellationToken)
 		{
-			CloudTable table = null;
-
 			var workload = new Workload(_logger, "Table");
-			await workload.InvokeAsync(async (random) =>
+			await workload.InvokeAsync(async (value) =>
 			{
-				// Ensure table exists.
-				table = await GetTable(table, cancellationToken).ConfigureAwait(false);
-				var value = RandomGenerator.GetPerformanceData();
-				var entity = new PerformanceEntity(value);
-
 				// Write to the table.
-				var operation = TableOperation.Insert(entity);
+				var entity = new PerformanceEntity(value);
+				var operation = TableOperation.InsertOrReplace(entity);
 				await table.ExecuteAsync(operation).ConfigureAwait(false);
-			}, cancellationToken);
+			}, taskId, cancellationToken);
 		}
 
-		private async Task CreateCleanupTaskAsync(CancellationToken cancellationToken)
+		private async Task<CloudTable> GetTable(string tableName, CancellationToken cancellationToken)
 		{
-			while (!cancellationToken.IsCancellationRequested)
-			{
-				try
-				{
-					var today = DateTimeOffset.UtcNow;
-					var yesterday = today.AddDays(-1);
-					var currentTablePrefixes = new[] { $"{_tableName}{yesterday.ToString("yyyyMMdd")}", $"{_tableName}{today.ToString("yyyyMMdd")}" };
-
-					var tables = _client.ListTables();
-					foreach (var table in tables)
-					{
-						// Delete old tables.
-						if (table.Name.StartsWith(_tableName) && !currentTablePrefixes.Any(p => table.Name.StartsWith(p)))
-						{
-							await table.DeleteAsync(cancellationToken).ConfigureAwait(false);
-						}
-					}
-				}
-				catch (Exception e)
-				{
-					_logger.Error(e, "Unexpected exception {ExceptionType} deleting old tables.", e.GetType());
-				}
-
-				// Check hourly.
-				await Task.Delay(TimeSpan.FromHours(1), cancellationToken).ConfigureAwait(false);
-			}
-		}
-
-		private async Task<CloudTable> GetTable(CloudTable table, CancellationToken cancellationToken)
-		{
-			var tableName = $"{_tableName}{DateTimeOffset.UtcNow.ToString("yyyyMMddH")}";
-			if (table?.Name != tableName)
-			{
-				table = _client.GetTableReference(tableName);
-				await table.CreateIfNotExistsAsync(cancellationToken).ConfigureAwait(false);
-			}
-
+			var table = _client.GetTableReference(tableName);
+			await table.CreateIfNotExistsAsync(cancellationToken).ConfigureAwait(false);
 			return table;
 		}
 	}

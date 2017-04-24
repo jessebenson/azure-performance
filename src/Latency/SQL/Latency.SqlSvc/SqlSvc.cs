@@ -58,7 +58,7 @@ namespace Azure.Performance.Latency.SqlSvc
 			await base.RunAsync(cancellationToken).ConfigureAwait(false);
 
 			// Spawn worker tasks.
-			await CreateWritersAsync(taskCount: 10, cancellationToken: cancellationToken).ConfigureAwait(false);
+			await CreateWritersAsync(taskCount: Workload.DefaultTaskCount, cancellationToken: cancellationToken).ConfigureAwait(false);
 		}
 
 		private async Task CreateWritersAsync(int taskCount, CancellationToken cancellationToken)
@@ -76,13 +76,12 @@ namespace Azure.Performance.Latency.SqlSvc
 		private Task CreateWriterAsync(int taskId, CancellationToken cancellationToken)
 		{
 			var workload = new Workload(_logger, "Sql");
-			return workload.InvokeAsync(async (random) =>
+			return workload.InvokeAsync(async (value) =>
 			{
-				var value = RandomGenerator.GetPerformanceData();
-
 				var commandText = @"
-INSERT INTO dbo.Data (id, timestamp, string_value, int_value, double_value, time_value, ttl)
-VALUES (@id, @timestamp, @string_value, @int_value, @double_value, @time_value, @ttl)
+UPDATE dbo.Latency 
+SET timestamp=@timestamp, string_value=@string_value, int_value=@int_value, double_value=@double_value, time_value=@time_value, ttl=@ttl)
+WHERE id=@id
 ";
 
 				using (var sql = new SqlConnection(_sqlConnectionString))
@@ -99,7 +98,7 @@ VALUES (@id, @timestamp, @string_value, @int_value, @double_value, @time_value, 
 					await sql.OpenAsync(cancellationToken).ConfigureAwait(false);
 					await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
 				}
-			}, cancellationToken);
+			}, taskId, cancellationToken);
 		}
 	}
 }

@@ -56,12 +56,12 @@ namespace Azure.Performance.Latency.DictionarySvc
 			await base.RunAsync(cancellationToken).ConfigureAwait(false);
 
 			// Spawn worker tasks.
-			await CreateWritersAsync(taskCount: 10, cancellationToken: cancellationToken).ConfigureAwait(false);
+			await CreateWritersAsync(taskCount: Workload.DefaultTaskCount, cancellationToken: cancellationToken).ConfigureAwait(false);
 		}
 
 		private async Task CreateWritersAsync(int taskCount, CancellationToken cancellationToken)
 		{
-			var state = await this.StateManager.GetOrAddAsync<IReliableDictionary<long, PerformanceData>>("latency-dictionary").ConfigureAwait(false);
+			var state = await this.StateManager.GetOrAddAsync<IReliableDictionary<string, PerformanceData>>("latency").ConfigureAwait(false);
 
 			var tasks = new List<Task>(taskCount);
 			for (int i = 0; i < taskCount; i++)
@@ -73,23 +73,17 @@ namespace Azure.Performance.Latency.DictionarySvc
 			await Task.WhenAll(tasks).ConfigureAwait(false);
 		}
 
-		private Task CreateWriterAsync(int taskId, IReliableDictionary<long, PerformanceData> state, CancellationToken cancellationToken)
+		private Task CreateWriterAsync(int taskId, IReliableDictionary<string, PerformanceData> state, CancellationToken cancellationToken)
 		{
-			int minKey = taskId * 10000;
-			int maxKey = (taskId + 1) * 10000;
-			
 			var workload = new Workload(_logger, "ReliableDictionary");
-			return workload.InvokeAsync(async (random) =>
+			return workload.InvokeAsync(async (value) =>
 			{
 				using (var tx = this.StateManager.CreateTransaction())
 				{
-					long key = random.Next(minKey, maxKey);
-					var value = RandomGenerator.GetPerformanceData($"latency-{taskId}-{key}");
-
-					await state.SetAsync(tx, key, value, DefaultTimeout, cancellationToken).ConfigureAwait(false);
+					await state.SetAsync(tx, value.Id, value, DefaultTimeout, cancellationToken).ConfigureAwait(false);
 					await tx.CommitAsync().ConfigureAwait(false);
 				}
-			}, cancellationToken);
+			}, taskId, cancellationToken);
 		}
 	}
 }
