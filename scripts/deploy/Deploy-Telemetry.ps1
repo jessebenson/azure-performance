@@ -6,11 +6,11 @@ Param
     [Switch] $Web
 )
 
-. ".\lib.ps1"
-
 $LocalFolder = (Split-Path $MyInvocation.MyCommand.Path)
 $RootFolder = Split-Path (Split-Path $LocalFolder)
 $SrcFolder = Join-Path $RootFolder "src/Telemetry"
+
+. "$LocalFolder\lib.ps1"
 
 #
 # Build solution.
