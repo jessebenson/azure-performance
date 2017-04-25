@@ -79,15 +79,14 @@ namespace Azure.Performance.Latency.SqlSvc
 			return workload.InvokeAsync(async (value) =>
 			{
 				var commandText = @"
-UPDATE dbo.Latency
-SET timestamp=@timestamp, string_value=@string_value, int_value=@int_value, double_value=@double_value, time_value=@time_value, ttl=@ttl
-WHERE id=@id
+INSERT INTO dbo.Latency (id, timestamp, string_value, int_value, double_value, time_value, ttl)
+VALUES (@id, @timestamp, @string_value, @int_value, @double_value, @time_value, @ttl)
 ";
 
 				using (var sql = new SqlConnection(_sqlConnectionString))
 				using (var command = new SqlCommand(commandText, sql))
 				{
-					command.Parameters.Add(new SqlParameter("@id", value.Id));
+					command.Parameters.Add(new SqlParameter("@id", Guid.NewGuid().ToString()));
 					command.Parameters.Add(new SqlParameter("@timestamp", value.Timestamp));
 					command.Parameters.Add(new SqlParameter("@string_value", value.StringValue));
 					command.Parameters.Add(new SqlParameter("@int_value", value.IntValue));
