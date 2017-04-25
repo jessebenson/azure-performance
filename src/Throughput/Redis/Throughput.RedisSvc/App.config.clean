@@ -7,7 +7,7 @@
     <add key="ElasticsearchUrl" value="{{Secret:elasticsearch-endpoint}}" />
     <add key="ElasticsearchUsername" value="{{Secret:elasticsearch-username}}" />
     <add key="ElasticsearchPassword" value="{{Secret:elasticsearch-password}}" />
-    <add key="RedisConnectionString" value="{{Secret:redis-latency-connection-string}}" />
+    <add key="RedisConnectionString" value="{{Secret:redis-throughput-connection-string}}" />
   </appSettings>
   <runtime>
     <gcServer enabled="true" />

@@ -13,27 +13,23 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Latency.Console", "Common\L
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DocumentDB", "DocumentDB", "{1DFC71FD-1AAF-4DFC-B2AE-77D2FD14AB63}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EventHub", "EventHub", "{7FAFDEF8-E940-4AF3-BE6D-4D8837AB5532}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Redis", "Redis", "{EC17B2E5-25C5-448C-9666-38CD1237AD4E}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ServiceFabric", "ServiceFabric", "{AC513EE0-5935-4578-A7E9-4BE5D28F3843}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SQL", "SQL", "{FB453109-CE17-416D-9F52-5FD8B244D3AC}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Storage", "Storage", "{7E93F627-83DB-47ED-B5F4-451B281B647B}"
-EndProject
 Project("{A07B5EB6-E848-4116-A8D0-A826331D98C6}") = "Latency.DocumentDB", "DocumentDB\Latency.DocumentDB\Latency.DocumentDB.sfproj", "{F7E8AA52-3E51-4A99-A2FA-29DD57B090A4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Latency.DocumentDbSvc", "DocumentDB\Latency.DocumentDbSvc\Latency.DocumentDbSvc.csproj", "{6A7CFD1D-5746-4E0A-801A-273012F08DC1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EventHub", "EventHub", "{7FAFDEF8-E940-4AF3-BE6D-4D8837AB5532}"
 EndProject
 Project("{A07B5EB6-E848-4116-A8D0-A826331D98C6}") = "Latency.EventHub", "EventHub\Latency.EventHub\Latency.EventHub.sfproj", "{08CD16E7-D5DF-4CFA-B841-83D5711B3705}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Latency.EventHubSvc", "EventHub\Latency.EventHubSvc\Latency.EventHubSvc.csproj", "{54B74630-9CC6-4E2B-8E3E-AE2C344A0E93}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Redis", "Redis", "{EC17B2E5-25C5-448C-9666-38CD1237AD4E}"
+EndProject
 Project("{A07B5EB6-E848-4116-A8D0-A826331D98C6}") = "Latency.Redis", "Redis\Latency.Redis\Latency.Redis.sfproj", "{CCC708D4-A277-4984-A3BD-913D846C19FD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Latency.RedisSvc", "Redis\Latency.RedisSvc\Latency.RedisSvc.csproj", "{375594D6-87A6-494C-8BFC-BD0C53D96F41}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ServiceFabric", "ServiceFabric", "{AC513EE0-5935-4578-A7E9-4BE5D28F3843}"
 EndProject
 Project("{A07B5EB6-E848-4116-A8D0-A826331D98C6}") = "Latency.App", "ServiceFabric\Latency.App\Latency.App.sfproj", "{677C93E2-6088-4D49-BF21-1BAD2A6F5BAF}"
 EndProject
@@ -45,9 +41,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Latency.StatefulSvc", "Serv
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Latency.StatelessSvc", "ServiceFabric\Latency.StatelessSvc\Latency.StatelessSvc.csproj", "{638DEFEC-97AF-4069-A640-120D6FBE3804}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SQL", "SQL", "{FB453109-CE17-416D-9F52-5FD8B244D3AC}"
+EndProject
 Project("{A07B5EB6-E848-4116-A8D0-A826331D98C6}") = "Latency.SQL", "SQL\Latency.SQL\Latency.SQL.sfproj", "{51C88FA3-C0A1-4A08-B9F5-EEB24365337E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Latency.SqlSvc", "SQL\Latency.SqlSvc\Latency.SqlSvc.csproj", "{D9116234-C189-4235-B30F-241C21961081}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Storage", "Storage", "{7E93F627-83DB-47ED-B5F4-451B281B647B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Latency.BlobSvc", "Storage\Latency.BlobSvc\Latency.BlobSvc.csproj", "{03D4A5B0-3EE4-4350-886E-BD856008DC5E}"
 EndProject

@@ -7,7 +7,7 @@
     <add key="ElasticsearchUrl" value="{{Secret:elasticsearch-endpoint}}" />
     <add key="ElasticsearchUsername" value="{{Secret:elasticsearch-username}}" />
     <add key="ElasticsearchPassword" value="{{Secret:elasticsearch-password}}" />
-    <add key="EventHubConnectionString" value="{{Secret:event-hubs-connection-string}}" />
+    <add key="EventHubConnectionString" value="{{Secret:event-hubs-latency-connection-string}}" />
   </appSettings>
   <runtime>
     <gcServer enabled="true" />

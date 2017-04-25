@@ -18,7 +18,6 @@ namespace Azure.Performance.Common
 		private readonly string _workloadName;
 		private readonly string _timeMetric;
 		private readonly string _scoreMetric;
-		private readonly int _taskCount;
 		private readonly int _keysPerTask;
 		private readonly int _minWorkloadDelayInMs;
 		private readonly int _maxWorkloadDelayInMs;
