@@ -41,16 +41,18 @@ namespace Azure.Performance.Latency
 
 				var createTableText = @"
 IF NOT EXISTS ( SELECT [Name] FROM sys.tables WHERE [name] = 'Latency' )
-CREATE TABLE Latency
-(
-	id             VARCHAR(255) NOT NULL PRIMARY KEY,
-	timestamp      DATETIMEOFFSET,
-	string_value   VARCHAR(512),
-	int_value      INT,
-	double_value   FLOAT,
-	time_value     BIGINT,
-	ttl            INT
-);
+	CREATE TABLE Latency
+	(
+		id             VARCHAR(255) NOT NULL PRIMARY KEY,
+		timestamp      DATETIMEOFFSET,
+		string_value   VARCHAR(512),
+		int_value      INT,
+		double_value   FLOAT,
+		time_value     BIGINT,
+		ttl            INT
+	);
+ELSE
+	TRUNCATE TABLE Latency;
 ";
 
 				using (var command = new SqlCommand(createTableText, sql))
