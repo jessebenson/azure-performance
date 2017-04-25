@@ -21,6 +21,7 @@ namespace Azure.Performance.Throughput.RedisSvc
 	/// </summary>
 	internal sealed class RedisSvc : LoggingStatelessService, IRedisSvc
 	{
+		private const int TaskCount = 1024;
 		private readonly string _connectionString;
 		private long _id = 0;
 
@@ -65,7 +66,7 @@ namespace Azure.Performance.Throughput.RedisSvc
 			var redis = connection.GetDatabase();
 
 			var workload = new ThroughputWorkload(_logger, "Redis");
-			await workload.InvokeAsync((random) => WriteAsync(redis, random, cancellationToken), cancellationToken).ConfigureAwait(false);
+			await workload.InvokeAsync(TaskCount, (random) => WriteAsync(redis, random, cancellationToken), cancellationToken).ConfigureAwait(false);
 		}
 
 		private async Task<long> WriteAsync(IDatabase redis, Random random, CancellationToken cancellationToken)
@@ -73,7 +74,7 @@ namespace Azure.Performance.Throughput.RedisSvc
 			var value = RandomGenerator.GetPerformanceData();
 			var serialized = JsonConvert.SerializeObject(value);
 
-			var tasks = new Task[512];
+			var tasks = new Task[256];
 			for (int i = 0; i < tasks.Length; i++)
 			{
 				long key = Interlocked.Increment(ref _id) % 1000000;

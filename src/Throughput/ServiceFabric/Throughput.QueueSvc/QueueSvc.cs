@@ -21,6 +21,8 @@ namespace Azure.Performance.Throughput.QueueSvc
 	/// </summary>
 	internal sealed class QueueSvc : LoggingStatefulService, IQueueSvc
 	{
+		private const int TaskCount = 256;
+
 		public QueueSvc(StatefulServiceContext context, ILogger logger)
 			: base(context, logger)
 		{ }
@@ -63,13 +65,13 @@ namespace Azure.Performance.Throughput.QueueSvc
 			var state = await this.StateManager.GetOrAddAsync<IReliableConcurrentQueue<PerformanceData>>("throughput").ConfigureAwait(false);
 
 			var workload = new ThroughputWorkload(_logger, "ReliableQueue");
-			await workload.InvokeAsync((random) => WriteAsync(state, random, cancellationToken), cancellationToken).ConfigureAwait(false);
+			await workload.InvokeAsync(TaskCount, (random) => WriteAsync(state, random, cancellationToken), cancellationToken).ConfigureAwait(false);
 		}
 
 		private async Task<long> WriteAsync(IReliableConcurrentQueue<PerformanceData> state, Random random, CancellationToken cancellationToken)
 		{
 			const int batchSize = 8;
-			const int QueueThreshold = ThroughputWorkload.TaskCount * batchSize;
+			const int QueueThreshold = TaskCount * batchSize;
 
 			using (var tx = StateManager.CreateTransaction())
 			{

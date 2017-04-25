@@ -20,6 +20,7 @@ namespace Azure.Performance.Throughput.DictionarySvc
 	/// </summary>
 	internal sealed class DictionarySvc : LoggingStatefulService, IDictionarySvc
 	{
+		private const int TaskCount = 256;
 		private static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(4);
 		private long _id = 0;
 
@@ -65,7 +66,7 @@ namespace Azure.Performance.Throughput.DictionarySvc
 			var state = await this.StateManager.GetOrAddAsync<IReliableDictionary<long, PerformanceData>>("throughput").ConfigureAwait(false);
 
 			var workload = new ThroughputWorkload(_logger, "ReliableDictionary");
-			await workload.InvokeAsync((random) => WriteAsync(state, random, cancellationToken), cancellationToken).ConfigureAwait(false);
+			await workload.InvokeAsync(TaskCount, (random) => WriteAsync(state, random, cancellationToken), cancellationToken).ConfigureAwait(false);
 		}
 
 		private async Task<long> WriteAsync(IReliableDictionary<long, PerformanceData> state, Random random, CancellationToken cancellationToken)

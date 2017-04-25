@@ -10,8 +10,6 @@ namespace Azure.Performance.Throughput.Common
 {
 	public sealed class ThroughputWorkload
 	{
-		public const int TaskCount = 1024;
-
 		private readonly ILogger _logger;
 		private readonly string _workloadName;
 
@@ -24,11 +22,11 @@ namespace Azure.Performance.Throughput.Common
 			_workloadName = workloadName ?? throw new ArgumentNullException(nameof(workloadName));
 		}
 
-		public async Task InvokeAsync(Func<Random, Task<long>> workload, CancellationToken cancellationToken)
+		public async Task InvokeAsync(int taskCount, Func<Random, Task<long>> workload, CancellationToken cancellationToken)
 		{
 			// Spawn the workload workers.
-			var tasks = new List<Task>(TaskCount + 1);
-			for (int i = 0; i < TaskCount; i++)
+			var tasks = new List<Task>(taskCount + 1);
+			for (int i = 0; i < taskCount; i++)
 			{
 				int taskId = i;
 				tasks.Add(Task.Run(() => CreateWorkerAsync(workload, taskId, cancellationToken)));
