@@ -40,20 +40,38 @@
             "type": "string"
         },
 
-        "redisDatabaseName": {
+        "redisLatencyDatabaseName": {
             "type": "string"
         },
-        "redisSkuName": {
+        "redisLatencySkuName": {
             "type": "string"
         },
-        "redisSkuFamily": {
+        "redisLatencySkuFamily": {
             "type": "string"
         },
-        "redisSkuCapacity": {
+        "redisLatencySkuCapacity": {
+            "type": "int"
+        },
+        "redisThroughputDatabaseName": {
+            "type": "string"
+        },
+        "redisThroughputSkuName": {
+            "type": "string"
+        },
+        "redisThroughputSkuFamily": {
+            "type": "string"
+        },
+        "redisThroughputSkuCapacity": {
             "type": "int"
         },
 
-        "sqlDatabaseName": {
+        "sqlServerName": {
+            "type": "string"
+        },
+        "sqlLatencyDatabaseName": {
+            "type": "string"
+        },
+        "sqlThroughputDatabaseName": {
             "type": "string"
         },
         "sqlEdition": {
@@ -221,6 +239,23 @@
             "metadata": {
                 "description": "Instance count for node type"
             }
+        },
+        
+        "vmNodeType3Name": {
+            "type": "string",
+            "defaultValue": "NT4",
+            "maxLength": 9
+        },
+        "vmNodeType3Size": {
+            "type": "string",
+            "defaultValue": "Standard_A4_v2"
+        },
+        "nt3InstanceCount": {
+            "type": "int",
+            "defaultValue": 5,
+            "metadata": {
+                "description": "Instance count for node type"
+            }
         }
     },
 
@@ -241,12 +276,15 @@
         "subnet0Prefix": "10.0.0.0/24",
         "subnet1Prefix": "10.0.1.0/24",
         "subnet2Prefix": "10.0.2.0/24",
+        "subnet3Prefix": "10.0.3.0/24",
         "subnet0Name": "[concat('subnet-',parameters('vmNodeType0Name'))]",
         "subnet1Name": "[concat('subnet-',parameters('vmNodeType1Name'))]",
         "subnet2Name": "[concat('subnet-',parameters('vmNodeType2Name'))]",
+        "subnet3Name": "[concat('subnet-',parameters('vmNodeType3Name'))]",
         "subnet0Ref": "[concat(variables('vnetID'),'/subnets/',variables('subnet0Name'))]",
         "subnet1Ref": "[concat(variables('vnetID'),'/subnets/',variables('subnet1Name'))]",
         "subnet2Ref": "[concat(variables('vnetID'),'/subnets/',variables('subnet2Name'))]",
+        "subnet3Ref": "[concat(variables('vnetID'),'/subnets/',variables('subnet3Name'))]",
 
         "loadBalancerName": "[concat('LB-',parameters('clusterName'))]",
         "loadBalancerID": "[resourceId('Microsoft.Network/loadBalancers',variables('loadBalancerName'))]",
@@ -280,6 +318,14 @@
             "[concat(variables('vmStorageAccountName2'), '3')]",
             "[concat(variables('vmStorageAccountName2'), '4')]"
         ],
+        "vmStorageAccountName3": "[toLower(concat(uniqueString(resourceGroup().id), '1', '3' ))]",
+        "uniqueStringArray3": [
+            "[concat(variables('vmStorageAccountName3'), '0')]",
+            "[concat(variables('vmStorageAccountName3'), '1')]",
+            "[concat(variables('vmStorageAccountName3'), '2')]",
+            "[concat(variables('vmStorageAccountName3'), '3')]",
+            "[concat(variables('vmStorageAccountName3'), '4')]"
+        ],
 
         "loadBalancedAppPort": 80,
         "applicationStartPort": 20000,
@@ -291,7 +337,8 @@
 
         "sqlCollation": "SQL_Latin1_General_CP1_CI_AS",
         "sqlDatabaseSizeBytes": "268435456000",
-        "sqlServiceObjectiveId": "455330e1-00cd-488b-b5fa-177c226f28b7",
+        "sqlLatencyServiceObjectiveId": "455330e1-00cd-488b-b5fa-177c226f28b7",
+        "sqlThroughputServiceObjectiveId": "789681b8-ca10-4eb0-bdf2-e0b050601b40",
         "sqlSampleName": ""
     },
 
@@ -334,13 +381,28 @@
         {
             "apiVersion": "2016-04-01",
             "type": "Microsoft.Cache/Redis",
-            "name": "[parameters('redisDatabaseName')]",
+            "name": "[parameters('redisLatencyDatabaseName')]",
             "location": "[parameters('location')]",
             "properties": {
                 "sku": {
-                    "name": "[parameters('redisSkuName')]",
-                    "family": "[parameters('redisSkuFamily')]",
-                    "capacity": "[parameters('redisSkuCapacity')]"
+                    "name": "[parameters('redisLatencySkuName')]",
+                    "family": "[parameters('redisLatencySkuFamily')]",
+                    "capacity": "[parameters('redisLatencySkuCapacity')]"
+                },
+                "redisConfiguration": {},
+                "enableNonSslPort": false
+            }
+        },
+        {
+            "apiVersion": "2016-04-01",
+            "type": "Microsoft.Cache/Redis",
+            "name": "[parameters('redisThroughputDatabaseName')]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "sku": {
+                    "name": "[parameters('redisThroughputSkuName')]",
+                    "family": "[parameters('redisThroughputSkuFamily')]",
+                    "capacity": "[parameters('redisThroughputSkuCapacity')]"
                 },
                 "redisConfiguration": {},
                 "enableNonSslPort": false
@@ -350,8 +412,9 @@
 
         {
             "apiVersion": "2014-04-01-preview",
+            "type": "Microsoft.Sql/servers",
+            "name": "[parameters('sqlServerName')]",
             "location": "[parameters('location')]",
-            "name": "[parameters('sqlDatabaseName')]",
             "properties": {
                 "administratorLogin": "[parameters('adminUserName')]",
                 "administratorLoginPassword": "[parameters('adminPassword')]",
@@ -360,35 +423,50 @@
             "resources": [
                 {
                     "apiVersion": "2014-04-01-preview",
-                    "dependsOn": [
-                        "[concat('Microsoft.Sql/servers/', parameters('sqlDatabaseName'))]"
-                    ],
+                    "type": "firewallrules",
+                    "name": "AllowAllWindowsAzureIps",
                     "location": "[parameters('location')]",
-                    "name": "[parameters('sqlDatabaseName')]",
+                    "dependsOn": [
+                        "[concat('Microsoft.Sql/servers/', parameters('sqlServerName'))]"
+                    ],
+                    "properties": {
+                        "endIpAddress": "0.0.0.0",
+                        "startIpAddress": "0.0.0.0"
+                    }
+                },
+                {
+                    "apiVersion": "2014-04-01-preview",
+                    "type": "databases",
+                    "name": "[parameters('sqlLatencyDatabaseName')]",
+                    "location": "[parameters('location')]",
+                    "dependsOn": [
+                        "[concat('Microsoft.Sql/servers/', parameters('sqlServerName'))]"
+                    ],
                     "properties": {
                         "collation": "[variables('sqlCollation')]",
                         "edition": "[parameters('sqlEdition')]",
                         "maxSizeBytes": "[variables('sqlDatabaseSizeBytes')]",
-                        "requestedServiceObjectiveId": "[variables('sqlServiceObjectiveId')]",
+                        "requestedServiceObjectiveId": "[variables('sqlLatencyServiceObjectiveId')]",
                         "sampleName": "[variables('sqlSampleName')]"
-                    },
-                    "type": "databases"
+                    }
                 },
                 {
                     "apiVersion": "2014-04-01-preview",
-                    "dependsOn": [
-                        "[concat('Microsoft.Sql/servers/', parameters('sqlDatabaseName'))]"
-                    ],
+                    "type": "databases",
+                    "name": "[parameters('sqlThroughputDatabaseName')]",
                     "location": "[parameters('location')]",
-                    "name": "AllowAllWindowsAzureIps",
+                    "dependsOn": [
+                        "[concat('Microsoft.Sql/servers/', parameters('sqlServerName'))]"
+                    ],
                     "properties": {
-                        "endIpAddress": "0.0.0.0",
-                        "startIpAddress": "0.0.0.0"
-                    },
-                    "type": "firewallrules"
+                        "collation": "[variables('sqlCollation')]",
+                        "edition": "[parameters('sqlEdition')]",
+                        "maxSizeBytes": "[variables('sqlDatabaseSizeBytes')]",
+                        "requestedServiceObjectiveId": "[variables('sqlThroughputServiceObjectiveId')]",
+                        "sampleName": "[variables('sqlSampleName')]"
+                    }
                 }
-            ],
-            "type": "Microsoft.Sql/servers"
+            ]
         },
 
 
@@ -482,6 +560,12 @@
                         "name": "[variables('subnet2Name')]",
                         "properties": {
                             "addressPrefix": "[variables('subnet2Prefix')]"
+                        }
+                    },
+                    {
+                        "name": "[variables('subnet3Name')]",
+                        "properties": {
+                            "addressPrefix": "[variables('subnet3Prefix')]"
                         }
                     }
                 ]
@@ -912,7 +996,7 @@
                                 "properties": {
                                     "ipConfigurations": [
                                         {
-                                            "name": "[concat(variables('nicName'),'-',0)]",
+                                            "name": "[concat(variables('nicName'),'-0')]",
                                             "properties": {
                                                 "loadBalancerBackendAddressPools": [
                                                     {
@@ -1116,7 +1200,7 @@
                                 "properties": {
                                     "ipConfigurations": [
                                         {
-                                            "name": "[concat(variables('nicName'),'-',1)]",
+                                            "name": "[concat(variables('nicName'),'-1')]",
                                             "properties": {
                                                 "subnet": {
                                                     "id": "[variables('subnet1Ref')]"
@@ -1310,7 +1394,7 @@
                                 "properties": {
                                     "ipConfigurations": [
                                         {
-                                            "name": "[concat(variables('nicName'),'-',2)]",
+                                            "name": "[concat(variables('nicName'),'-2')]",
                                             "properties": {
                                                 "subnet": {
                                                     "id": "[variables('subnet2Ref')]"
@@ -1366,6 +1450,200 @@
             "sku": {
                 "name": "[parameters('vmNodeType2Size')]",
                 "capacity": "[parameters('nt2InstanceCount')]",
+                "tier": "Standard"
+            },
+            "tags": {
+                "resourceType": "Service Fabric",
+                "clusterName": "[parameters('clusterName')]"
+            }
+        },
+
+
+        {
+            "apiVersion": "[variables('storageApiVersion')]",
+            "type": "Microsoft.Storage/storageAccounts",
+            "name": "[variables('uniqueStringArray3')[copyIndex()]]",
+            "location": "[parameters('location')]",
+            "dependsOn": [],
+            "properties": {},
+            "copy": {
+                "name": "storageLoop",
+                "count": 5
+            },
+            "kind": "Storage",
+            "sku": {
+                "name": "[parameters('storageAccountType')]"
+            },
+            "tags": {
+                "resourceType": "Service Fabric",
+                "clusterName": "[parameters('clusterName')]"
+            }
+        },
+        {
+            "apiVersion": "[variables('vmssApiVersion')]",
+            "type": "Microsoft.Compute/virtualMachineScaleSets",
+            "name": "[parameters('vmNodeType3Name')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[concat('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]",
+                "[concat('Microsoft.Storage/storageAccounts/', variables('uniqueStringArray3')[0])]",
+                "[concat('Microsoft.Storage/storageAccounts/', variables('uniqueStringArray3')[1])]",
+                "[concat('Microsoft.Storage/storageAccounts/', variables('uniqueStringArray3')[2])]",
+                "[concat('Microsoft.Storage/storageAccounts/', variables('uniqueStringArray3')[3])]",
+                "[concat('Microsoft.Storage/storageAccounts/', variables('uniqueStringArray3')[4])]",
+                "[concat('Microsoft.Storage/storageAccounts/', parameters('supportLogStorageAccountName'))]",
+                "[concat('Microsoft.Storage/storageAccounts/', parameters('applicationDiagnosticsStorageAccountName'))]"
+            ],
+            "properties": {
+                "overprovision": "false",
+                "upgradePolicy": {
+                    "mode": "Automatic"
+                },
+                "virtualMachineProfile": {
+                    "extensionProfile": {
+                        "extensions": [
+                            {
+                                "name": "[concat(parameters('vmNodeType3Name'),'_ServiceFabricNode')]",
+                                "properties": {
+                                    "type": "ServiceFabricNode",
+                                    "autoUpgradeMinorVersion": false,
+                                    "protectedSettings": {
+                                        "StorageAccountKey1": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('supportLogStorageAccountName')),'2015-05-01-preview').key1]",
+                                        "StorageAccountKey2": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('supportLogStorageAccountName')),'2015-05-01-preview').key2]"
+                                    },
+                                    "publisher": "Microsoft.Azure.ServiceFabric",
+                                    "settings": {
+                                        "clusterEndpoint": "[reference(variables('clusterRef')).clusterEndpoint]",
+                                        "nodeTypeRef": "[parameters('vmNodeType3Name')]",
+                                        "dataPath": "D:\\\\SF",
+                                        "durabilityLevel": "Bronze",
+                                        "enableParallelJobs": true,
+                                        "nicPrefixOverride": "[variables('subnet3Prefix')]",
+                                        "certificate": {
+                                            "thumbprint": "[parameters('certificateThumbprint')]",
+                                            "x509StoreName": "[parameters('certificateStoreValue')]"
+                                        }
+                                    },
+                                    "typeHandlerVersion": "1.0"
+                                }
+                            },
+                            {
+                                "name": "[concat('VMDiagnosticsVmExt','_vmNodeType3Name')]",
+                                "properties": {
+                                    "type": "IaaSDiagnostics",
+                                    "autoUpgradeMinorVersion": true,
+                                    "protectedSettings": {
+                                        "storageAccountName": "[parameters('applicationDiagnosticsStorageAccountName')]",
+                                        "storageAccountKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('applicationDiagnosticsStorageAccountName')),'2015-05-01-preview').key1]",
+                                        "storageAccountEndPoint": "https://core.windows.net/"
+                                    },
+                                    "publisher": "Microsoft.Azure.Diagnostics",
+                                    "settings": {
+                                        "WadCfg": {
+                                            "DiagnosticMonitorConfiguration": {
+                                                "overallQuotaInMB": "50000",
+                                                "EtwProviders": {
+                                                    "EtwEventSourceProviderConfiguration": [
+                                                        {
+                                                            "provider": "Microsoft-ServiceFabric-Actors",
+                                                            "scheduledTransferKeywordFilter": "1",
+                                                            "scheduledTransferPeriod": "PT5M",
+                                                            "DefaultEvents": {
+                                                                "eventDestination": "ServiceFabricReliableActorEventTable"
+                                                            }
+                                                        },
+                                                        {
+                                                            "provider": "Microsoft-ServiceFabric-Services",
+                                                            "scheduledTransferPeriod": "PT5M",
+                                                            "DefaultEvents": {
+                                                                "eventDestination": "ServiceFabricReliableServiceEventTable"
+                                                            }
+                                                        }
+                                                    ],
+                                                    "EtwManifestProviderConfiguration": [
+                                                        {
+                                                            "provider": "cbd93bc2-71e5-4566-b3a7-595d8eeca6e8",
+                                                            "scheduledTransferLogLevelFilter": "Information",
+                                                            "scheduledTransferKeywordFilter": "4611686018427387904",
+                                                            "scheduledTransferPeriod": "PT5M",
+                                                            "DefaultEvents": {
+                                                                "eventDestination": "ServiceFabricSystemEventTable"
+                                                            }
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        },
+                                        "StorageAccount": "[parameters('applicationDiagnosticsStorageAccountName')]"
+                                    },
+                                    "typeHandlerVersion": "1.5"
+                                }
+                            }
+                        ]
+                    },
+                    "networkProfile": {
+                        "networkInterfaceConfigurations": [
+                            {
+                                "name": "[concat(variables('nicName'), '-3')]",
+                                "properties": {
+                                    "ipConfigurations": [
+                                        {
+                                            "name": "[concat(variables('nicName'),'-3')]",
+                                            "properties": {
+                                                "subnet": {
+                                                    "id": "[variables('subnet3Ref')]"
+                                                }
+                                            }
+                                        }
+                                    ],
+                                    "primary": true
+                                }
+                            }
+                        ]
+                    },
+                    "osProfile": {
+                        "adminPassword": "[parameters('adminPassword')]",
+                        "adminUsername": "[parameters('adminUsername')]",
+                        "computernamePrefix": "[parameters('vmNodeType3Name')]",
+                        "secrets": [
+                            {
+                                "sourceVault": {
+                                    "id": "[parameters('sourceVaultValue')]"
+                                },
+                                "vaultCertificates": [
+                                    {
+                                        "certificateStore": "[parameters('certificateStoreValue')]",
+                                        "certificateUrl": "[parameters('certificateUrlValue')]"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    "storageProfile": {
+                        "imageReference": {
+                            "publisher": "[parameters('vmImagePublisher')]",
+                            "offer": "[parameters('vmImageOffer')]",
+                            "sku": "[parameters('vmImageSku')]",
+                            "version": "[parameters('vmImageVersion')]"
+                        },
+                        "osDisk": {
+                            "vhdContainers": [
+                                "[concat(reference(concat('Microsoft.Storage/storageAccounts/', variables('uniqueStringArray3')[0]), variables('storageApiVersion')).primaryEndpoints.blob, parameters('vmStorageAccountContainerName'))]",
+                                "[concat(reference(concat('Microsoft.Storage/storageAccounts/', variables('uniqueStringArray3')[1]), variables('storageApiVersion')).primaryEndpoints.blob, parameters('vmStorageAccountContainerName'))]",
+                                "[concat(reference(concat('Microsoft.Storage/storageAccounts/', variables('uniqueStringArray3')[2]), variables('storageApiVersion')).primaryEndpoints.blob, parameters('vmStorageAccountContainerName'))]",
+                                "[concat(reference(concat('Microsoft.Storage/storageAccounts/', variables('uniqueStringArray3')[3]), variables('storageApiVersion')).primaryEndpoints.blob, parameters('vmStorageAccountContainerName'))]",
+                                "[concat(reference(concat('Microsoft.Storage/storageAccounts/', variables('uniqueStringArray3')[4]), variables('storageApiVersion')).primaryEndpoints.blob, parameters('vmStorageAccountContainerName'))]"
+                            ],
+                            "name": "vmssosdisk",
+                            "caching": "ReadOnly",
+                            "createOption": "FromImage"
+                        }
+                    }
+                }
+            },
+            "sku": {
+                "name": "[parameters('vmNodeType3Size')]",
+                "capacity": "[parameters('nt3InstanceCount')]",
                 "tier": "Standard"
             },
             "tags": {
@@ -1458,6 +1736,22 @@
                         "httpGatewayEndpointPort": "[variables('fabricHttpGatewayPort')]",
                         "isPrimary": false,
                         "vmInstanceCount": "[parameters('nt2InstanceCount')]"
+                    },
+                    {
+                        "name": "[parameters('vmNodeType3Name')]",
+                        "applicationPorts": {
+                            "startPort": "[variables('applicationStartPort')]",
+                            "endPort": "[variables('applicationEndPort')]"
+                        },
+                        "clientConnectionEndpointPort": "[variables('fabricTcpGatewayPort')]",
+                        "durabilityLevel": "Bronze",
+                        "ephemeralPorts": {
+                            "startPort": "[variables('ephemeralStartPort')]",
+                            "endPort": "[variables('ephemeralEndPort')]"
+                        },
+                        "httpGatewayEndpointPort": "[variables('fabricHttpGatewayPort')]",
+                        "isPrimary": false,
+                        "vmInstanceCount": "[parameters('nt3InstanceCount')]"
                     }
                 ],
                 "provisioningState": "Default",

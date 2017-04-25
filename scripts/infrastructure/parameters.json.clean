@@ -24,27 +24,45 @@
             "value": "azure-performance"
         },
         "eventHubSku": {
-            "value": "2"
-        },
-        "eventHubMessagingUnits": {
             "value": "1"
         },
-
-        "redisDatabaseName": {
-            "value": "azure-performance"
+        "eventHubMessagingUnits": {
+            "value": "10"
         },
-        "redisSkuName": {
+
+        "redisLatencyDatabaseName": {
+            "value": "azure-latency"
+        },
+        "redisLatencySkuName": {
             "value": "Basic"
         },
-        "redisSkuFamily": {
+        "redisLatencySkuFamily": {
             "value": "C"
         },
-        "redisSkuCapacity": {
+        "redisLatencySkuCapacity": {
             "value": 2
         },
+        "redisThroughputDatabaseName": {
+            "value": "azure-throughput"
+        },
+        "redisThroughputSkuName": {
+            "value": "Basic"
+        },
+        "redisThroughputSkuFamily": {
+            "value": "C"
+        },
+        "redisThroughputSkuCapacity": {
+            "value": 5
+        },
 
-        "sqlDatabaseName": {
+        "sqlServerName": {
             "value": "azure-performance"
+        },
+        "sqlLatencyDatabaseName": {
+            "value": "azure-latency"
+        },
+        "sqlThroughputDatabaseName": {
+            "value": "azure-throughput"
         },
         "sqlEdition": {
             "value": "Standard"
@@ -94,6 +112,16 @@
             "value": "Standard_D3_v2_Promo"
         },
         "nt2InstanceCount": {
+            "value": 6
+        },
+
+        "vmNodeType3Name": {
+            "value": "az-perf"
+        },
+        "vmNodeType3Size": {
+            "value": "Standard_D2_v2_Promo"
+        },
+        "nt3InstanceCount": {
             "value": 6
         },
 
