@@ -86,6 +86,9 @@ namespace Azure.Performance.Throughput.QueueSvc
 				await tx.CommitAsync().ConfigureAwait(false);
 			}
 
+			// Workaround:  memory consumption goes to zero without this.
+			await Task.Delay(1).ConfigureAwait(false);
+
 			return batchSize;
 		}
 	}

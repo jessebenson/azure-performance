@@ -4,6 +4,8 @@
   <Section Name="ReplicatorConfig">
     <Parameter Name="ReplicatorEndpoint" Value="ReplicatorEndpoint" />
     <Parameter Name="BatchAcknowledgementInterval" Value="0.015" />
+    <Parameter Name="MaxPrimaryReplicationQueueSize" Value="1048576" />
+    <Parameter Name="MaxSecondaryReplicationQueueSize" Value="1048576" />
   </Section>
   <!-- This is used for securing StateManager's replication traffic. -->
   <Section Name="ReplicatorSecurityConfig" />
