@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.12
+VisualStudioVersion = 15.0.26403.7
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{E2697F9D-9050-438F-8F82-B6FC0D948A68}"
 EndProject
@@ -24,6 +24,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Throughput.DictionarySvc", "ServiceFabric\Throughput.DictionarySvc\Throughput.DictionarySvc.csproj", "{E7D8F7CC-E5CA-43F1-9CFF-61FDB67E24DD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Throughput.QueueSvc", "ServiceFabric\Throughput.QueueSvc\Throughput.QueueSvc.csproj", "{18565709-9819-4F6F-8D6E-87D3BCEA349E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DocumentDB", "DocumentDB", "{9CA7FBF7-F083-4676-A317-E8DEDBD8377B}"
+EndProject
+Project("{A07B5EB6-E848-4116-A8D0-A826331D98C6}") = "Throughput.DocumentDB", "DocumentDB\Throughput.DocumentDB\Throughput.DocumentDB.sfproj", "{F7E8AA52-3E51-4A99-A2FA-29DD57B090A4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Throughput.DocumentDbSvc", "DocumentDB\Throughput.DocumentDbSvc\Throughput.DocumentDbSvc.csproj", "{6A7CFD1D-5746-4E0A-801A-273012F08DC1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -67,6 +73,16 @@ Global
 		{18565709-9819-4F6F-8D6E-87D3BCEA349E}.Debug|x64.Build.0 = Debug|x64
 		{18565709-9819-4F6F-8D6E-87D3BCEA349E}.Release|x64.ActiveCfg = Release|x64
 		{18565709-9819-4F6F-8D6E-87D3BCEA349E}.Release|x64.Build.0 = Release|x64
+		{F7E8AA52-3E51-4A99-A2FA-29DD57B090A4}.Debug|x64.ActiveCfg = Debug|x64
+		{F7E8AA52-3E51-4A99-A2FA-29DD57B090A4}.Debug|x64.Build.0 = Debug|x64
+		{F7E8AA52-3E51-4A99-A2FA-29DD57B090A4}.Debug|x64.Deploy.0 = Debug|x64
+		{F7E8AA52-3E51-4A99-A2FA-29DD57B090A4}.Release|x64.ActiveCfg = Release|x64
+		{F7E8AA52-3E51-4A99-A2FA-29DD57B090A4}.Release|x64.Build.0 = Release|x64
+		{F7E8AA52-3E51-4A99-A2FA-29DD57B090A4}.Release|x64.Deploy.0 = Release|x64
+		{6A7CFD1D-5746-4E0A-801A-273012F08DC1}.Debug|x64.ActiveCfg = Debug|x64
+		{6A7CFD1D-5746-4E0A-801A-273012F08DC1}.Debug|x64.Build.0 = Debug|x64
+		{6A7CFD1D-5746-4E0A-801A-273012F08DC1}.Release|x64.ActiveCfg = Release|x64
+		{6A7CFD1D-5746-4E0A-801A-273012F08DC1}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -80,5 +96,7 @@ Global
 		{677C93E2-6088-4D49-BF21-1BAD2A6F5BAF} = {62EBB5C6-1208-485D-BAB4-06EF7EBD903B}
 		{E7D8F7CC-E5CA-43F1-9CFF-61FDB67E24DD} = {62EBB5C6-1208-485D-BAB4-06EF7EBD903B}
 		{18565709-9819-4F6F-8D6E-87D3BCEA349E} = {62EBB5C6-1208-485D-BAB4-06EF7EBD903B}
+		{F7E8AA52-3E51-4A99-A2FA-29DD57B090A4} = {9CA7FBF7-F083-4676-A317-E8DEDBD8377B}
+		{6A7CFD1D-5746-4E0A-801A-273012F08DC1} = {9CA7FBF7-F083-4676-A317-E8DEDBD8377B}
 	EndGlobalSection
 EndGlobal

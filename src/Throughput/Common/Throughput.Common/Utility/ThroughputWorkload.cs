@@ -12,14 +12,16 @@ namespace Azure.Performance.Throughput.Common
 	{
 		private readonly ILogger _logger;
 		private readonly string _workloadName;
+		private readonly Func<Exception, TimeSpan?> _throttle;
 
 		private long _operations = 0;
 		private long _latency = 0;
 
-		public ThroughputWorkload(ILogger logger, string workloadName)
+		public ThroughputWorkload(ILogger logger, string workloadName, Func<Exception, TimeSpan?> throttle = null)
 		{
 			_logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			_workloadName = workloadName ?? throw new ArgumentNullException(nameof(workloadName));
+			_throttle = throttle ?? new Func<Exception, TimeSpan?>((e) => null);
 		}
 
 		public async Task InvokeAsync(int taskCount, Func<Random, Task<long>> workload, CancellationToken cancellationToken)
@@ -86,18 +88,28 @@ namespace Azure.Performance.Throughput.Common
 				}
 				catch (Exception e)
 				{
+					timer.Stop();
+
 					if (cancellationToken.IsCancellationRequested)
 						return;
 
-					timer.Stop();
-					var retryAfter = retry.Retry();
+					// Check if this is an exception indicating we are being throttled.
+					var throttle = _throttle.Invoke(e);
+					if (throttle != null)
+					{
+						await Task.Delay(throttle.Value, cancellationToken).ConfigureAwait(false);
+					}
+					else
+					{
+						var retryAfter = retry.Retry();
 
-					// Track metrics.
-					Interlocked.Add(ref _latency, timer.ElapsedMilliseconds);
+						// Track metrics.
+						Interlocked.Add(ref _latency, timer.ElapsedMilliseconds);
 
-					// Exponential delay after exceptions.
-					_logger.Error(e, "Unexpected exception {ExceptionType} in {WorkloadName}.  Retrying in {RetryInMs} ms.", e.GetType(), _workloadName, retryAfter.TotalMilliseconds);
-					await Task.Delay(retryAfter, cancellationToken).ConfigureAwait(false);
+						// Exponential delay after exceptions.
+						_logger.Error(e, "Unexpected exception {ExceptionType} in {WorkloadName}.  Retrying in {RetryInMs} ms.", e.GetType(), _workloadName, retryAfter.TotalMilliseconds);
+						await Task.Delay(retryAfter, cancellationToken).ConfigureAwait(false);
+					}
 				}
 			}
 		}
