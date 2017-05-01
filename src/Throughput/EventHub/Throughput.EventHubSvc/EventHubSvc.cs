@@ -22,7 +22,7 @@ namespace Azure.Performance.Throughput.EventHubSvc
 	/// </summary>
 	internal sealed class EventHubSvc : LoggingStatelessService, IEventHubSvc
 	{
-		private const int TaskCount = 64;
+		private const int TaskCount = 32;
 		private readonly EventHubClient _client;
 
 		public EventHubSvc(StatelessServiceContext context, ILogger logger)
