@@ -65,7 +65,7 @@ namespace Azure.Performance.Throughput.DictionarySvc
 		{
 			var state = await this.StateManager.GetOrAddAsync<IReliableDictionary<long, PerformanceData>>("throughput").ConfigureAwait(false);
 
-			var workload = new ThroughputWorkload(_logger, "ReliableDictionary");
+			var workload = new ThroughputWorkload(_logger, "ReliableDictionary", IsKnownException);
 			await workload.InvokeAsync(TaskCount, (random) => WriteAsync(state, random, cancellationToken), cancellationToken).ConfigureAwait(false);
 		}
 
@@ -87,6 +87,14 @@ namespace Azure.Performance.Throughput.DictionarySvc
 			}
 
 			return batchSize;
+		}
+
+		private static TimeSpan? IsKnownException(Exception e)
+		{
+			if (e is FabricNotPrimaryException || e is FabricNotReadableException)
+				return TimeSpan.FromSeconds(1);
+
+			return null;
 		}
 	}
 }

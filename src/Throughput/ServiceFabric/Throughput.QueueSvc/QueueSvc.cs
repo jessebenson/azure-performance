@@ -64,7 +64,7 @@ namespace Azure.Performance.Throughput.QueueSvc
 		{
 			var state = await this.StateManager.GetOrAddAsync<IReliableConcurrentQueue<PerformanceData>>("throughput").ConfigureAwait(false);
 
-			var workload = new ThroughputWorkload(_logger, "ReliableQueue");
+			var workload = new ThroughputWorkload(_logger, "ReliableQueue", IsKnownException);
 			await workload.InvokeAsync(TaskCount, (random) => WriteAsync(state, random, cancellationToken), cancellationToken).ConfigureAwait(false);
 		}
 
@@ -90,6 +90,14 @@ namespace Azure.Performance.Throughput.QueueSvc
 			await Task.Delay(1).ConfigureAwait(false);
 
 			return batchSize;
+		}
+
+		private static TimeSpan? IsKnownException(Exception e)
+		{
+			if (e is FabricNotPrimaryException || e is FabricNotReadableException)
+				return TimeSpan.FromSeconds(1);
+
+			return null;
 		}
 	}
 }
