@@ -71,7 +71,7 @@ namespace Azure.Performance.Throughput.DocumentDbSvc
 			await base.RunAsync(cancellationToken).ConfigureAwait(false);
 
 			// Spawn workload.
-			await CreateWorkloadAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
+			await CreateWorkloadAsync(cancellationToken).ConfigureAwait(false);
 		}
 
 		private async Task CreateWorkloadAsync(CancellationToken cancellationToken)

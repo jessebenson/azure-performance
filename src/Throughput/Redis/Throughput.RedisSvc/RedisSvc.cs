@@ -21,7 +21,7 @@ namespace Azure.Performance.Throughput.RedisSvc
 	/// </summary>
 	internal sealed class RedisSvc : LoggingStatelessService, IRedisSvc
 	{
-		private const int TaskCount = 1024;
+		private const int TaskCount = 128;
 		private readonly string _connectionString;
 		private long _id = 0;
 
@@ -57,7 +57,7 @@ namespace Azure.Performance.Throughput.RedisSvc
 			await base.RunAsync(cancellationToken).ConfigureAwait(false);
 
 			// Spawn workload.
-			await CreateWorkloadAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
+			await CreateWorkloadAsync(cancellationToken).ConfigureAwait(false);
 		}
 
 		private async Task CreateWorkloadAsync(CancellationToken cancellationToken)
@@ -71,19 +71,21 @@ namespace Azure.Performance.Throughput.RedisSvc
 
 		private async Task<long> WriteAsync(IDatabase redis, Random random, CancellationToken cancellationToken)
 		{
-			var value = RandomGenerator.GetPerformanceData();
-			var serialized = JsonConvert.SerializeObject(value);
+			const int batchSize = 192;
 
-			var tasks = new Task[256];
-			for (int i = 0; i < tasks.Length; i++)
+			var values = new KeyValuePair<RedisKey, RedisValue>[batchSize];
+			for (int i = 0; i < batchSize; i++)
 			{
 				long key = Interlocked.Increment(ref _id) % 1000000;
-				tasks[i] = redis.StringSetAsync(key.ToString(), serialized);
+				var value = RandomGenerator.GetPerformanceData();
+				var serialized = JsonConvert.SerializeObject(value);
+
+				values[i] = new KeyValuePair<RedisKey, RedisValue>(key.ToString(), serialized);
 			}
 
-			await Task.WhenAll(tasks).ConfigureAwait(false);
+			await redis.StringSetAsync(values).ConfigureAwait(false);
 
-			return tasks.Length;
+			return batchSize;
 		}
 	}
 }
