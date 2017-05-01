@@ -21,7 +21,7 @@ namespace Azure.Performance.Throughput.QueueSvc
 	/// </summary>
 	internal sealed class QueueSvc : LoggingStatefulService, IQueueSvc
 	{
-		private const int TaskCount = 64;
+		private const int TaskCount = 48;
 
 		public QueueSvc(StatefulServiceContext context, ILogger logger)
 			: base(context, logger)
