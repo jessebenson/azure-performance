@@ -119,7 +119,7 @@
             "value": "az-perf"
         },
         "vmNodeType3Size": {
-            "value": "Standard_D2_v2_Promo"
+            "value": "Standard_D3_v2_Promo"
         },
         "nt3InstanceCount": {
             "value": 6

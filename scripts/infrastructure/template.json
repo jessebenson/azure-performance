@@ -338,7 +338,7 @@
         "sqlCollation": "SQL_Latin1_General_CP1_CI_AS",
         "sqlDatabaseSizeBytes": "268435456000",
         "sqlLatencyServiceObjectiveId": "455330e1-00cd-488b-b5fa-177c226f28b7",
-        "sqlThroughputServiceObjectiveId": "789681b8-ca10-4eb0-bdf2-e0b050601b40",
+        "sqlThroughputServiceObjectiveId": "a7d1b92d-c987-4375-b54d-2b1d0e0f5bb0",
         "sqlSampleName": ""
     },
 
