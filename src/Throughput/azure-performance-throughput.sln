@@ -11,12 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Throughput.Common", "Common
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Throughput.Console", "Common\Throughput.Console\Throughput.Console.csproj", "{C1F46A94-FAB7-4F33-B187-F035C56F6F5D}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DocumentDB", "DocumentDB", "{9CA7FBF7-F083-4676-A317-E8DEDBD8377B}"
-EndProject
-Project("{A07B5EB6-E848-4116-A8D0-A826331D98C6}") = "Throughput.DocumentDB", "DocumentDB\Throughput.DocumentDB\Throughput.DocumentDB.sfproj", "{F7E8AA52-3E51-4A99-A2FA-29DD57B090A4}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Throughput.DocumentDbSvc", "DocumentDB\Throughput.DocumentDbSvc\Throughput.DocumentDbSvc.csproj", "{6A7CFD1D-5746-4E0A-801A-273012F08DC1}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Redis", "Redis", "{B4E92714-1866-41BC-8137-7258CE88D5FA}"
 EndProject
 Project("{A07B5EB6-E848-4116-A8D0-A826331D98C6}") = "Throughput.Redis", "Redis\Throughput.Redis\Throughput.Redis.sfproj", "{CCC708D4-A277-4984-A3BD-913D846C19FD}"
@@ -31,11 +25,23 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Throughput.DictionarySvc", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Throughput.QueueSvc", "ServiceFabric\Throughput.QueueSvc\Throughput.QueueSvc.csproj", "{18565709-9819-4F6F-8D6E-87D3BCEA349E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DocumentDB", "DocumentDB", "{9CA7FBF7-F083-4676-A317-E8DEDBD8377B}"
+EndProject
+Project("{A07B5EB6-E848-4116-A8D0-A826331D98C6}") = "Throughput.DocumentDB", "DocumentDB\Throughput.DocumentDB\Throughput.DocumentDB.sfproj", "{F7E8AA52-3E51-4A99-A2FA-29DD57B090A4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Throughput.DocumentDbSvc", "DocumentDB\Throughput.DocumentDbSvc\Throughput.DocumentDbSvc.csproj", "{6A7CFD1D-5746-4E0A-801A-273012F08DC1}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SQL", "SQL", "{8B454586-5854-4D62-8069-6304DB3260B5}"
 EndProject
 Project("{A07B5EB6-E848-4116-A8D0-A826331D98C6}") = "Throughput.SQL", "SQL\Throughput.SQL\Throughput.SQL.sfproj", "{51C88FA3-C0A1-4A08-B9F5-EEB24365337E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Throughput.SqlSvc", "SQL\Throughput.SqlSvc\Throughput.SqlSvc.csproj", "{D9116234-C189-4235-B30F-241C21961081}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EventHub", "EventHub", "{30EA1CAF-BB69-4B26-863A-99D67E76ACEC}"
+EndProject
+Project("{A07B5EB6-E848-4116-A8D0-A826331D98C6}") = "Throughput.EventHub", "EventHub\Throughput.EventHub\Throughput.EventHub.sfproj", "{08CD16E7-D5DF-4CFA-B841-83D5711B3705}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Throughput.EventHubSvc", "EventHub\Throughput.EventHubSvc\Throughput.EventHubSvc.csproj", "{54B74630-9CC6-4E2B-8E3E-AE2C344A0E93}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -99,6 +105,16 @@ Global
 		{D9116234-C189-4235-B30F-241C21961081}.Debug|x64.Build.0 = Debug|x64
 		{D9116234-C189-4235-B30F-241C21961081}.Release|x64.ActiveCfg = Release|x64
 		{D9116234-C189-4235-B30F-241C21961081}.Release|x64.Build.0 = Release|x64
+		{08CD16E7-D5DF-4CFA-B841-83D5711B3705}.Debug|x64.ActiveCfg = Debug|x64
+		{08CD16E7-D5DF-4CFA-B841-83D5711B3705}.Debug|x64.Build.0 = Debug|x64
+		{08CD16E7-D5DF-4CFA-B841-83D5711B3705}.Debug|x64.Deploy.0 = Debug|x64
+		{08CD16E7-D5DF-4CFA-B841-83D5711B3705}.Release|x64.ActiveCfg = Release|x64
+		{08CD16E7-D5DF-4CFA-B841-83D5711B3705}.Release|x64.Build.0 = Release|x64
+		{08CD16E7-D5DF-4CFA-B841-83D5711B3705}.Release|x64.Deploy.0 = Release|x64
+		{54B74630-9CC6-4E2B-8E3E-AE2C344A0E93}.Debug|x64.ActiveCfg = Debug|x64
+		{54B74630-9CC6-4E2B-8E3E-AE2C344A0E93}.Debug|x64.Build.0 = Debug|x64
+		{54B74630-9CC6-4E2B-8E3E-AE2C344A0E93}.Release|x64.ActiveCfg = Release|x64
+		{54B74630-9CC6-4E2B-8E3E-AE2C344A0E93}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -116,5 +132,7 @@ Global
 		{6A7CFD1D-5746-4E0A-801A-273012F08DC1} = {9CA7FBF7-F083-4676-A317-E8DEDBD8377B}
 		{51C88FA3-C0A1-4A08-B9F5-EEB24365337E} = {8B454586-5854-4D62-8069-6304DB3260B5}
 		{D9116234-C189-4235-B30F-241C21961081} = {8B454586-5854-4D62-8069-6304DB3260B5}
+		{08CD16E7-D5DF-4CFA-B841-83D5711B3705} = {30EA1CAF-BB69-4B26-863A-99D67E76ACEC}
+		{54B74630-9CC6-4E2B-8E3E-AE2C344A0E93} = {30EA1CAF-BB69-4B26-863A-99D67E76ACEC}
 	EndGlobalSection
 EndGlobal
