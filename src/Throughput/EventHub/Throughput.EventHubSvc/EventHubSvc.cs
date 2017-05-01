@@ -22,7 +22,7 @@ namespace Azure.Performance.Throughput.EventHubSvc
 	/// </summary>
 	internal sealed class EventHubSvc : LoggingStatelessService, IEventHubSvc
 	{
-		private const int TaskCount = 128;
+		private const int TaskCount = 64;
 		private readonly EventHubClient _client;
 
 		public EventHubSvc(StatelessServiceContext context, ILogger logger)
@@ -72,7 +72,7 @@ namespace Azure.Performance.Throughput.EventHubSvc
 
 		private async Task<long> WriteAsync(Random random, CancellationToken cancellationToken)
 		{
-			const int batchSize = 128;
+			const int batchSize = 16;
 
 			var values = new EventData[batchSize];
 			for (int i = 0; i < batchSize; i++)
