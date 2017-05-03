@@ -50,6 +50,7 @@
     <Service Name="ReadSvc">
       <StatefulService ServiceTypeName="ReadSvcType" TargetReplicaSetSize="[ReadSvc_TargetReplicaSetSize]" MinReplicaSetSize="[ReadSvc_MinReplicaSetSize]">
         <UniformInt64Partition PartitionCount="[ReadSvc_PartitionCount]" LowKey="-9223372036854775808" HighKey="9223372036854775807" />
+        <PlacementConstraints>[ReadSvc_PlacementConstraints]</PlacementConstraints>
       </StatefulService>
     </Service>
   </DefaultServices>
