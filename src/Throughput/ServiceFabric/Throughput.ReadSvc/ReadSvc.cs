@@ -12,19 +12,20 @@ using Microsoft.ServiceFabric.Services.Runtime;
 using Serilog;
 using Azure.Performance.Common;
 using Azure.Performance.Throughput.Common;
+using System.IO;
 
-namespace Azure.Performance.Throughput.DictionarySvc
+namespace Azure.Performance.Throughput.ReadSvc
 {
 	/// <summary>
 	/// An instance of this class is created for each service replica by the Service Fabric runtime.
 	/// </summary>
-	internal sealed class DictionarySvc : LoggingStatefulService, IDictionarySvc
+	internal sealed class ReadSvc : LoggingStatefulService, IPerformanceSvc
 	{
 		private const int TaskCount = 32;
 		private static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(4);
 		private long _id = 0;
 
-		public DictionarySvc(StatefulServiceContext context, ILogger logger)
+		public ReadSvc(StatefulServiceContext context, ILogger logger)
 			: base(context, logger)
 		{ }
 
@@ -65,28 +66,34 @@ namespace Azure.Performance.Throughput.DictionarySvc
 		{
 			var state = await this.StateManager.GetOrAddAsync<IReliableDictionary<long, PerformanceData>>("throughput").ConfigureAwait(false);
 
-			var workload = new ThroughputWorkload(_logger, "ReliableDictionary", IsKnownException);
-			await workload.InvokeAsync(TaskCount, (random) => WriteAsync(state, random, cancellationToken), cancellationToken).ConfigureAwait(false);
+			await PopulateAsync(state, cancellationToken).ConfigureAwait(false);
+
+			var workload = new ThroughputWorkload(_logger, "ReadReliableDictionary", IsKnownException);
+			await workload.InvokeAsync(TaskCount, (random) => ReadAsync(state, random, cancellationToken), cancellationToken).ConfigureAwait(false);
 		}
 
-		private async Task<long> WriteAsync(IReliableDictionary<long, PerformanceData> state, Random random, CancellationToken cancellationToken)
+		private async Task<long> ReadAsync(IReliableDictionary<long, PerformanceData> state, Random random, CancellationToken cancellationToken)
 		{
-			const int batchSize = 16;
-
 			using (var tx = StateManager.CreateTransaction())
 			{
-				for (int i = 0; i < batchSize; i++)
-				{
-					long key = Interlocked.Increment(ref _id) % 1000000;
-					var value = RandomGenerator.GetPerformanceData();
-
-					await state.SetAsync(tx, key, value, DefaultTimeout, cancellationToken).ConfigureAwait(false);
-				}
-
+				var key = 0;
+				var result = await state.TryGetValueAsync(tx, key, DefaultTimeout, cancellationToken).ConfigureAwait(false);
 				await tx.CommitAsync().ConfigureAwait(false);
+
+				if (!result.HasValue)
+					throw new InvalidDataException($"IReliableDictionary is missing key '{key}'.");
 			}
 
-			return batchSize;
+			return 1;
+		}
+
+		private async Task PopulateAsync(IReliableDictionary<long, PerformanceData> state, CancellationToken cancellationToken)
+		{
+			using (var tx = StateManager.CreateTransaction())
+			{
+				await state.GetOrAddAsync(tx, 0, RandomGenerator.GetPerformanceData(), DefaultTimeout, cancellationToken).ConfigureAwait(false);
+				await tx.CommitAsync();
+			}
 		}
 
 		private static TimeSpan? IsKnownException(Exception e)

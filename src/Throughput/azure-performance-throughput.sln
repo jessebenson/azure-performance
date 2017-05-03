@@ -43,6 +43,8 @@ Project("{A07B5EB6-E848-4116-A8D0-A826331D98C6}") = "Throughput.EventHub", "Even
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Throughput.EventHubSvc", "EventHub\Throughput.EventHubSvc\Throughput.EventHubSvc.csproj", "{54B74630-9CC6-4E2B-8E3E-AE2C344A0E93}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Throughput.ReadSvc", "ServiceFabric\Throughput.ReadSvc\Throughput.ReadSvc.csproj", "{FE63E0CF-D0AC-452A-9DDC-8DDCF61FBEBD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -115,6 +117,10 @@ Global
 		{54B74630-9CC6-4E2B-8E3E-AE2C344A0E93}.Debug|x64.Build.0 = Debug|x64
 		{54B74630-9CC6-4E2B-8E3E-AE2C344A0E93}.Release|x64.ActiveCfg = Release|x64
 		{54B74630-9CC6-4E2B-8E3E-AE2C344A0E93}.Release|x64.Build.0 = Release|x64
+		{FE63E0CF-D0AC-452A-9DDC-8DDCF61FBEBD}.Debug|x64.ActiveCfg = Debug|x64
+		{FE63E0CF-D0AC-452A-9DDC-8DDCF61FBEBD}.Debug|x64.Build.0 = Debug|x64
+		{FE63E0CF-D0AC-452A-9DDC-8DDCF61FBEBD}.Release|x64.ActiveCfg = Release|x64
+		{FE63E0CF-D0AC-452A-9DDC-8DDCF61FBEBD}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -134,5 +140,6 @@ Global
 		{D9116234-C189-4235-B30F-241C21961081} = {8B454586-5854-4D62-8069-6304DB3260B5}
 		{08CD16E7-D5DF-4CFA-B841-83D5711B3705} = {30EA1CAF-BB69-4B26-863A-99D67E76ACEC}
 		{54B74630-9CC6-4E2B-8E3E-AE2C344A0E93} = {30EA1CAF-BB69-4B26-863A-99D67E76ACEC}
+		{FE63E0CF-D0AC-452A-9DDC-8DDCF61FBEBD} = {62EBB5C6-1208-485D-BAB4-06EF7EBD903B}
 	EndGlobalSection
 EndGlobal

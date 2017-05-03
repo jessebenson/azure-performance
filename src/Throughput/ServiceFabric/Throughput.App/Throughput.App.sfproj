@@ -33,6 +33,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Throughput.QueueSvc\Throughput.QueueSvc.csproj" />
     <ProjectReference Include="..\Throughput.DictionarySvc\Throughput.DictionarySvc.csproj" />
+    <ProjectReference Include="..\Throughput.ReadSvc\Throughput.ReadSvc.csproj" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />
   <PropertyGroup>

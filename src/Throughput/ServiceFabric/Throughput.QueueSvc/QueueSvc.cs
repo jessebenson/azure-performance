@@ -56,7 +56,7 @@ namespace Azure.Performance.Throughput.QueueSvc
 		{
 			await base.RunAsync(cancellationToken);
 
-			// Spawn worker tasks.
+			// Spawn workload.
 			await CreateWorkloadAsync(cancellationToken).ConfigureAwait(false);
 		}
 
