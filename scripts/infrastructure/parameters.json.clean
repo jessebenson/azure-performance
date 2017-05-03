@@ -34,7 +34,7 @@
             "value": "azure-latency"
         },
         "redisLatencySkuName": {
-            "value": "Basic"
+            "value": "Standard"
         },
         "redisLatencySkuFamily": {
             "value": "C"
@@ -46,7 +46,7 @@
             "value": "azure-throughput"
         },
         "redisThroughputSkuName": {
-            "value": "Basic"
+            "value": "Standard"
         },
         "redisThroughputSkuFamily": {
             "value": "C"
