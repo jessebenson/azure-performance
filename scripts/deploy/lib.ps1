@@ -37,15 +37,28 @@ function Deploy-Application($Path, $Project)
 	$global:clusterConnection = $clusterConnection
 
 	# Deploy application.
-	. $DeployScript `
-		-ApplicationPackagePath $ApplicationPackagePath `
-		-PublishProfileFile $PublishProfileFile `
-		-DeployOnly:$false `
-		-ApplicationParameter:@{} `
-		-UnregisterUnusedApplicationVersionsAfterUpgrade $false `
-		-OverrideUpgradeBehavior 'None' `
-		-OverwriteBehavior 'SameAppTypeAndVersion' `
-		-UseExistingClusterConnection:$true `
-		-SkipPackageValidation:$false `
-		-ErrorAction Stop
+	$attempts = 0
+	while ($attempts++ -lt 5)
+	{
+		try
+		{
+			. $DeployScript `
+				-ApplicationPackagePath $ApplicationPackagePath `
+				-PublishProfileFile $PublishProfileFile `
+				-DeployOnly:$false `
+				-ApplicationParameter:@{} `
+				-UnregisterUnusedApplicationVersionsAfterUpgrade $false `
+				-OverrideUpgradeBehavior 'None' `
+				-OverwriteBehavior 'SameAppTypeAndVersion' `
+				-UseExistingClusterConnection:$true `
+				-SkipPackageValidation:$false `
+				-ErrorAction Stop
+
+			break;
+		}
+		catch
+		{
+			Write-Warning "Exception deploying: $($_.Exception.Message)"
+		}
+	}
 }
