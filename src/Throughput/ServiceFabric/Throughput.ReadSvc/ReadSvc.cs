@@ -21,7 +21,8 @@ namespace Azure.Performance.Throughput.ReadSvc
 	/// </summary>
 	internal sealed class ReadSvc : LoggingStatefulService, IPerformanceSvc
 	{
-		private const int TaskCount = 1024;
+		private const int TaskCount = 256;
+		private const long KeyCount = 1024 * 1024;
 		private static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(4);
 		private long _id = 0;
 
@@ -76,7 +77,7 @@ namespace Azure.Performance.Throughput.ReadSvc
 		{
 			using (var tx = StateManager.CreateTransaction())
 			{
-				var key = 0;
+				long key = Interlocked.Increment(ref _id) % KeyCount;
 				var result = await state.TryGetValueAsync(tx, key, DefaultTimeout, cancellationToken).ConfigureAwait(false);
 				await tx.CommitAsync().ConfigureAwait(false);
 
@@ -84,15 +85,46 @@ namespace Azure.Performance.Throughput.ReadSvc
 					throw new InvalidDataException($"IReliableDictionary is missing key '{key}'.");
 			}
 
+			// Add small sleep to the loop.
+			await Task.Delay(1).ConfigureAwait(false);
+
 			return 1;
 		}
 
+		/// <summary>
+		/// Generate <see cref="KeyCount"/> keys using a number of concurrent tasks.
+		/// </summary>
 		private async Task PopulateAsync(IReliableDictionary<long, PerformanceData> state, CancellationToken cancellationToken)
 		{
-			using (var tx = StateManager.CreateTransaction())
+			try
 			{
-				await state.GetOrAddAsync(tx, 0, RandomGenerator.GetPerformanceData(), DefaultTimeout, cancellationToken).ConfigureAwait(false);
-				await tx.CommitAsync();
+				long nextKey = -1;
+
+				int taskCount = 32;
+				var tasks = new List<Task>(taskCount);
+				for (int i = 0; i < taskCount; i++)
+				{
+					int taskId = i;
+					tasks.Add(Task.Run(async () =>
+					{
+						long key = 0;
+						while (!cancellationToken.IsCancellationRequested && ((key = Interlocked.Increment(ref nextKey)) < KeyCount))
+						{
+							using (var tx = StateManager.CreateTransaction())
+							{
+								await state.GetOrAddAsync(tx, key, RandomGenerator.GetPerformanceData(), DefaultTimeout, cancellationToken).ConfigureAwait(false);
+								await tx.CommitAsync();
+							}
+						}
+					}));
+				}
+
+				await Task.WhenAll(tasks).ConfigureAwait(false);
+			}
+			catch (Exception e)
+			{
+				_logger.Error(e, "Unexpected exception {ExceptionType} in {WorkloadName}.", e.GetType(), "PopulateAsync");
+				throw;
 			}
 		}
 

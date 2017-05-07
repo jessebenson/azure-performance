@@ -46,23 +46,32 @@ namespace Azure.Performance.Throughput.Common
 			var timer = new Stopwatch();
 			while (!cancellationToken.IsCancellationRequested)
 			{
-				timer.Restart();
-				await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken).ConfigureAwait(false);
-				timer.Stop();
+				try
+				{
+					timer.Restart();
+					await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken).ConfigureAwait(false);
+					timer.Stop();
 
-				// Read the latest metrics.
-				long operations = Interlocked.Read(ref _operations);
-				long latency = Interlocked.Read(ref _latency);
+					// Read the latest metrics.
+					long operations = Interlocked.Read(ref _operations);
+					long latency = Interlocked.Read(ref _latency);
+					if (operations == 0)
+						continue;
 
-				// Log metrics - operations/sec and latency/operation.
-				double throughput = ((double)operations * 1000) / (double)timer.ElapsedMilliseconds;
-				double latencyPerOperation = (double)latency / (double)operations;
-				_logger.Information("Throughput statistics: {WorkloadName} {Operations} {Throughput} {OperationLatency} {ElapsedTimeInMs}",
-					_workloadName, operations, throughput, latencyPerOperation, timer.ElapsedMilliseconds);
+					// Log metrics - operations/sec and latency/operation.
+					double throughput = ((double)operations * 1000) / Math.Max((double)timer.ElapsedMilliseconds, 1000);
+					double latencyPerOperation = (double)latency / (double)operations;
+					_logger.Information("Throughput statistics: {WorkloadName} {Operations} {Throughput} {OperationLatency} {ElapsedTimeInMs}",
+						_workloadName, operations, throughput, latencyPerOperation, timer.ElapsedMilliseconds);
 
-				// Subtract out the metrics that were logged.
-				Interlocked.Add(ref _operations, -operations);
-				Interlocked.Add(ref _latency, -latency);
+					// Subtract out the metrics that were logged.
+					Interlocked.Add(ref _operations, -operations);
+					Interlocked.Add(ref _latency, -latency);
+				}
+				catch (Exception e)
+				{
+					_logger.Error(e, "Unexpected exception {ExceptionType} in {WorkloadName} tracking metrics.", e.GetType(), _workloadName);
+				}
 			}
 		}
 
