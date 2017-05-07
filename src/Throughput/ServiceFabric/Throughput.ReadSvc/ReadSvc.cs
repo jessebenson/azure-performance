@@ -85,9 +85,6 @@ namespace Azure.Performance.Throughput.ReadSvc
 					throw new InvalidDataException($"IReliableDictionary is missing key '{key}'.");
 			}
 
-			// Add small sleep to the loop.
-			await Task.Delay(1).ConfigureAwait(false);
-
 			return 1;
 		}
 
