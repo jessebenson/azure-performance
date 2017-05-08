@@ -35,13 +35,14 @@ namespace Azure.Performance.Throughput.Common
 			}
 
 			// Spawn the metric tracker.
-			tasks.Add(Task.Run(() => TrackMetricsAsync(cancellationToken)));
+			var metrics = new Thread(() => TrackMetrics(cancellationToken)) { Priority = ThreadPriority.AboveNormal };
+			metrics.Start();
 
 			// Run until cancelled.
 			await Task.WhenAll(tasks).ConfigureAwait(false);
 		}
 
-		private async Task TrackMetricsAsync(CancellationToken cancellationToken)
+		private void TrackMetrics(CancellationToken cancellationToken)
 		{
 			var timer = new Stopwatch();
 			while (!cancellationToken.IsCancellationRequested)
@@ -49,7 +50,7 @@ namespace Azure.Performance.Throughput.Common
 				try
 				{
 					timer.Restart();
-					await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken).ConfigureAwait(false);
+					Thread.Sleep(TimeSpan.FromSeconds(1));
 					timer.Stop();
 
 					// Read the latest metrics.
