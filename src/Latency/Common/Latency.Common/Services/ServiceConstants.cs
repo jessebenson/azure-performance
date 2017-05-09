@@ -6,7 +6,9 @@ namespace Azure.Performance.Latency.Common
 	{
 		public static readonly Uri DictionarySvcUri = new Uri("fabric:/Latency.App/DictionarySvc");
 		public static readonly Uri QueueSvcUri = new Uri("fabric:/Latency.App/QueueSvc");
+		public static readonly Uri StatefulActorUri = new Uri("fabric:/Latency.App/StatefulActorService");
 		public static readonly Uri StatefulSvcUri = new Uri("fabric:/Latency.App/StatefulSvc");
+		public static readonly Uri StatelessActorUri = new Uri("fabric:/Latency.App/StatelessActorService");
 		public static readonly Uri StatelessSvcUri = new Uri("fabric:/Latency.App/StatelessSvc");
 		public static readonly Uri DocumentDbSvcUri = new Uri("fabric:/Latency.DocumentDB/DocumentDbSvc");
 		public static readonly Uri EventHubSvcUri = new Uri("fabric:/Latency.EventHub/EventHubSvc");

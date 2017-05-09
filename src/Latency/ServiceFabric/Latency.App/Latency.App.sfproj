@@ -33,7 +33,9 @@
   <ItemGroup>
     <ProjectReference Include="..\Latency.QueueSvc\Latency.QueueSvc.csproj" />
     <ProjectReference Include="..\Latency.DictionarySvc\Latency.DictionarySvc.csproj" />
+    <ProjectReference Include="..\Latency.StatefulActor\Latency.StatefulActor.csproj" />
     <ProjectReference Include="..\Latency.StatefulSvc\Latency.StatefulSvc.csproj" />
+    <ProjectReference Include="..\Latency.StatelessActor\Latency.StatelessActor.csproj" />
     <ProjectReference Include="..\Latency.StatelessSvc\Latency.StatelessSvc.csproj" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />

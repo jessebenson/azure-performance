@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.12
+VisualStudioVersion = 15.0.26403.7
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{E2697F9D-9050-438F-8F82-B6FC0D948A68}"
 EndProject
@@ -37,7 +37,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Latency.DictionarySvc", "Se
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Latency.QueueSvc", "ServiceFabric\Latency.QueueSvc\Latency.QueueSvc.csproj", "{18565709-9819-4F6F-8D6E-87D3BCEA349E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Latency.StatefulActor", "ServiceFabric\Latency.StatefulActor\Latency.StatefulActor.csproj", "{C10C111B-F080-4301-BD76-F344372ECC1A}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Latency.StatefulSvc", "ServiceFabric\Latency.StatefulSvc\Latency.StatefulSvc.csproj", "{21B78475-D4A1-4D0F-AF0B-068D2CC4902F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Latency.StatelessActor", "ServiceFabric\Latency.StatelessActor\Latency.StatelessActor.csproj", "{C08434F0-3592-4780-B7B2-175C5858A34B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Latency.StatelessSvc", "ServiceFabric\Latency.StatelessSvc\Latency.StatelessSvc.csproj", "{638DEFEC-97AF-4069-A640-120D6FBE3804}"
 EndProject
@@ -149,6 +153,14 @@ Global
 		{383495C2-250D-47C4-8235-CFF111B00316}.Debug|x64.Build.0 = Debug|x64
 		{383495C2-250D-47C4-8235-CFF111B00316}.Release|x64.ActiveCfg = Release|x64
 		{383495C2-250D-47C4-8235-CFF111B00316}.Release|x64.Build.0 = Release|x64
+		{C10C111B-F080-4301-BD76-F344372ECC1A}.Debug|x64.ActiveCfg = Debug|x64
+		{C10C111B-F080-4301-BD76-F344372ECC1A}.Debug|x64.Build.0 = Debug|x64
+		{C10C111B-F080-4301-BD76-F344372ECC1A}.Release|x64.ActiveCfg = Release|x64
+		{C10C111B-F080-4301-BD76-F344372ECC1A}.Release|x64.Build.0 = Release|x64
+		{C08434F0-3592-4780-B7B2-175C5858A34B}.Debug|x64.ActiveCfg = Debug|x64
+		{C08434F0-3592-4780-B7B2-175C5858A34B}.Debug|x64.Build.0 = Debug|x64
+		{C08434F0-3592-4780-B7B2-175C5858A34B}.Release|x64.ActiveCfg = Release|x64
+		{C08434F0-3592-4780-B7B2-175C5858A34B}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -173,5 +185,7 @@ Global
 		{03D4A5B0-3EE4-4350-886E-BD856008DC5E} = {7E93F627-83DB-47ED-B5F4-451B281B647B}
 		{69399D51-9023-4310-AD2E-23A3852F2982} = {7E93F627-83DB-47ED-B5F4-451B281B647B}
 		{383495C2-250D-47C4-8235-CFF111B00316} = {7E93F627-83DB-47ED-B5F4-451B281B647B}
+		{C10C111B-F080-4301-BD76-F344372ECC1A} = {AC513EE0-5935-4578-A7E9-4BE5D28F3843}
+		{C08434F0-3592-4780-B7B2-175C5858A34B} = {AC513EE0-5935-4578-A7E9-4BE5D28F3843}
 	EndGlobalSection
 EndGlobal

@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ServiceManifest xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Name="Latency.StatelessActorPkg" Version="1.0.0" xmlns="http://schemas.microsoft.com/2011/01/fabric">
+  <ServiceTypes>
+    <StatefulServiceType ServiceTypeName="StatelessActorServiceType">
+      <Extensions>
+        <Extension Name="__GeneratedServiceType__" GeneratedId="b95ad209-99fb-417d-87c9-8fca548ed1c2|Volatile">
+          <GeneratedNames xmlns="http://schemas.microsoft.com/2015/03/fabact-no-schema">
+            <DefaultService Name="StatelessActorService" />
+            <ServiceEndpoint Name="StatelessActorServiceEndpoint" />
+            <ReplicatorEndpoint Name="StatelessActorServiceReplicatorEndpoint" />
+            <ReplicatorConfigSection Name="StatelessActorServiceReplicatorConfig" />
+            <ReplicatorSecurityConfigSection Name="StatelessActorServiceReplicatorSecurityConfig" />
+            <StoreConfigSection Name="StatelessActorServiceLocalStoreConfig" />
+          </GeneratedNames>
+        </Extension>
+      </Extensions>
+    </StatefulServiceType>
+  </ServiceTypes>
+  <CodePackage Name="Code" Version="1.0.0">
+    <EntryPoint>
+      <ExeHost>
+        <Program>Latency.StatelessActor.exe</Program>
+      </ExeHost>
+    </EntryPoint>
+  </CodePackage>
+  <ConfigPackage Name="Config" Version="1.0.0" />
+  <Resources>
+    <Endpoints>
+      <Endpoint Name="StatelessActorServiceEndpoint" />
+      <Endpoint Name="StatelessActorServiceReplicatorEndpoint" />
+    </Endpoints>
+  </Resources>
+  <!-- The content will be generated during build -->
+</ServiceManifest>
