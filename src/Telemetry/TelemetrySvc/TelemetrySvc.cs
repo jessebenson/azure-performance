@@ -56,7 +56,7 @@ namespace TelemetrySvc
 					GetPerformanceCounter("LogicalDisk", "Avg. Disk Read Queue Length", "_Total"),
 					GetPerformanceCounter("LogicalDisk", "Avg. Disk Write Queue Length", "_Total"),
 					GetPerformanceCounter("TCPv6", "Connections Established")
-					).ConfigureAwait(false);
+				).ConfigureAwait(false);
 			}
 			catch (Exception e)
 			{
