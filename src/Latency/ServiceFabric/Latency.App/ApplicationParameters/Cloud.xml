@@ -15,5 +15,13 @@
     <Parameter Name="StatefulSvc_PlacementConstraints" Value="NodeType == latency" />
     <Parameter Name="StatelessSvc_InstanceCount" Value="1" />
     <Parameter Name="StatelessSvc_PlacementConstraints" Value="NodeType == latency" />
+    <Parameter Name="StatefulActorService_PartitionCount" Value="1" />
+    <Parameter Name="StatefulActorService_TargetReplicaSetSize" Value="3" />
+    <Parameter Name="StatefulActorService_MinReplicaSetSize" Value="3" />
+    <Parameter Name="StatefulActorService_PlacementConstraints" Value="NodeType == latency" />
+    <Parameter Name="StatelessActorService_PartitionCount" Value="1" />
+    <Parameter Name="StatelessActorService_TargetReplicaSetSize" Value="3" />
+    <Parameter Name="StatelessActorService_MinReplicaSetSize" Value="3" />
+    <Parameter Name="StatelessActorService_PlacementConstraints" Value="NodeType == latency" />
   </Parameters>
 </Application>

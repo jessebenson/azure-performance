@@ -18,9 +18,11 @@
     <Parameter Name="StatefulActorService_PartitionCount" DefaultValue="1" />
     <Parameter Name="StatefulActorService_MinReplicaSetSize" DefaultValue="3" />
     <Parameter Name="StatefulActorService_TargetReplicaSetSize" DefaultValue="3" />
+    <Parameter Name="StatefulActorService_PlacementConstraints" DefaultValue="" />
     <Parameter Name="StatelessActorService_PartitionCount" DefaultValue="1" />
     <Parameter Name="StatelessActorService_MinReplicaSetSize" DefaultValue="3" />
     <Parameter Name="StatelessActorService_TargetReplicaSetSize" DefaultValue="3" />
+    <Parameter Name="StatelessActorService_PlacementConstraints" DefaultValue="" />
   </Parameters>
   <!-- Import the ServiceManifest from the ServicePackage. The ServiceManifestName and ServiceManifestVersion 
        should match the Name and Version attributes of the ServiceManifest element defined in the 
@@ -80,11 +82,13 @@
     <Service Name="StatefulActorService" GeneratedIdRef="92ced8aa-a9b9-4b82-88c8-f05510390f6a|Persisted">
       <StatefulService ServiceTypeName="StatefulActorServiceType" TargetReplicaSetSize="[StatefulActorService_TargetReplicaSetSize]" MinReplicaSetSize="[StatefulActorService_MinReplicaSetSize]">
         <UniformInt64Partition PartitionCount="[StatefulActorService_PartitionCount]" LowKey="-9223372036854775808" HighKey="9223372036854775807" />
+        <PlacementConstraints>[StatefulActorService_PlacementConstraints]</PlacementConstraints>
       </StatefulService>
     </Service>
     <Service Name="StatelessActorService" GeneratedIdRef="b95ad209-99fb-417d-87c9-8fca548ed1c2|Volatile">
       <StatefulService ServiceTypeName="StatelessActorServiceType" TargetReplicaSetSize="[StatelessActorService_TargetReplicaSetSize]" MinReplicaSetSize="[StatelessActorService_MinReplicaSetSize]">
         <UniformInt64Partition PartitionCount="[StatelessActorService_PartitionCount]" LowKey="-9223372036854775808" HighKey="9223372036854775807" />
+        <PlacementConstraints>[StatelessActorService_PlacementConstraints]</PlacementConstraints>
       </StatefulService>
     </Service>
   </DefaultServices>
