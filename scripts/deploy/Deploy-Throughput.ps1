@@ -32,40 +32,40 @@ if ($DocumentDB -or $All)
 {
 	$DocumentDbPath = (Join-Path $SrcFolder "DocumentDB/Throughput.DocumentDB")
 	$DocumentDbProject = (Join-Path $DocumentDbPath "Throughput.DocumentDB.sfproj")
-	Deploy-Application $DocumentDbPath $DocumentDbProject
+	Deploy-Application $SrcFolder $DocumentDbPath $DocumentDbProject
 }
 
 if ($EventHub -or $All)
 {
 	$EventHubPath = (Join-Path $SrcFolder "EventHub/Throughput.EventHub")
 	$EventHubProject = (Join-Path $EventHubPath "Throughput.EventHub.sfproj")
-	Deploy-Application $EventHubPath $EventHubProject
+	Deploy-Application $SrcFolder $EventHubPath $EventHubProject
 }
 
 if ($Redis -or $All)
 {
 	$RedisPath = (Join-Path $SrcFolder "Redis/Throughput.Redis")
 	$RedisProject = (Join-Path $RedisPath "Throughput.Redis.sfproj")
-	Deploy-Application $RedisPath $RedisProject
+	Deploy-Application $SrcFolder $RedisPath $RedisProject
 }
 
 if ($ServiceFabric -or $All)
 {
 	$ServiceFabricPath = (Join-Path $SrcFolder "ServiceFabric/Throughput.App")
 	$ServiceFabricProject = (Join-Path $ServiceFabricPath "Throughput.App.sfproj")
-	Deploy-Application $ServiceFabricPath $ServiceFabricProject
+	Deploy-Application $SrcFolder $ServiceFabricPath $ServiceFabricProject
 }
 
 if ($Sql -or $All)
 {
 	$SqlPath = (Join-Path $SrcFolder "SQL/Throughput.SQL")
 	$SqlProject = (Join-Path $SqlPath "Throughput.SQL.sfproj")
-	Deploy-Application $SqlPath $SqlProject
+	Deploy-Application $SrcFolder $SqlPath $SqlProject
 }
 
 if ($Storage -or $All)
 {
 	$StoragePath = (Join-Path $SrcFolder "Storage/Throughput.Storage")
 	$StorageProject = (Join-Path $StoragePath "Throughput.Storage.sfproj")
-	Deploy-Application $StoragePath $StorageProject
+	Deploy-Application $SrcFolder $StoragePath $StorageProject
 }

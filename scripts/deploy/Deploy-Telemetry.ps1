@@ -28,12 +28,12 @@ if ($Telemetry -or $All)
 {
 	$TelemetryPath = (Join-Path $SrcFolder "TelemetryApp")
 	$TelemetryProject = (Join-Path $TelemetryPath "TelemetryApp.sfproj")
-	Deploy-Application $TelemetryPath $TelemetryProject
+	Deploy-Application $SrcFolder $TelemetryPath $TelemetryProject
 }
 
 if ($Web -or $All)
 {
 	$WebPath = (Join-Path $SrcFolder "WebApp")
 	$WebProject = (Join-Path $WebPath "WebApp.sfproj")
-	Deploy-Application $WebPath $WebProject
+	Deploy-Application $SrcFolder $WebPath $WebProject
 }

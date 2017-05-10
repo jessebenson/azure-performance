@@ -21,14 +21,14 @@ function Read-XmlElementAsHashtable([System.Xml.XmlElement] $Element)
 	return $hashtable
 }
 
-function Deploy-Application($Path, $Project)
+function Deploy-Application($SolutionDir, $Path, $Project)
 {
 	$DeployScript = (Join-Path $Path "Scripts/Deploy-FabricApplication.ps1")
 	$ApplicationPackagePath = (Join-Path $Path "pkg\Release")
 	$PublishProfileFile = (Join-Path $Path "PublishProfiles\Cloud.xml")
 
 	# Package application.
-	msbuild $Project /t:Package /p:Platform=x64 /p:Configuration=Release
+	msbuild $Project /t:Package /p:Platform=x64 /p:Configuration=Release /p:SolutionDir=$SolutionDir
 
 	# Connect to cluster.
 	$PublishProfile = [Xml]$(Get-Content $PublishProfileFile)

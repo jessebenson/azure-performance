@@ -32,40 +32,40 @@ if ($DocumentDB -or $All)
 {
 	$DocumentDbPath = (Join-Path $SrcFolder "DocumentDB/Latency.DocumentDB")
 	$DocumentDbProject = (Join-Path $DocumentDbPath "Latency.DocumentDB.sfproj")
-	Deploy-Application $DocumentDbPath $DocumentDbProject
+	Deploy-Application $SrcFolder $DocumentDbPath $DocumentDbProject
 }
 
 if ($EventHub -or $All)
 {
 	$EventHubPath = (Join-Path $SrcFolder "EventHub/Latency.EventHub")
 	$EventHubProject = (Join-Path $EventHubPath "Latency.EventHub.sfproj")
-	Deploy-Application $EventHubPath $EventHubProject
+	Deploy-Application $SrcFolder $EventHubPath $EventHubProject
 }
 
 if ($Redis -or $All)
 {
 	$RedisPath = (Join-Path $SrcFolder "Redis/Latency.Redis")
 	$RedisProject = (Join-Path $RedisPath "Latency.Redis.sfproj")
-	Deploy-Application $RedisPath $RedisProject
+	Deploy-Application $SrcFolder $RedisPath $RedisProject
 }
 
 if ($ServiceFabric -or $All)
 {
 	$ServiceFabricPath = (Join-Path $SrcFolder "ServiceFabric/Latency.App")
 	$ServiceFabricProject = (Join-Path $ServiceFabricPath "Latency.App.sfproj")
-	Deploy-Application $ServiceFabricPath $ServiceFabricProject
+	Deploy-Application $SrcFolder $ServiceFabricPath $ServiceFabricProject
 }
 
 if ($Sql -or $All)
 {
 	$SqlPath = (Join-Path $SrcFolder "SQL/Latency.SQL")
 	$SqlProject = (Join-Path $SqlPath "Latency.SQL.sfproj")
-	Deploy-Application $SqlPath $SqlProject
+	Deploy-Application $SrcFolder $SqlPath $SqlProject
 }
 
 if ($Storage -or $All)
 {
 	$StoragePath = (Join-Path $SrcFolder "Storage/Latency.Storage")
 	$StorageProject = (Join-Path $StoragePath "Latency.Storage.sfproj")
-	Deploy-Application $StoragePath $StorageProject
+	Deploy-Application $SrcFolder $StoragePath $StorageProject
 }
