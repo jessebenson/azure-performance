@@ -3,7 +3,7 @@ Param
 	[Switch] $All,
 
 	[Switch] $Telemetry,
-    [Switch] $Web
+	[Switch] $Web
 )
 
 $LocalFolder = (Split-Path $MyInvocation.MyCommand.Path)

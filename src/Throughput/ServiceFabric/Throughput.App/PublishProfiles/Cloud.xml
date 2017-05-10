@@ -20,7 +20,7 @@
                                     AzureActiveDirectory="true"
                                     ServerCertThumbprint="0123456789012345678901234567890123456789" />
   -->
-  <ClusterConnectionParameters ConnectionEndpoint="azure-performance.southcentralus.cloudapp.azure.com:19000"
+  <ClusterConnectionParameters ConnectionEndpoint="azure-performance.jessebenson.me:19000"
                                X509Credential="true"
                                ServerCertThumbprint="41AEC7DD46696FA88DAC6A5878F92E90C727726F"
                                FindType="FindByThumbprint"
