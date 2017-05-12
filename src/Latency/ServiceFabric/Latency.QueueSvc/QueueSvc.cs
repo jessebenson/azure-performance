@@ -6,7 +6,6 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.ServiceFabric.Data.Collections;
-using Microsoft.ServiceFabric.Data.Collections.Preview;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
 using Microsoft.ServiceFabric.Services.Remoting.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
@@ -84,7 +83,7 @@ namespace Azure.Performance.Latency.QueueSvc
 					if (queue.Count < QueueThreshold)
 						await queue.EnqueueAsync(tx, value, cancellationToken).ConfigureAwait(false);
 					else
-						await queue.DequeueAsync(tx, cancellationToken).ConfigureAwait(false);
+						await queue.TryDequeueAsync(tx, cancellationToken).ConfigureAwait(false);
 
 					await tx.CommitAsync().ConfigureAwait(false);
 				}

@@ -6,7 +6,6 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.ServiceFabric.Data.Collections;
-using Microsoft.ServiceFabric.Data.Collections.Preview;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
 using Microsoft.ServiceFabric.Services.Remoting.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
@@ -80,7 +79,7 @@ namespace Azure.Performance.Throughput.QueueSvc
 					if (state.Count < QueueThreshold)
 						await state.EnqueueAsync(tx, RandomGenerator.GetPerformanceData(), cancellationToken).ConfigureAwait(false);
 					else
-						await state.DequeueAsync(tx, cancellationToken).ConfigureAwait(false);
+						await state.TryDequeueAsync(tx, cancellationToken).ConfigureAwait(false);
 				}
 
 				await tx.CommitAsync().ConfigureAwait(false);
