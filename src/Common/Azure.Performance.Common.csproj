@@ -151,7 +151,6 @@
     <Compile Include="Services\IPerformanceActor.cs" />
     <Compile Include="Services\IPerformanceSvc.cs" />
     <Compile Include="Utility\RetryHandler.cs" />
-    <Compile Include="Utility\Workload.cs" />
     <Compile Include="Utility\WorkloadScore.cs" />
   </ItemGroup>
   <ItemGroup>

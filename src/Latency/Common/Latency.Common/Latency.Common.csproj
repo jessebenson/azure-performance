@@ -150,6 +150,7 @@
     <Compile Include="Services\IStatelessSvc.cs" />
     <Compile Include="Services\ITableSvc.cs" />
     <Compile Include="Services\ServiceConstants.cs" />
+    <Compile Include="Utility\LatencyWorkload.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

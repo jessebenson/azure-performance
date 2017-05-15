@@ -65,7 +65,7 @@ namespace Azure.Performance.Latency.DocumentDbSvc
 			await base.RunAsync(cancellationToken).ConfigureAwait(false);
 
 			// Spawn worker tasks.
-			await CreateWritersAsync(taskCount: Workload.DefaultTaskCount, cancellationToken: cancellationToken).ConfigureAwait(false);
+			await CreateWritersAsync(taskCount: LatencyWorkload.DefaultTaskCount, cancellationToken: cancellationToken).ConfigureAwait(false);
 		}
 
 		private async Task CreateWritersAsync(int taskCount, CancellationToken cancellationToken)
@@ -85,7 +85,7 @@ namespace Azure.Performance.Latency.DocumentDbSvc
 
 		private Task CreateWriterAsync(int taskId, DocumentCollection collection, CancellationToken cancellationToken)
 		{
-			var workload = new Workload(_logger, "DocumentDb");
+			var workload = new LatencyWorkload(_logger, "DocumentDb");
 			return workload.InvokeAsync(async (value) =>
 			{
 				var response = await _client.UpsertDocumentAsync(collection.SelfLink, value).ConfigureAwait(false);

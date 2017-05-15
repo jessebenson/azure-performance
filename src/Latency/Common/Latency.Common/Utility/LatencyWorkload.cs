@@ -3,10 +3,11 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using Serilog;
+using Azure.Performance.Common;
 
-namespace Azure.Performance.Common
+namespace Azure.Performance.Latency.Common
 {
-	public sealed class Workload
+	public sealed class LatencyWorkload
 	{
 		public const int DefaultTaskCount = 10;
 		public const int KeysPerTask = 10000;
@@ -22,7 +23,7 @@ namespace Azure.Performance.Common
 		private readonly int _minWorkloadDelayInMs;
 		private readonly int _maxWorkloadDelayInMs;
 
-		public Workload(ILogger logger, string workloadName, int keysPerTask = KeysPerTask, int minWorkloadDelayInMs = MinWorkloadDelayInMs, int maxWorkloadDelayInMs = MaxWorkloadDelayInMs)
+		public LatencyWorkload(ILogger logger, string workloadName, int keysPerTask = KeysPerTask, int minWorkloadDelayInMs = MinWorkloadDelayInMs, int maxWorkloadDelayInMs = MaxWorkloadDelayInMs)
 		{
 			_logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			_workloadName = workloadName ?? throw new ArgumentNullException(nameof(workloadName));

@@ -63,7 +63,7 @@ namespace Azure.Performance.Latency.TableSvc
 			await base.RunAsync(cancellationToken).ConfigureAwait(false);
 
 			// Spawn worker tasks.
-			await CreateWritersAsync(taskCount: Workload.DefaultTaskCount, cancellationToken: cancellationToken).ConfigureAwait(false);
+			await CreateWritersAsync(taskCount: LatencyWorkload.DefaultTaskCount, cancellationToken: cancellationToken).ConfigureAwait(false);
 		}
 
 		private async Task CreateWritersAsync(int taskCount, CancellationToken cancellationToken)
@@ -82,7 +82,7 @@ namespace Azure.Performance.Latency.TableSvc
 
 		private async Task CreateWriterAsync(int taskId, CloudTable table, CancellationToken cancellationToken)
 		{
-			var workload = new Workload(_logger, "Table");
+			var workload = new LatencyWorkload(_logger, "Table");
 			await workload.InvokeAsync(async (value) =>
 			{
 				// Write to the table.

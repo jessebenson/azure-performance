@@ -63,7 +63,7 @@ namespace Azure.Performance.Latency.BlobSvc
 			await base.RunAsync(cancellationToken).ConfigureAwait(false);
 
 			// Spawn worker tasks.
-			await CreateWritersAsync(taskCount: Workload.DefaultTaskCount, cancellationToken: cancellationToken).ConfigureAwait(false);
+			await CreateWritersAsync(taskCount: LatencyWorkload.DefaultTaskCount, cancellationToken: cancellationToken).ConfigureAwait(false);
 		}
 
 		private async Task CreateWritersAsync(int taskCount, CancellationToken cancellationToken)
@@ -82,7 +82,7 @@ namespace Azure.Performance.Latency.BlobSvc
 
 		private async Task CreateWriterAsync(int taskId, CloudBlobContainer container, CancellationToken cancellationToken)
 		{
-			var workload = new Workload(_logger, "Blob");
+			var workload = new LatencyWorkload(_logger, "Blob");
 			await workload.InvokeAsync(async (value) =>
 			{
 				// Write the blob.

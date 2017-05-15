@@ -55,7 +55,7 @@ namespace Azure.Performance.Latency.RedisSvc
 			await base.RunAsync(cancellationToken).ConfigureAwait(false);
 
 			// Spawn worker tasks.
-			await CreateWritersAsync(taskCount: Workload.DefaultTaskCount, cancellationToken: cancellationToken).ConfigureAwait(false);
+			await CreateWritersAsync(taskCount: LatencyWorkload.DefaultTaskCount, cancellationToken: cancellationToken).ConfigureAwait(false);
 		}
 
 		private async Task CreateWritersAsync(int taskCount, CancellationToken cancellationToken)
@@ -75,7 +75,7 @@ namespace Azure.Performance.Latency.RedisSvc
 
 		private Task CreateWriterAsync(int taskId, IDatabase redis, CancellationToken cancellationToken)
 		{
-			var workload = new Workload(_logger, "Redis");
+			var workload = new LatencyWorkload(_logger, "Redis");
 			return workload.InvokeAsync(async (value) =>
 			{
 				await redis.StringSetAsync(value.Id, JsonConvert.SerializeObject(value)).ConfigureAwait(false);

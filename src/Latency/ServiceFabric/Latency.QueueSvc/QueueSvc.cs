@@ -54,7 +54,7 @@ namespace Azure.Performance.Latency.QueueSvc
 			await base.RunAsync(cancellationToken);
 
 			// Spawn worker tasks.
-			await CreateWritersAsync(taskCount: Workload.DefaultTaskCount, cancellationToken: cancellationToken).ConfigureAwait(false);
+			await CreateWritersAsync(taskCount: LatencyWorkload.DefaultTaskCount, cancellationToken: cancellationToken).ConfigureAwait(false);
 		}
 
 		private async Task CreateWritersAsync(int taskCount, CancellationToken cancellationToken)
@@ -75,7 +75,7 @@ namespace Azure.Performance.Latency.QueueSvc
 		{
 			const int QueueThreshold = 100;
 
-			var workload = new Workload(_logger, "ReliableQueue");
+			var workload = new LatencyWorkload(_logger, "ReliableQueue");
 			return workload.InvokeAsync(async (value) =>
 			{
 				using (var tx = this.StateManager.CreateTransaction())

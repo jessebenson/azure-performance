@@ -60,7 +60,7 @@ namespace Azure.Performance.Latency.EventHubSvc
 			await base.RunAsync(cancellationToken).ConfigureAwait(false);
 
 			// Spawn worker tasks.
-			await CreateWritersAsync(taskCount: Workload.DefaultTaskCount, cancellationToken: cancellationToken).ConfigureAwait(false);
+			await CreateWritersAsync(taskCount: LatencyWorkload.DefaultTaskCount, cancellationToken: cancellationToken).ConfigureAwait(false);
 		}
 
 		private async Task CreateWritersAsync(int taskCount, CancellationToken cancellationToken)
@@ -77,7 +77,7 @@ namespace Azure.Performance.Latency.EventHubSvc
 
 		private async Task CreateWriterAsync(int taskId, CancellationToken cancellationToken)
 		{
-			var workload = new Workload(_logger, "EventHub");
+			var workload = new LatencyWorkload(_logger, "EventHub");
 			await workload.InvokeAsync(async (value) =>
 			{
 				var content = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(value));
