@@ -6,8 +6,7 @@ Param
 	[Switch] $EventHub,
 	[Switch] $Redis,
 	[Switch] $ServiceFabric,
-	[Switch] $SQL,
-	[Switch] $Storage
+	[Switch] $SQL
 )
 
 $LocalFolder = (Split-Path $MyInvocation.MyCommand.Path)
@@ -61,11 +60,4 @@ if ($Sql -or $All)
 	$SqlPath = (Join-Path $SrcFolder "SQL/Throughput.SQL")
 	$SqlProject = (Join-Path $SqlPath "Throughput.SQL.sfproj")
 	Deploy-Application $SrcFolder $SqlPath $SqlProject
-}
-
-if ($Storage -or $All)
-{
-	$StoragePath = (Join-Path $SrcFolder "Storage/Throughput.Storage")
-	$StorageProject = (Join-Path $StoragePath "Throughput.Storage.sfproj")
-	Deploy-Application $SrcFolder $StoragePath $StorageProject
 }
