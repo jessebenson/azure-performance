@@ -97,8 +97,8 @@
     <Reference Include="Serilog.Enrichers.Thread, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\Serilog.Enrichers.Thread.3.0.0\lib\net45\Serilog.Enrichers.Thread.dll</HintPath>
     </Reference>
-    <Reference Include="Serilog.Sinks.Elasticsearch, Version=5.1.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
-      <HintPath>$(SolutionDir)\packages\Serilog.Sinks.Elasticsearch.5.1.0\lib\net45\Serilog.Sinks.Elasticsearch.dll</HintPath>
+    <Reference Include="Serilog.Sinks.Elasticsearch, Version=5.3.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Serilog.Sinks.Elasticsearch.5.3.0\lib\net45\Serilog.Sinks.Elasticsearch.dll</HintPath>
     </Reference>
     <Reference Include="Serilog.Sinks.File, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\Serilog.Sinks.File.3.2.0\lib\net45\Serilog.Sinks.File.dll</HintPath>
@@ -161,7 +161,7 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(SolutionDir)\packages\Microsoft.ServiceFabric.Actors.2.6.210\build\Microsoft.ServiceFabric.Actors.targets" Condition="Exists('..\..\packages\Microsoft.ServiceFabric.Actors.2.6.210\build\Microsoft.ServiceFabric.Actors.targets')" />
+  <Import Project="$(SolutionDir)\packages\Microsoft.ServiceFabric.Actors.2.6.210\build\Microsoft.ServiceFabric.Actors.targets" Condition="Exists('$(SolutionDir)\packages\Microsoft.ServiceFabric.Actors.2.6.210\build\Microsoft.ServiceFabric.Actors.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
