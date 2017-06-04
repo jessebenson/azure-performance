@@ -31,7 +31,7 @@ namespace Azure.Performance.Common
 
 		public Metric AddSample(double value)
 		{
-			_values.Add(value);
+			_values.Insert(_values.Count, value);
 			return this;
 		}
 	}
