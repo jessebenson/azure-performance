@@ -58,13 +58,12 @@ namespace Azure.Performance.Latency.StatelessSvc
 
 		private async Task CreateWritersAsync(int taskCount, CancellationToken cancellationToken)
 		{
-			var service = ServiceProxy.Create<IStatefulSvc>(ServiceConstants.StatefulSvcUri, new ServicePartitionKey(0));
 
 			var tasks = new List<Task>(taskCount * 3);
 			for (int i = 0; i < taskCount; i++)
 			{
 				int taskId = i;
-				tasks.Add(Task.Run(() => CreateStatefulServiceWriterAsync(taskId, service, cancellationToken)));
+				tasks.Add(Task.Run(() => CreateStatefulServiceWriterAsync(taskId, cancellationToken)));
 				tasks.Add(Task.Run(() => CreateStatefulActorWriterAsync(taskId, cancellationToken)));
 				tasks.Add(Task.Run(() => CreateStatelessActorWriterAsync(taskId, cancellationToken)));
 			}
@@ -72,33 +71,32 @@ namespace Azure.Performance.Latency.StatelessSvc
 			await Task.WhenAll(tasks).ConfigureAwait(false);
 		}
 
-		private async Task CreateStatefulServiceWriterAsync(int taskId, IStatefulSvc service, CancellationToken cancellationToken)
+		private async Task CreateStatefulServiceWriterAsync(int taskId, CancellationToken cancellationToken)
 		{
 			var workload = new LatencyWorkload(_logger, "Stateful");
 			await workload.InvokeAsync(async (value) =>
 			{
+				var service = ServiceProxy.Create<IStatefulSvc>(ServiceConstants.StatefulSvcUri, new ServicePartitionKey(0));
 				await service.WriteAsync(value.Id, value, cancellationToken).ConfigureAwait(false);
 			}, taskId, cancellationToken);
 		}
 
 		private async Task CreateStatefulActorWriterAsync(int taskId, CancellationToken cancellationToken)
 		{
-			var service = ActorProxy.Create<IStatefulActor>(new ActorId(taskId), ServiceConstants.StatefulActorUri);
-
 			var workload = new LatencyWorkload(_logger, "StatefulActor");
 			await workload.InvokeAsync(async (value) =>
 			{
+				var service = ActorProxy.Create<IStatefulActor>(new ActorId(taskId), ServiceConstants.StatefulActorUri);
 				await service.WriteAsync(value, cancellationToken).ConfigureAwait(false);
 			}, taskId, cancellationToken);
 		}
 
 		private async Task CreateStatelessActorWriterAsync(int taskId, CancellationToken cancellationToken)
 		{
-			var service = ActorProxy.Create<IStatelessActor>(new ActorId(taskId), ServiceConstants.StatelessActorUri);
-
 			var workload = new LatencyWorkload(_logger, "VolatileActor");
 			await workload.InvokeAsync(async (value) =>
 			{
+				var service = ActorProxy.Create<IStatelessActor>(new ActorId(taskId), ServiceConstants.StatelessActorUri);
 				await service.WriteAsync(value, cancellationToken).ConfigureAwait(false);
 			}, taskId, cancellationToken);
 		}
