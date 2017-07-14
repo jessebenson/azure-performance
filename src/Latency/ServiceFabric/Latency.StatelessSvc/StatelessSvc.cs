@@ -74,9 +74,10 @@ namespace Azure.Performance.Latency.StatelessSvc
 		private async Task CreateStatefulServiceWriterAsync(int taskId, CancellationToken cancellationToken)
 		{
 			var workload = new LatencyWorkload(_logger, "Stateful");
+			var service = ServiceProxy.Create<IStatefulSvc>(ServiceConstants.StatefulSvcUri, new ServicePartitionKey(0));
+
 			await workload.InvokeAsync(async (value) =>
 			{
-				var service = ServiceProxy.Create<IStatefulSvc>(ServiceConstants.StatefulSvcUri, new ServicePartitionKey(0));
 				await service.WriteAsync(value.Id, value, cancellationToken).ConfigureAwait(false);
 			}, taskId, cancellationToken);
 		}
@@ -84,9 +85,10 @@ namespace Azure.Performance.Latency.StatelessSvc
 		private async Task CreateStatefulActorWriterAsync(int taskId, CancellationToken cancellationToken)
 		{
 			var workload = new LatencyWorkload(_logger, "StatefulActor");
+			var service = ActorProxy.Create<IStatefulActor>(new ActorId(taskId), ServiceConstants.StatefulActorUri);
+
 			await workload.InvokeAsync(async (value) =>
 			{
-				var service = ActorProxy.Create<IStatefulActor>(new ActorId(taskId), ServiceConstants.StatefulActorUri);
 				await service.WriteAsync(value, cancellationToken).ConfigureAwait(false);
 			}, taskId, cancellationToken);
 		}
@@ -94,9 +96,10 @@ namespace Azure.Performance.Latency.StatelessSvc
 		private async Task CreateStatelessActorWriterAsync(int taskId, CancellationToken cancellationToken)
 		{
 			var workload = new LatencyWorkload(_logger, "VolatileActor");
+			var service = ActorProxy.Create<IStatelessActor>(new ActorId(taskId), ServiceConstants.StatelessActorUri);
+
 			await workload.InvokeAsync(async (value) =>
 			{
-				var service = ActorProxy.Create<IStatelessActor>(new ActorId(taskId), ServiceConstants.StatelessActorUri);
 				await service.WriteAsync(value, cancellationToken).ConfigureAwait(false);
 			}, taskId, cancellationToken);
 		}
