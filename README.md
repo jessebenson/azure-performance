@@ -8,7 +8,7 @@ Latency performance analysis finds the optimal (lowest) latency by using a low t
 
 | Azure Service   | Avg Latency (ms) | P99 Latency (ms) | Notes |
 | --------------- | :--------------: | :--------------: | ----- |
-| DocumentDB      |       7.5        |        40        | strong consistency, consistent indexing, 1 region, 400 RUs, TTL = 1 day |
+| DocumentDB      |       7.5        |        40        | strong consistency, no indexing, 1 region, 400 RUs, TTL = 1 day |
 | Event Hub       |       28         |       265        | 2 partitions, 10 throughput units, 1 day message retention |
 | Redis           |       1.0        |       2.9        | C2 Standard (async replication, no data persistence, dedicated service, moderate network bandwidth) |
 | SQL             |       8.9        |       150        | S2 Standard (50 DTUs), 1 region, insert-only writes |
@@ -30,7 +30,7 @@ Throughput performance analysis finds the optimal throughput numbers by using a 
 
 | Azure Service   | Avg Throughput (writes/sec) | P99 Throughput (writes/sec) | Avg Latency (ms) | Notes |
 | --------------- | :-------------------------: | :-------------------------: | :--------------: | ----- |
-| DocumentDB      |              1,500          |            2,100            |       20.5       | strong consistency, consistent indexing, 1 region, 15000 RUs, TTL = 1 day |
+| DocumentDB      |              1,500          |            2,100            |       20.5       | strong consistency, no indexing, 1 region, 15000 RUs, TTL = 1 day |
 | Event Hub       |             15,000          |           31,000            |        8.0       | 32 partitions, 10 throughput units, 1 day message retention |
 | Redis           |            125,000          |          135,000            |        1.0       | P2 Premium (async replication, no data persistence, dedicated service, redis cluster, moderate network bandwidth) |
 | SQL             |             11,000          |           12,500            |        3.0       | P2 Premium (250 DTUs), 1 region, insert-only writes |
