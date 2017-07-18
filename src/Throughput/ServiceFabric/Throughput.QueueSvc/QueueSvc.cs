@@ -20,7 +20,8 @@ namespace Azure.Performance.Throughput.QueueSvc
 	/// </summary>
 	internal sealed class QueueSvc : LoggingStatefulService, IQueueSvc
 	{
-		private const int TaskCount = 48;
+		private const int TaskCount = 256;
+		private long _queueCount = 0;
 
 		public QueueSvc(StatefulServiceContext context, ILogger logger)
 			: base(context, logger)
@@ -62,6 +63,7 @@ namespace Azure.Performance.Throughput.QueueSvc
 		private async Task CreateWorkloadAsync(CancellationToken cancellationToken)
 		{
 			var state = await this.StateManager.GetOrAddAsync<IReliableConcurrentQueue<PerformanceData>>("throughput").ConfigureAwait(false);
+			_queueCount = state.Count;
 
 			var workload = new ThroughputWorkload(_logger, "ReliableQueue", IsKnownException);
 			await workload.InvokeAsync(TaskCount, (random) => WriteAsync(state, random, cancellationToken), cancellationToken).ConfigureAwait(false);
@@ -69,24 +71,32 @@ namespace Azure.Performance.Throughput.QueueSvc
 
 		private async Task<long> WriteAsync(IReliableConcurrentQueue<PerformanceData> state, Random random, CancellationToken cancellationToken)
 		{
-			const int batchSize = 16;
+			const int batchSize = 1;
 			const int QueueThreshold = TaskCount * batchSize;
 
 			using (var tx = StateManager.CreateTransaction())
 			{
+				long delta = 0;
+
 				for (int i = 0; i < batchSize; i++)
 				{
-					if (state.Count < QueueThreshold)
+					var queueCount = Interlocked.Read(ref _queueCount);
+					if (Interlocked.Read(ref _queueCount) < QueueThreshold)
+					{
 						await state.EnqueueAsync(tx, RandomGenerator.GetPerformanceData(), cancellationToken).ConfigureAwait(false);
+						delta++;
+					}
 					else
+					{
 						await state.TryDequeueAsync(tx, cancellationToken).ConfigureAwait(false);
+						delta--;
+					}
 				}
 
 				await tx.CommitAsync().ConfigureAwait(false);
-			}
 
-			// Workaround:  memory consumption goes to zero without this.
-			await Task.Delay(1).ConfigureAwait(false);
+				Interlocked.Add(ref _queueCount, delta);
+			}
 
 			return batchSize;
 		}
