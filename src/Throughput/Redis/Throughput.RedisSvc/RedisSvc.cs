@@ -21,7 +21,7 @@ namespace Azure.Performance.Throughput.RedisSvc
 	/// </summary>
 	internal sealed class RedisSvc : LoggingStatelessService, IRedisSvc
 	{
-		private const int TaskCount = 128;
+		private const int TaskCount = 1024;
 		private readonly string _connectionString;
 		private long _id = 0;
 
@@ -71,7 +71,7 @@ namespace Azure.Performance.Throughput.RedisSvc
 
 		private async Task<long> WriteAsync(IDatabase redis, Random random, CancellationToken cancellationToken)
 		{
-			const int batchSize = 192;
+			const int batchSize = 16;
 
 			var values = new KeyValuePair<RedisKey, RedisValue>[batchSize];
 			for (int i = 0; i < batchSize; i++)
