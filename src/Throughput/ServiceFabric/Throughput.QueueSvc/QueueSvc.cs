@@ -20,7 +20,7 @@ namespace Azure.Performance.Throughput.QueueSvc
 	/// </summary>
 	internal sealed class QueueSvc : LoggingStatefulService, IQueueSvc
 	{
-		private const int TaskCount = 256;
+		private const int TaskCount = 64;
 		private long _queueCount = 0;
 
 		public QueueSvc(StatefulServiceContext context, ILogger logger)
@@ -71,7 +71,7 @@ namespace Azure.Performance.Throughput.QueueSvc
 
 		private async Task<long> WriteAsync(IReliableConcurrentQueue<PerformanceData> state, Random random, CancellationToken cancellationToken)
 		{
-			const int batchSize = 1;
+			const int batchSize = 8;
 			const int QueueThreshold = TaskCount * batchSize;
 
 			using (var tx = StateManager.CreateTransaction())

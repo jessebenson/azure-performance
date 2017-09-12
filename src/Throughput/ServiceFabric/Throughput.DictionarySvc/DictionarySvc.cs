@@ -20,7 +20,7 @@ namespace Azure.Performance.Throughput.DictionarySvc
 	/// </summary>
 	internal sealed class DictionarySvc : LoggingStatefulService, IDictionarySvc
 	{
-		private const int TaskCount = 256;
+		private const int TaskCount = 64;
 		private static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(4);
 		private long _id = 0;
 
@@ -71,7 +71,7 @@ namespace Azure.Performance.Throughput.DictionarySvc
 
 		private async Task<long> WriteAsync(IReliableDictionary<long, PerformanceData> state, Random random, CancellationToken cancellationToken)
 		{
-			const int batchSize = 1;
+			const int batchSize = 8;
 
 			using (var tx = StateManager.CreateTransaction())
 			{
