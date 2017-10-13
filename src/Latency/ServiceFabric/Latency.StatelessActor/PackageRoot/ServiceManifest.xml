@@ -6,11 +6,11 @@
         <Extension Name="__GeneratedServiceType__" GeneratedId="b95ad209-99fb-417d-87c9-8fca548ed1c2|Volatile">
           <GeneratedNames xmlns="http://schemas.microsoft.com/2015/03/fabact-no-schema">
             <DefaultService Name="StatelessActorService" />
-            <ServiceEndpoint Name="StatelessActorServiceEndpoint" />
             <ReplicatorEndpoint Name="StatelessActorServiceReplicatorEndpoint" />
             <ReplicatorConfigSection Name="StatelessActorServiceReplicatorConfig" />
             <ReplicatorSecurityConfigSection Name="StatelessActorServiceReplicatorSecurityConfig" />
             <StoreConfigSection Name="StatelessActorServiceLocalStoreConfig" />
+            <ServiceEndpoint Name="StatelessActorServiceEndpoint" />
           </GeneratedNames>
         </Extension>
       </Extensions>

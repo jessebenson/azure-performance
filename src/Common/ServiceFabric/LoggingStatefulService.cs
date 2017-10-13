@@ -23,7 +23,7 @@ namespace Azure.Performance.Common
 			_logger = logger.WithServiceContext(serviceContext);
 		}
 
-		protected LoggingStatefulService(StatefulServiceContext serviceContext, IReliableStateManagerReplica reliableStateManagerReplica, ILogger logger) : base(serviceContext, reliableStateManagerReplica)
+		protected LoggingStatefulService(StatefulServiceContext serviceContext, IReliableStateManagerReplica2 reliableStateManagerReplica, ILogger logger) : base(serviceContext, reliableStateManagerReplica)
 		{
 			if (logger == null)
 				throw new ArgumentNullException(nameof(logger));
