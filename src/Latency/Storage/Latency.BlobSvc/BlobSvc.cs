@@ -80,14 +80,14 @@ namespace Azure.Performance.Latency.BlobSvc
 			await Task.WhenAll(tasks).ConfigureAwait(false);
 		}
 
-		private async Task CreateWriterAsync(int taskId, CloudBlobContainer container, CancellationToken cancellationToken)
+		private Task CreateWriterAsync(int taskId, CloudBlobContainer container, CancellationToken cancellationToken)
 		{
 			var workload = new LatencyWorkload(_logger, "Blob");
-			await workload.InvokeAsync(async (value) =>
+			return workload.InvokeAsync((value) =>
 			{
 				// Write the blob.
 				var blob = container.GetBlockBlobReference(value.Id);
-				await blob.UploadTextAsync(JsonConvert.SerializeObject(value), cancellationToken).ConfigureAwait(false);
+				return blob.UploadTextAsync(JsonConvert.SerializeObject(value), cancellationToken);
 			}, taskId, cancellationToken);
 		}
 

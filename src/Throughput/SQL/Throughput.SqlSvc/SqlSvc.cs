@@ -65,10 +65,10 @@ namespace Azure.Performance.Throughput.SqlSvc
 			).ConfigureAwait(false);
 		}
 
-		private async Task CreateWorkloadAsync(CancellationToken cancellationToken)
+		private Task CreateWorkloadAsync(CancellationToken cancellationToken)
 		{
 			var workload = new ThroughputWorkload(_logger, "Sql");
-			await workload.InvokeAsync(TaskCount, (random) => WriteAsync(random, cancellationToken), cancellationToken).ConfigureAwait(false);
+			return workload.InvokeAsync(TaskCount, (random) => WriteAsync(random, cancellationToken), cancellationToken);
 		}
 
 		private async Task<long> WriteAsync(Random random, CancellationToken cancellationToken)

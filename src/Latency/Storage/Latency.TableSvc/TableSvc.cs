@@ -80,15 +80,15 @@ namespace Azure.Performance.Latency.TableSvc
 			await Task.WhenAll(tasks).ConfigureAwait(false);
 		}
 
-		private async Task CreateWriterAsync(int taskId, CloudTable table, CancellationToken cancellationToken)
+		private Task CreateWriterAsync(int taskId, CloudTable table, CancellationToken cancellationToken)
 		{
 			var workload = new LatencyWorkload(_logger, "Table");
-			await workload.InvokeAsync(async (value) =>
+			return workload.InvokeAsync((value) =>
 			{
 				// Write to the table.
 				var entity = new PerformanceEntity(value);
 				var operation = TableOperation.InsertOrReplace(entity);
-				await table.ExecuteAsync(operation).ConfigureAwait(false);
+				return table.ExecuteAsync(operation);
 			}, taskId, cancellationToken);
 		}
 

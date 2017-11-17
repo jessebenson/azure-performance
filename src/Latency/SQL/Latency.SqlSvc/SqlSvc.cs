@@ -58,10 +58,13 @@ namespace Azure.Performance.Latency.SqlSvc
 			await base.RunAsync(cancellationToken).ConfigureAwait(false);
 
 			// Spawn worker tasks.
-			await CreateWritersAsync(taskCount: LatencyWorkload.DefaultTaskCount, cancellationToken: cancellationToken).ConfigureAwait(false);
+			await Task.WhenAll(
+				CreateWritersAsync(taskCount: LatencyWorkload.DefaultTaskCount, cancellationToken: cancellationToken),
+				CreateTruncatorAsync(cancellationToken)
+			).ConfigureAwait(false);
 		}
 
-		private async Task CreateWritersAsync(int taskCount, CancellationToken cancellationToken)
+		private Task CreateWritersAsync(int taskCount, CancellationToken cancellationToken)
 		{
 			var tasks = new List<Task>(taskCount);
 			for (int i = 0; i < taskCount; i++)
@@ -70,7 +73,7 @@ namespace Azure.Performance.Latency.SqlSvc
 				tasks.Add(Task.Run(() => CreateWriterAsync(taskId, cancellationToken)));
 			}
 
-			await Task.WhenAll(tasks).ConfigureAwait(false);
+			return Task.WhenAll(tasks);
 		}
 
 		private Task CreateWriterAsync(int taskId, CancellationToken cancellationToken)
@@ -98,6 +101,28 @@ VALUES (@id, @timestamp, @string_value, @int_value, @double_value, @time_value, 
 					await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
 				}
 			}, taskId, cancellationToken);
+		}
+
+		private async Task CreateTruncatorAsync(CancellationToken cancellationToken)
+		{
+			while (!cancellationToken.IsCancellationRequested)
+			{
+				try
+				{
+					using (var sql = new SqlConnection(_sqlConnectionString))
+					using (var command = new SqlCommand("TRUNCATE TABLE Latency", sql))
+					{
+						await sql.OpenAsync(cancellationToken).ConfigureAwait(false);
+						await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+					}
+				}
+				catch (Exception e)
+				{
+					_logger.Error(e, "Unexpected exception {ExceptionType} in {WorkloadName}.", e.GetType(), "CreateTruncatorAsync");
+				}
+
+				await Task.Delay(TimeSpan.FromHours(1), cancellationToken).ConfigureAwait(false);
+			}
 		}
 	}
 }

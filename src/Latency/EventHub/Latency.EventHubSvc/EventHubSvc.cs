@@ -63,7 +63,7 @@ namespace Azure.Performance.Latency.EventHubSvc
 			await CreateWritersAsync(taskCount: LatencyWorkload.DefaultTaskCount, cancellationToken: cancellationToken).ConfigureAwait(false);
 		}
 
-		private async Task CreateWritersAsync(int taskCount, CancellationToken cancellationToken)
+		private Task CreateWritersAsync(int taskCount, CancellationToken cancellationToken)
 		{
 			var tasks = new List<Task>(taskCount);
 			for (int i = 0; i < taskCount; i++)
@@ -72,18 +72,18 @@ namespace Azure.Performance.Latency.EventHubSvc
 				tasks.Add(Task.Run(() => CreateWriterAsync(taskId, cancellationToken)));
 			}
 
-			await Task.WhenAll(tasks).ConfigureAwait(false);
+			return Task.WhenAll(tasks);
 		}
 
-		private async Task CreateWriterAsync(int taskId, CancellationToken cancellationToken)
+		private Task CreateWriterAsync(int taskId, CancellationToken cancellationToken)
 		{
 			var workload = new LatencyWorkload(_logger, "EventHub");
-			await workload.InvokeAsync(async (value) =>
+			return workload.InvokeAsync((value) =>
 			{
 				var content = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(value));
 				var data = new EventData(content);
 
-				await _client.SendAsync(data).ConfigureAwait(false);
+				return _client.SendAsync(data);
 			}, taskId, cancellationToken);
 		}
 	}
