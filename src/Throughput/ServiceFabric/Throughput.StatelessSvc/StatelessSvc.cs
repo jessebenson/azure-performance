@@ -20,7 +20,7 @@ namespace Azure.Performance.Throughput.StatelessSvc
 	/// </summary>
 	internal sealed class StatelessSvc : LoggingStatelessService, IDictionarySvc
 	{
-		private const int TaskCount = 64;
+		private const int TaskCount = 32;
 		private static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(4);
 		private long _id = 0;
 
@@ -68,7 +68,7 @@ namespace Azure.Performance.Throughput.StatelessSvc
 
 		private async Task<long> WriteAsync(IStatefulSvc service, Random random, CancellationToken cancellationToken)
 		{
-			const int batchSize = 8;
+			const int batchSize = 16;
 
 			var batch = new KeyValuePair<long, PerformanceData>[batchSize];
 			for (int i = 0; i < batchSize; i++)
