@@ -34,6 +34,8 @@
     <ProjectReference Include="..\Throughput.QueueSvc\Throughput.QueueSvc.csproj" />
     <ProjectReference Include="..\Throughput.DictionarySvc\Throughput.DictionarySvc.csproj" />
     <ProjectReference Include="..\Throughput.ReadSvc\Throughput.ReadSvc.csproj" />
+    <ProjectReference Include="..\Throughput.StatefulSvc\Throughput.StatefulSvc.csproj" />
+    <ProjectReference Include="..\Throughput.StatelessSvc\Throughput.StatelessSvc.csproj" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />
   <PropertyGroup>

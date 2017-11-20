@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26510.0
+VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{E2697F9D-9050-438F-8F82-B6FC0D948A68}"
 EndProject
@@ -44,6 +44,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Throughput.EventHubSvc", "EventHub\Throughput.EventHubSvc\Throughput.EventHubSvc.csproj", "{54B74630-9CC6-4E2B-8E3E-AE2C344A0E93}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Throughput.ReadSvc", "ServiceFabric\Throughput.ReadSvc\Throughput.ReadSvc.csproj", "{FE63E0CF-D0AC-452A-9DDC-8DDCF61FBEBD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Throughput.StatefulSvc", "ServiceFabric\Throughput.StatefulSvc\Throughput.StatefulSvc.csproj", "{04A3F7BA-3B35-4156-ACA2-8FC2F424B70D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Throughput.StatelessSvc", "ServiceFabric\Throughput.StatelessSvc\Throughput.StatelessSvc.csproj", "{248ED8D9-7103-4885-96AB-65B2404C8963}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -121,6 +125,14 @@ Global
 		{FE63E0CF-D0AC-452A-9DDC-8DDCF61FBEBD}.Debug|x64.Build.0 = Debug|x64
 		{FE63E0CF-D0AC-452A-9DDC-8DDCF61FBEBD}.Release|x64.ActiveCfg = Release|x64
 		{FE63E0CF-D0AC-452A-9DDC-8DDCF61FBEBD}.Release|x64.Build.0 = Release|x64
+		{04A3F7BA-3B35-4156-ACA2-8FC2F424B70D}.Debug|x64.ActiveCfg = Debug|x64
+		{04A3F7BA-3B35-4156-ACA2-8FC2F424B70D}.Debug|x64.Build.0 = Debug|x64
+		{04A3F7BA-3B35-4156-ACA2-8FC2F424B70D}.Release|x64.ActiveCfg = Release|x64
+		{04A3F7BA-3B35-4156-ACA2-8FC2F424B70D}.Release|x64.Build.0 = Release|x64
+		{248ED8D9-7103-4885-96AB-65B2404C8963}.Debug|x64.ActiveCfg = Debug|x64
+		{248ED8D9-7103-4885-96AB-65B2404C8963}.Debug|x64.Build.0 = Debug|x64
+		{248ED8D9-7103-4885-96AB-65B2404C8963}.Release|x64.ActiveCfg = Release|x64
+		{248ED8D9-7103-4885-96AB-65B2404C8963}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -141,5 +153,10 @@ Global
 		{08CD16E7-D5DF-4CFA-B841-83D5711B3705} = {30EA1CAF-BB69-4B26-863A-99D67E76ACEC}
 		{54B74630-9CC6-4E2B-8E3E-AE2C344A0E93} = {30EA1CAF-BB69-4B26-863A-99D67E76ACEC}
 		{FE63E0CF-D0AC-452A-9DDC-8DDCF61FBEBD} = {62EBB5C6-1208-485D-BAB4-06EF7EBD903B}
+		{04A3F7BA-3B35-4156-ACA2-8FC2F424B70D} = {62EBB5C6-1208-485D-BAB4-06EF7EBD903B}
+		{248ED8D9-7103-4885-96AB-65B2404C8963} = {62EBB5C6-1208-485D-BAB4-06EF7EBD903B}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5E81228D-E71F-45C0-835F-15C3F22983A3}
 	EndGlobalSection
 EndGlobal

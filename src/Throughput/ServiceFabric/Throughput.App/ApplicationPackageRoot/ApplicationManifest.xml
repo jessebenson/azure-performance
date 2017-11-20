@@ -9,10 +9,16 @@
     <Parameter Name="QueueSvc_MinReplicaSetSize" DefaultValue="3" />
     <Parameter Name="QueueSvc_TargetReplicaSetSize" DefaultValue="3" />
     <Parameter Name="QueueSvc_PlacementConstraints" DefaultValue="" />
-    <Parameter Name="ReadSvc_MinReplicaSetSize" DefaultValue="3" />
     <Parameter Name="ReadSvc_PartitionCount" DefaultValue="1" />
+    <Parameter Name="ReadSvc_MinReplicaSetSize" DefaultValue="3" />
     <Parameter Name="ReadSvc_TargetReplicaSetSize" DefaultValue="3" />
     <Parameter Name="ReadSvc_PlacementConstraints" DefaultValue="" />
+    <Parameter Name="StatefulSvc_PartitionCount" DefaultValue="1" />
+    <Parameter Name="StatefulSvc_MinReplicaSetSize" DefaultValue="3" />
+    <Parameter Name="StatefulSvc_TargetReplicaSetSize" DefaultValue="3" />
+    <Parameter Name="StatefulSvc_PlacementConstraints" DefaultValue="" />
+    <Parameter Name="StatelessSvc_InstanceCount" DefaultValue="1" />
+    <Parameter Name="StatelessSvc_PlacementConstraints" DefaultValue="" />
   </Parameters>
   <!-- Import the ServiceManifest from the ServicePackage. The ServiceManifestName and ServiceManifestVersion 
        should match the Name and Version attributes of the ServiceManifest element defined in the 
@@ -27,6 +33,14 @@
   </ServiceManifestImport>
   <ServiceManifestImport>
     <ServiceManifestRef ServiceManifestName="Throughput.ReadSvcPkg" ServiceManifestVersion="1.0.0" />
+    <ConfigOverrides />
+  </ServiceManifestImport>
+  <ServiceManifestImport>
+    <ServiceManifestRef ServiceManifestName="Throughput.StatefulSvcPkg" ServiceManifestVersion="1.0.0" />
+    <ConfigOverrides />
+  </ServiceManifestImport>
+  <ServiceManifestImport>
+    <ServiceManifestRef ServiceManifestName="Throughput.StatelessSvcPkg" ServiceManifestVersion="1.0.0" />
     <ConfigOverrides />
   </ServiceManifestImport>
   <DefaultServices>
@@ -52,6 +66,18 @@
         <UniformInt64Partition PartitionCount="[ReadSvc_PartitionCount]" LowKey="-9223372036854775808" HighKey="9223372036854775807" />
         <PlacementConstraints>[ReadSvc_PlacementConstraints]</PlacementConstraints>
       </StatefulService>
+    </Service>
+    <Service Name="StatefulSvc">
+      <StatefulService ServiceTypeName="StatefulSvcType" TargetReplicaSetSize="[StatefulSvc_TargetReplicaSetSize]" MinReplicaSetSize="[StatefulSvc_MinReplicaSetSize]">
+        <UniformInt64Partition PartitionCount="[StatefulSvc_PartitionCount]" LowKey="-9223372036854775808" HighKey="9223372036854775807" />
+        <PlacementConstraints>[StatefulSvc_PlacementConstraints]</PlacementConstraints>
+      </StatefulService>
+    </Service>
+    <Service Name="StatelessSvc">
+      <StatelessService ServiceTypeName="StatelessSvcType" InstanceCount="[StatelessSvc_InstanceCount]">
+        <SingletonPartition />
+        <PlacementConstraints>[StatelessSvc_PlacementConstraints]</PlacementConstraints>
+      </StatelessService>
     </Service>
   </DefaultServices>
 </ApplicationManifest>

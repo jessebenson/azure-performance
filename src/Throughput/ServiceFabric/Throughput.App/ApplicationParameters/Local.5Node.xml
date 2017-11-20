@@ -10,5 +10,9 @@
     <Parameter Name="ReadSvc_PartitionCount" Value="1" />
     <Parameter Name="ReadSvc_MinReplicaSetSize" Value="3" />
     <Parameter Name="ReadSvc_TargetReplicaSetSize" Value="3" />
+    <Parameter Name="StatefulSvc_PartitionCount" Value="1" />
+    <Parameter Name="StatefulSvc_MinReplicaSetSize" Value="3" />
+    <Parameter Name="StatefulSvc_TargetReplicaSetSize" Value="3" />
+    <Parameter Name="StatelessSvc_InstanceCount" Value="1" />
   </Parameters>
 </Application>

@@ -112,7 +112,7 @@
             "value": "Standard_D3_v2_Promo"
         },
         "nt2InstanceCount": {
-            "value": 9
+            "value": 13
         },
 
         "vmNodeType3Name": {
