@@ -8,17 +8,17 @@ Latency performance analysis finds the optimal (lowest) latency by using a low t
 
 | Azure Service   | Avg Latency (ms) | P99 Latency (ms) | Notes |
 | --------------- | :--------------: | :--------------: | ----- |
-| DocumentDB      |       7.5        |        40        | strong consistency, no indexing, 1 region, 400 RUs, TTL = 1 day |
-| Event Hub       |       28         |       265        | 2 partitions, 10 throughput units, 1 day message retention |
-| Redis           |       1.0        |       2.9        | C2 Standard (async replication, no data persistence, dedicated service, moderate network bandwidth) |
-| SQL             |       8.9        |       150        | S2 Standard (50 DTUs), 1 region, insert-only writes |
+| DocumentDB      |       6.5        |        35        | strong consistency, no indexing, 1 region, 400 RUs, TTL = 1 day |
+| Event Hub       |       36         |       320        | 2 partitions, 10 throughput units, 1 day message retention |
+| Redis           |       1.1        |       3.1        | C2 Standard (async replication, no data persistence, dedicated service, moderate network bandwidth) |
+| SQL             |       7.8        |        60        | S2 Standard (50 DTUs), 1 region, insert-only writes |
 | Storage (Blob)  |       37         |       240        | Standard, Locally-redundant storage (LRS) |
 | Storage (Table) |       50         |       350        | Standard, Locally-redundant storage (LRS) |
-| ServiceFabric Queue |  3.6         |        10        | IReliableConcurrentQueue, D2v2 (SSD), 3 replicas, POD class with DataContract serialization, BatchAcknowledgementInterval = 0ms, writes measured from the stateful service |
-| ServiceFabric Dictionary |   3.6   |        10        | IReliableDictionary, D2v2 (SSD), 3 replicas, key = string, value = POD class with DataContract serialization, BatchAcknowledgementInterval = 0ms, writes measured from the stateful service |
-| ServiceFabric Dictionary + ServiceProxy | 5.4 |  14   | IReliableDictionary, D2v2 (SSD), 3 replicas, key = string, value = POD class with DataContract serialization, BatchAcknowledgementInterval = 0ms, writes measured from a stateless service communicating via ServiceProxy to the stateful service |
-| ServiceFabric Stateful Actor | 4.7 |        17        | StatefulActor, StatePersistence = Persisted, D2v2 (SSD), 3 replicas, POD class with DataContract serialization, BatchAcknowledgementInterval = 0ms, writes measured from a stateless service communicating via ActorProxy to the stateful actor |
-| ServiceFabric Volatile Actor | 3.9 |         7        | StatefulActor, StatePersistence = Volatile, D2v2 (SSD), 3 replicas, POD class with DataContract serialization, StatePersistence = Volatile, BatchAcknowledgementInterval = 0ms, writes measured from a stateless service communicating via ActorProxy to the volatile actor |
+| ServiceFabric Queue |  3.2         |         9        | IReliableConcurrentQueue, D2v2 (SSD), 3 replicas, POD class with DataContract serialization, BatchAcknowledgementInterval = 0ms, writes measured from the stateful service |
+| ServiceFabric Dictionary |   3.2   |        10        | IReliableDictionary, D2v2 (SSD), 3 replicas, key = string, value = POD class with DataContract serialization, BatchAcknowledgementInterval = 0ms, writes measured from the stateful service |
+| ServiceFabric Dictionary + ServiceProxy | 4.2 |  14   | IReliableDictionary, D2v2 (SSD), 3 replicas, key = string, value = POD class with DataContract serialization, BatchAcknowledgementInterval = 0ms, writes measured from a stateless service communicating via ServiceProxy to the stateful service |
+| ServiceFabric Stateful Actor | 3.9 |        17        | StatefulActor, StatePersistence = Persisted, D2v2 (SSD), 3 replicas, POD class with DataContract serialization, BatchAcknowledgementInterval = 0ms, writes measured from a stateless service communicating via ActorProxy to the stateful actor |
+| ServiceFabric Volatile Actor | 3.9 |         9        | StatefulActor, StatePersistence = Volatile, D2v2 (SSD), 3 replicas, POD class with DataContract serialization, StatePersistence = Volatile, BatchAcknowledgementInterval = 0ms, writes measured from a stateless service communicating via ActorProxy to the volatile actor |
 
 ## Throughput Performance Analysis
 
