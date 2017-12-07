@@ -82,7 +82,7 @@ namespace TelemetrySvc
 
 		private async Task LogPerformanceCountersAsync(CancellationToken cancellationToken, params PerformanceCounter[] counters)
 		{
-			// Log the performance counters approximately every minute.
+			// Log the performance counters approximately every minute (metrics are logged after 'SampleThreshold' events).
 			TimeSpan frequency = TimeSpan.FromMilliseconds((60 * 1000) / MetricExtensions.SamplingThreshold);
 
 			while (!cancellationToken.IsCancellationRequested)
