@@ -22,7 +22,7 @@ namespace Azure.Performance.Throughput.ReadSvc
 	internal sealed class ReadSvc : LoggingStatefulService, IPerformanceSvc
 	{
 		private const int TaskCount = 256;
-		private const long KeyCount = 1;
+		private const long KeyCount = 1000000;
 		private static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(4);
 		private long _id = 0;
 
