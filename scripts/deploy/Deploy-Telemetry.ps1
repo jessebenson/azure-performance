@@ -2,8 +2,7 @@ Param
 (
 	[Switch] $All,
 
-	[Switch] $Telemetry,
-	[Switch] $Web
+	[Switch] $Telemetry
 )
 
 $LocalFolder = (Split-Path $MyInvocation.MyCommand.Path)
@@ -29,11 +28,4 @@ if ($Telemetry -or $All)
 	$TelemetryPath = (Join-Path $SrcFolder "TelemetryApp")
 	$TelemetryProject = (Join-Path $TelemetryPath "TelemetryApp.sfproj")
 	Deploy-Application $SrcFolder $TelemetryPath $TelemetryProject
-}
-
-if ($Web -or $All)
-{
-	$WebPath = (Join-Path $SrcFolder "WebApp")
-	$WebProject = (Join-Path $WebPath "WebApp.sfproj")
-	Deploy-Application $SrcFolder $WebPath $WebProject
 }
