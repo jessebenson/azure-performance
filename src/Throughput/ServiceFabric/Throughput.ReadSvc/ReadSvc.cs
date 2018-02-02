@@ -83,6 +83,10 @@ namespace Azure.Performance.Throughput.ReadSvc
 
 				if (!result.HasValue)
 					throw new InvalidDataException($"IReliableDictionary is missing key '{key}'.");
+
+				// Need to investigate why memory leaks without a periodic sleep.
+				if (key % 1000 == 0)
+					await Task.Delay(1).ConfigureAwait(false);
 			}
 
 			return 1;
