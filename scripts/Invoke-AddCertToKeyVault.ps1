@@ -77,7 +77,7 @@ if ($CreateSelfSignedCertificate)
     }
     else
     {
-        New-SelfSignedCertificate -CertStoreLocation Cert:\CurrentUser\My -DnsName $DnsName -Provider 'Microsoft Enhanced Cryptographic Provider v1.0' | Export-PfxCertificate -FilePath $NewPfxFilePath -Password $securePassword | Out-Null
+        New-SelfSignedCertificate -CertStoreLocation Cert:\CurrentUser\My -DnsName $DnsName -Provider 'Microsoft Enhanced Cryptographic Provider v1.0' -NotAfter (Get-Date -Year 2025) | Export-PfxCertificate -FilePath $NewPfxFilePath -Password $securePassword | Out-Null
     }
 
     $ExistingPfxFilePath = $NewPfxFilePath

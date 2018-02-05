@@ -136,10 +136,10 @@
             "value": "/subscriptions/fc4ea3c9-1d30-4f18-b33b-7404e7da0123/resourceGroups/azure-performance/providers/Microsoft.KeyVault/vaults/azure-performance"
         },
         "certificateUrlValue": {
-            "value": "https://azure-performance.vault.azure.net:443/secrets/azure-performance-cert/f5721d88155846aea8223368a27a84dc"
+            "value": "https://azure-performance.vault.azure.net:443/secrets/azure-performance-cert/1bd9fc4c362a4f9698e8c71db3e7b2e2"
         },
         "certificateThumbprint": {
-            "value": "41AEC7DD46696FA88DAC6A5878F92E90C727726F"
+            "value": "B7B0D8BDEE49AE2DFD752684A63C62BD1D9BD64B"
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿Connect-ServiceFabricCluster azure-performance.jessebenson.me:19000 `
     -X509Credential `
-    -ServerCertThumbprint "41AEC7DD46696FA88DAC6A5878F92E90C727726F" `
+    -ServerCertThumbprint "B7B0D8BDEE49AE2DFD752684A63C62BD1D9BD64B" `
     -FindType "FindByThumbprint" `
-    -FindValue "41AEC7DD46696FA88DAC6A5878F92E90C727726F" `
+    -FindValue "B7B0D8BDEE49AE2DFD752684A63C62BD1D9BD64B" `
     -StoreLocation "CurrentUser" `
     -StoreName "My"
 
