@@ -1,6 +1,6 @@
 # Azure Performance Analysis
 
-This repository contains a number of services used to measure the latency and throughput of various Azure services.
+This repository contains a number of services used to measure the latency and throughput of various Azure services.  Last update: 3/26/2018.
 
 ## Latency Performance Analysis
 
@@ -8,17 +8,17 @@ Latency performance analysis finds the optimal (lowest) latency by using a low t
 
 | Azure Service   | Avg Latency (ms) | P99 Latency (ms) | Notes |
 | --------------- | :--------------: | :--------------: | ----- |
-| DocumentDB      |       6.5        |        35        | strong consistency, no indexing, 1 region, 400 RUs, TTL = 1 day |
-| Event Hub       |       36         |       320        | 2 partitions, 10 throughput units, 1 day message retention |
-| Redis           |       1.1        |       3.1        | C2 Standard (async replication, no data persistence, dedicated service, moderate network bandwidth) |
-| SQL             |       7.8        |        60        | S2 Standard (50 DTUs), 1 region, insert-only writes |
-| Storage (Blob)  |       37         |       240        | Standard, Locally-redundant storage (LRS) |
-| Storage (Table) |       50         |       350        | Standard, Locally-redundant storage (LRS) |
-| ServiceFabric Queue |  3.2         |         9        | IReliableConcurrentQueue, D2v2 (SSD), 3 replicas, POD class with DataContract serialization, BatchAcknowledgementInterval = 0ms, writes measured from the stateful service |
-| ServiceFabric Dictionary |   3.2   |        10        | IReliableDictionary, D2v2 (SSD), 3 replicas, key = string, value = POD class with DataContract serialization, BatchAcknowledgementInterval = 0ms, writes measured from the stateful service |
-| ServiceFabric Dictionary + ServiceProxy | 4.2 |  14   | IReliableDictionary, D2v2 (SSD), 3 replicas, key = string, value = POD class with DataContract serialization, BatchAcknowledgementInterval = 0ms, writes measured from a stateless service communicating via ServiceProxy to the stateful service |
-| ServiceFabric Stateful Actor | 3.9 |        17        | StatefulActor, StatePersistence = Persisted, D2v2 (SSD), 3 replicas, POD class with DataContract serialization, BatchAcknowledgementInterval = 0ms, writes measured from a stateless service communicating via ActorProxy to the stateful actor |
-| ServiceFabric Volatile Actor | 3.9 |         9        | StatefulActor, StatePersistence = Volatile, D2v2 (SSD), 3 replicas, POD class with DataContract serialization, StatePersistence = Volatile, BatchAcknowledgementInterval = 0ms, writes measured from a stateless service communicating via ActorProxy to the volatile actor |
+| DocumentDB      |       5.9        |        11        | strong consistency, no indexing, 1 region, 400 RUs, TTL = 1 day |
+| Event Hub       |       55         |       520        | 2 partitions, 10 throughput units, 1 day message retention |
+| Redis           |       1.0        |       3.1        | C2 Standard (async replication, no data persistence, dedicated service, moderate network bandwidth) |
+| SQL             |       6.2        |        46        | S2 Standard (50 DTUs), 1 region, insert-only writes |
+| Storage (Blob)  |       42         |       200        | Standard, Locally-redundant storage (LRS) |
+| Storage (Table) |       32         |       150        | Standard, Locally-redundant storage (LRS) |
+| ServiceFabric Queue |  2.5         |        12        | IReliableConcurrentQueue, D2v2 (SSD), 3 replicas, POD class with DataContract serialization, BatchAcknowledgementInterval = 0ms, writes measured from the stateful service |
+| ServiceFabric Dictionary |   2.6   |        12        | IReliableDictionary, D2v2 (SSD), 3 replicas, key = string, value = POD class with DataContract serialization, BatchAcknowledgementInterval = 0ms, writes measured from the stateful service |
+| ServiceFabric Dictionary + ServiceProxy | 3.9 |  16   | IReliableDictionary, D2v2 (SSD), 3 replicas, key = string, value = POD class with DataContract serialization, BatchAcknowledgementInterval = 0ms, writes measured from a stateless service communicating via ServiceProxy to the stateful service |
+| ServiceFabric Stateful Actor | 3.9 |        14        | StatefulActor, StatePersistence = Persisted, D2v2 (SSD), 3 replicas, POD class with DataContract serialization, BatchAcknowledgementInterval = 0ms, writes measured from a stateless service communicating via ActorProxy to the stateful actor |
+| ServiceFabric Volatile Actor | 2.3 |         6        | StatefulActor, StatePersistence = Volatile, D2v2 (SSD), 3 replicas, POD class with DataContract serialization, StatePersistence = Volatile, BatchAcknowledgementInterval = 0ms, writes measured from a stateless service communicating via ActorProxy to the volatile actor |
 
 ## Throughput Performance Analysis
 
@@ -26,14 +26,14 @@ Throughput performance analysis finds the optimal throughput numbers by using a 
 
 | Azure Service   | Avg Throughput (writes/sec) | P99 Throughput (writes/sec) | Avg Latency (ms) | Cost / month | Notes |
 | --------------- | :-------------------------: | :-------------------------: | :--------------: | :----------: | ----- |
-| DocumentDB      |              1,500          |            2,100            |       20.5       | $876 | strong consistency, no indexing, 1 region, 15000 RUs, TTL = 1 day |
-| Event Hub       |             15,000          |           31,000            |        7.0       | ~$1,059* | 32 partitions, 10 throughput units, 1 day message retention |
-| Redis           |            115,000          |          125,000            |        9.1       | $810 | P2 Premium (async replication, no data persistence, dedicated service, redis cluster, moderate network bandwidth) |
-| SQL             |             11,400          |           12,800            |        2.9       | $913 | P2 Premium (250 DTUs), 1 region, insert-only writes |
-| ServiceFabric Queue |          8,600          |           10,500            |        3.7       | $924 | IReliableConcurrentQueue, D3v2 (SSD), 3 replicas, POD class with DataContract serialization, BatchAcknowledgementInterval = 15ms, MaxPrimaryReplicationQueueSize/MaxSecondaryReplicationQueueSize = 1M, writes measured from the stateful service |
-| ServiceFabric Dictionary (Write-only) |  8,000 |          11,000            |        4.2       | $924 | IReliableDictionary, D3v2 (SSD), 3 replicas, key = long, value = POD class with DataContract serialization, BatchAcknowledgementInterval = 15ms, MaxPrimaryReplicationQueueSize/MaxSecondaryReplicationQueueSize = 1M, writes measured from the stateful service |
-| ServiceFabric Dictionary + ServiceProxy | 7,800 |         11,000            |        4.3       | $924* | IReliableDictionary, D3v2 (SSD), 3 replicas, key = long, value = POD class with DataContract serialization, BatchAcknowledgementInterval = 15ms, MaxPrimaryReplicationQueueSize/MaxSecondaryReplicationQueueSize = 1M, writes measured from a stateless service communicating via ServiceProxy to the stateful service |
-| ServiceFabric Dictionary (Read-only) | 175,000 |         260,000            |        1.7       | $924 | IReliableDictionary, D3v2 (SSD), 3 replicas, key = long, value = POD class with DataContract serialization, BatchAcknowledgementInterval = 15ms, MaxPrimaryReplicationQueueSize/MaxSecondaryReplicationQueueSize = 1M, reads measured from the stateful service |
+| DocumentDB      |              1,480          |            1,980            |       20.5       | $876 | strong consistency, no indexing, 1 region, 15000 RUs, TTL = 1 day |
+| Event Hub       |             13,800          |           37,000            |       12.0       | ~$1,059* | 32 partitions, 10 throughput units, 1 day message retention |
+| Redis           |            104,000          |          112,000            |       10.1       | $810 | P2 Premium (async replication, no data persistence, dedicated service, redis cluster, moderate network bandwidth) |
+| SQL             |             10,400          |           11,500            |        3.1       | $913 | P2 Premium (250 DTUs), 1 region, insert-only writes |
+| ServiceFabric Queue |          9,000          |           10,300            |        3.7       | $924 | IReliableConcurrentQueue, D3v2 (SSD), 3 replicas, POD class with DataContract serialization, BatchAcknowledgementInterval = 15ms, MaxPrimaryReplicationQueueSize/MaxSecondaryReplicationQueueSize = 1M, writes measured from the stateful service |
+| ServiceFabric Dictionary (Write-only) |  7,200 |          10,200            |        5.1       | $924 | IReliableDictionary, D3v2 (SSD), 3 replicas, key = long, value = POD class with DataContract serialization, BatchAcknowledgementInterval = 15ms, MaxPrimaryReplicationQueueSize/MaxSecondaryReplicationQueueSize = 1M, writes measured from the stateful service |
+| ServiceFabric Dictionary + ServiceProxy | 7,000 |         10,200            |        5.5       | $924* | IReliableDictionary, D3v2 (SSD), 3 replicas, key = long, value = POD class with DataContract serialization, BatchAcknowledgementInterval = 15ms, MaxPrimaryReplicationQueueSize/MaxSecondaryReplicationQueueSize = 1M, writes measured from a stateless service communicating via ServiceProxy to the stateful service |
+| ServiceFabric Dictionary (Read-only) | 116,000 |         160,000            |        2.5       | $924 | IReliableDictionary, D3v2 (SSD), 3 replicas, key = long, value = POD class with DataContract serialization, BatchAcknowledgementInterval = 15ms, MaxPrimaryReplicationQueueSize/MaxSecondaryReplicationQueueSize = 1M, reads measured from the stateful service |
 
 *Note:  Average latency per operation at this throughput is given - however it's measured as: (*latency to write a batch*) / (*number of writes in the batch*).  So a batch write of 10 documents that took 50 ms would show an average latency of 5 ms.*
 
