@@ -59,6 +59,12 @@ Project("{A07B5EB6-E848-4116-A8D0-A826331D98C6}") = "Latency.Storage", "Storage\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Latency.TableSvc", "Storage\Latency.TableSvc\Latency.TableSvc.csproj", "{383495C2-250D-47C4-8235-CFF111B00316}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ServiceBus", "ServiceBus", "{B2DDD932-DD42-4328-BD14-7015A1FFE8BA}"
+EndProject
+Project("{A07B5EB6-E848-4116-A8D0-A826331D98C6}") = "Latency.ServiceBus", "ServiceBus\Latency.ServiceBus\Latency.ServiceBus.sfproj", "{2459EC4B-0F0E-44C0-9F86-B689BAA47B38}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Latency.ServiceBusSvc", "ServiceBus\Latency.ServiceBusSvc\Latency.ServiceBusSvc.csproj", "{BFDFED29-9AEC-4D19-92D2-34FA93F6853A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -161,6 +167,16 @@ Global
 		{383495C2-250D-47C4-8235-CFF111B00316}.Debug|x64.Build.0 = Debug|x64
 		{383495C2-250D-47C4-8235-CFF111B00316}.Release|x64.ActiveCfg = Release|x64
 		{383495C2-250D-47C4-8235-CFF111B00316}.Release|x64.Build.0 = Release|x64
+		{2459EC4B-0F0E-44C0-9F86-B689BAA47B38}.Debug|x64.ActiveCfg = Debug|x64
+		{2459EC4B-0F0E-44C0-9F86-B689BAA47B38}.Debug|x64.Build.0 = Debug|x64
+		{2459EC4B-0F0E-44C0-9F86-B689BAA47B38}.Debug|x64.Deploy.0 = Debug|x64
+		{2459EC4B-0F0E-44C0-9F86-B689BAA47B38}.Release|x64.ActiveCfg = Release|x64
+		{2459EC4B-0F0E-44C0-9F86-B689BAA47B38}.Release|x64.Build.0 = Release|x64
+		{2459EC4B-0F0E-44C0-9F86-B689BAA47B38}.Release|x64.Deploy.0 = Release|x64
+		{BFDFED29-9AEC-4D19-92D2-34FA93F6853A}.Debug|x64.ActiveCfg = Debug|x64
+		{BFDFED29-9AEC-4D19-92D2-34FA93F6853A}.Debug|x64.Build.0 = Debug|x64
+		{BFDFED29-9AEC-4D19-92D2-34FA93F6853A}.Release|x64.ActiveCfg = Release|x64
+		{BFDFED29-9AEC-4D19-92D2-34FA93F6853A}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -187,6 +203,8 @@ Global
 		{03D4A5B0-3EE4-4350-886E-BD856008DC5E} = {7E93F627-83DB-47ED-B5F4-451B281B647B}
 		{69399D51-9023-4310-AD2E-23A3852F2982} = {7E93F627-83DB-47ED-B5F4-451B281B647B}
 		{383495C2-250D-47C4-8235-CFF111B00316} = {7E93F627-83DB-47ED-B5F4-451B281B647B}
+		{2459EC4B-0F0E-44C0-9F86-B689BAA47B38} = {B2DDD932-DD42-4328-BD14-7015A1FFE8BA}
+		{BFDFED29-9AEC-4D19-92D2-34FA93F6853A} = {B2DDD932-DD42-4328-BD14-7015A1FFE8BA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9BA0A7AB-B397-47AC-8565-5B92DFE0E1D9}

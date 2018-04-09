@@ -5,6 +5,7 @@ Param
 	[Switch] $DocumentDB,
 	[Switch] $EventHub,
 	[Switch] $Redis,
+	[Switch] $ServiceBus,
 	[Switch] $ServiceFabric,
 	[Switch] $SQL,
 	[Switch] $Storage
@@ -47,6 +48,13 @@ if ($Redis -or $All)
 	$RedisPath = (Join-Path $SrcFolder "Redis/Latency.Redis")
 	$RedisProject = (Join-Path $RedisPath "Latency.Redis.sfproj")
 	Deploy-Application $SrcFolder $RedisPath $RedisProject
+}
+
+if ($ServiceBus -or $All)
+{
+	$ServiceBusPath = (Join-Path $SrcFolder "ServiceBus/Latency.ServiceBus")
+	$ServiceBusProject = (Join-Path $ServiceBusPath "Latency.ServiceBus.sfproj")
+	Deploy-Application $SrcFolder $ServiceBusPath $ServiceBusProject
 }
 
 if ($ServiceFabric -or $All)

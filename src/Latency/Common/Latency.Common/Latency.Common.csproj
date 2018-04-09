@@ -153,6 +153,7 @@
     <Compile Include="Services\IEventHubSvc.cs" />
     <Compile Include="Services\IQueueSvc.cs" />
     <Compile Include="Services\IRedisSvc.cs" />
+    <Compile Include="Services\IServiceBusSvc.cs" />
     <Compile Include="Services\ISqlSvc.cs" />
     <Compile Include="Services\IStatefulActor.cs" />
     <Compile Include="Services\IStatefulSvc.cs" />

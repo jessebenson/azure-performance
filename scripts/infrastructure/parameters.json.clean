@@ -55,6 +55,22 @@
             "value": 5
         },
 
+        "serviceBusLatencyName": {
+            "value": "azure-latency"
+        },
+        "serviceBusThroughputName": {
+            "value": "azure-throughput"
+        },
+        "serviceBusSkuName": {
+            "value": "Premium"
+        },
+        "serviceBusSkuTier": {
+            "value": "Premium"
+        },
+        "serviceBusSkuCapacity": {
+            "value": 1
+        },
+
         "sqlServerName": {
             "value": "azure-performance"
         },
@@ -122,7 +138,7 @@
             "value": "Standard_D3_v2_Promo"
         },
         "nt3InstanceCount": {
-            "value": 6
+            "value": 7
         },
 
         "applicationDiagnosticsStorageAccountName": {

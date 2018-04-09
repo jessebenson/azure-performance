@@ -12,6 +12,7 @@ namespace Azure.Performance.Latency.Common
 		public static readonly Uri StatelessSvcUri = new Uri("fabric:/Latency.App/StatelessSvc");
 		public static readonly Uri DocumentDbSvcUri = new Uri("fabric:/Latency.DocumentDB/DocumentDbSvc");
 		public static readonly Uri EventHubSvcUri = new Uri("fabric:/Latency.EventHub/EventHubSvc");
+		public static readonly Uri ServiceBusSvcUri = new Uri("fabric:/Latency.ServiceBus/ServiceBusSvc");
 		public static readonly Uri RedisSvcUri = new Uri("fabric:/Latency.Redis/RedisSvc");
 		public static readonly Uri SqlSvcUri = new Uri("fabric:/Latency.SQL/SqlSvc");
 		public static readonly Uri BlobSvcUri = new Uri("fabric:/Latency.Storage/BlobSvc");

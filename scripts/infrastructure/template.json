@@ -65,6 +65,22 @@
             "type": "int"
         },
 
+        "serviceBusLatencyName": {
+            "type": "string"
+        },
+        "serviceBusThroughputName": {
+            "type": "string"
+        },
+        "serviceBusSkuName": {
+            "type": "string"
+        },
+        "serviceBusSkuTier": {
+            "type": "string"
+        },
+        "serviceBusSkuCapacity": {
+            "type": "int"
+        },
+
         "sqlServerName": {
             "type": "string"
         },
@@ -406,6 +422,30 @@
                 },
                 "redisConfiguration": {},
                 "enableNonSslPort": false
+            }
+        },
+
+
+        {
+            "apiVersion": "2017-04-01",
+            "type": "Microsoft.ServiceBus/namespaces",
+            "name": "[parameters('serviceBusLatencyName')]",
+            "location": "[parameters('location')]",
+            "sku": {
+                "name": "[parameters('serviceBusSkuName')]",
+                "tier": "[parameters('serviceBusSkuTier')]",
+                "capacity": "[parameters('serviceBusSkuCapacity')]"
+            }
+        },
+        {
+            "apiVersion": "2017-04-01",
+            "type": "Microsoft.ServiceBus/namespaces",
+            "name": "[parameters('serviceBusThroughputName')]",
+            "location": "[parameters('location')]",
+            "sku": {
+                "name": "[parameters('serviceBusSkuName')]",
+                "tier": "[parameters('serviceBusSkuTier')]",
+                "capacity": "[parameters('serviceBusSkuCapacity')]"
             }
         },
 

@@ -19,6 +19,9 @@ namespace Azure.Performance.Common
 		public static string EventHubConnectionString => GetAppSetting("EventHubConnectionString");
 
 		public static string RedisConnectionString => GetAppSetting("RedisConnectionString");
+		
+		public static string ServiceBusConnectionString => GetAppSetting("ServiceBusConnectionString");
+		public static string ServiceBusQueue => GetAppSetting("ServiceBusQueue");
 
 		public static string StorageConnectionString => GetAppSetting("StorageConnectionString");
 		public static string StorageBlobContainerName => GetAppSetting("StorageBlobContainerName");
