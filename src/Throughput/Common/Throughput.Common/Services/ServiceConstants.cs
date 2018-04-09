@@ -10,6 +10,7 @@ namespace Azure.Performance.Throughput.Common
 		public static readonly Uri StatelessSvcUri = new Uri("fabric:/Throughput.App/StatelessSvc");
 		public static readonly Uri DocumentDbSvcUri = new Uri("fabric:/Throughput.DocumentDB/DocumentDbSvc");
 		public static readonly Uri EventHubSvcUri = new Uri("fabric:/Throughput.EventHub/EventHubSvc");
+		public static readonly Uri ServiceBusSvcUri = new Uri("fabric:/Throughput.ServiceBus/ServiceBusSvc");
 		public static readonly Uri RedisSvcUri = new Uri("fabric:/Throughput.Redis/RedisSvc");
 		public static readonly Uri SqlSvcUri = new Uri("fabric:/Throughput.SQL/SqlSvc");
 		public static readonly Uri BlobSvcUri = new Uri("fabric:/Throughput.Storage/BlobSvc");

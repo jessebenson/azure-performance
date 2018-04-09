@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2005
+VisualStudioVersion = 15.0.27004.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{E2697F9D-9050-438F-8F82-B6FC0D948A68}"
 EndProject
@@ -48,6 +48,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Throughput.StatefulSvc", "ServiceFabric\Throughput.StatefulSvc\Throughput.StatefulSvc.csproj", "{04A3F7BA-3B35-4156-ACA2-8FC2F424B70D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Throughput.StatelessSvc", "ServiceFabric\Throughput.StatelessSvc\Throughput.StatelessSvc.csproj", "{248ED8D9-7103-4885-96AB-65B2404C8963}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ServiceBus", "ServiceBus", "{70710B56-1D81-419F-905A-7EDF6A219CDA}"
+EndProject
+Project("{A07B5EB6-E848-4116-A8D0-A826331D98C6}") = "Throughput.ServiceBus", "ServiceBus\Throughput.ServiceBus\Throughput.ServiceBus.sfproj", "{BB956B21-1CF7-4F0D-8C12-2DD72B698620}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Throughput.ServiceBusSvc", "ServiceBus\Throughput.ServiceBusSvc\Throughput.ServiceBusSvc.csproj", "{CFA50541-621C-4AB0-8BCF-514977986CAB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -133,6 +139,16 @@ Global
 		{248ED8D9-7103-4885-96AB-65B2404C8963}.Debug|x64.Build.0 = Debug|x64
 		{248ED8D9-7103-4885-96AB-65B2404C8963}.Release|x64.ActiveCfg = Release|x64
 		{248ED8D9-7103-4885-96AB-65B2404C8963}.Release|x64.Build.0 = Release|x64
+		{CFA50541-621C-4AB0-8BCF-514977986CAB}.Debug|x64.ActiveCfg = Debug|x64
+		{CFA50541-621C-4AB0-8BCF-514977986CAB}.Debug|x64.Build.0 = Debug|x64
+		{CFA50541-621C-4AB0-8BCF-514977986CAB}.Release|x64.ActiveCfg = Release|x64
+		{CFA50541-621C-4AB0-8BCF-514977986CAB}.Release|x64.Build.0 = Release|x64
+		{BB956B21-1CF7-4F0D-8C12-2DD72B698620}.Debug|x64.ActiveCfg = Debug|x64
+		{BB956B21-1CF7-4F0D-8C12-2DD72B698620}.Debug|x64.Build.0 = Debug|x64
+		{BB956B21-1CF7-4F0D-8C12-2DD72B698620}.Debug|x64.Deploy.0 = Debug|x64
+		{BB956B21-1CF7-4F0D-8C12-2DD72B698620}.Release|x64.ActiveCfg = Release|x64
+		{BB956B21-1CF7-4F0D-8C12-2DD72B698620}.Release|x64.Build.0 = Release|x64
+		{BB956B21-1CF7-4F0D-8C12-2DD72B698620}.Release|x64.Deploy.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -155,6 +171,8 @@ Global
 		{FE63E0CF-D0AC-452A-9DDC-8DDCF61FBEBD} = {62EBB5C6-1208-485D-BAB4-06EF7EBD903B}
 		{04A3F7BA-3B35-4156-ACA2-8FC2F424B70D} = {62EBB5C6-1208-485D-BAB4-06EF7EBD903B}
 		{248ED8D9-7103-4885-96AB-65B2404C8963} = {62EBB5C6-1208-485D-BAB4-06EF7EBD903B}
+		{CFA50541-621C-4AB0-8BCF-514977986CAB} = {70710B56-1D81-419F-905A-7EDF6A219CDA}
+		{BB956B21-1CF7-4F0D-8C12-2DD72B698620} = {70710B56-1D81-419F-905A-7EDF6A219CDA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5E81228D-E71F-45C0-835F-15C3F22983A3}
