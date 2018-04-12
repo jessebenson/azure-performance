@@ -3,7 +3,7 @@
   <Import Project="..\..\packages\Microsoft.VisualStudio.Azure.Fabric.MSBuild.1.6.5\build\Microsoft.VisualStudio.Azure.Fabric.Application.props" Condition="Exists('..\..\packages\Microsoft.VisualStudio.Azure.Fabric.MSBuild.1.6.5\build\Microsoft.VisualStudio.Azure.Fabric.Application.props')" />
   <PropertyGroup Label="Globals">
     <ProjectGuid>69399d51-9023-4310-ad2e-23a3852f2982</ProjectGuid>
-    <ProjectVersion>1.6.1</ProjectVersion>
+    <ProjectVersion>2.0</ProjectVersion>
     <MinToolsVersion>1.5</MinToolsVersion>
   </PropertyGroup>
   <ItemGroup Label="ProjectConfigurations">
