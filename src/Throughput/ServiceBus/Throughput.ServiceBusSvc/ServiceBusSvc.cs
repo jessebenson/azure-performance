@@ -71,6 +71,7 @@ namespace Azure.Performance.Throughput.ServiceBusSvc
 			var writer = new MessageSender(AppConfig.ServiceBusConnectionString, AppConfig.ServiceBusQueue);
 
 			await ClearAsync(reader, cancellationToken).ConfigureAwait(false);
+			var traceTask = Task.Run(() => TraceQueueLengthAsync(cancellationToken));
 
 			var workload = new ThroughputWorkload(_logger, "ServiceBus", IsThrottlingException);
 			await workload.InvokeAsync(TaskCount, (random) => WriteAsync(reader, writer, random, cancellationToken), cancellationToken).ConfigureAwait(false);
@@ -129,6 +130,16 @@ namespace Azure.Performance.Throughput.ServiceBusSvc
 					_logger.Error(e, "Failed clearing messages.");
 					return;
 				}
+			}
+		}
+
+		private async Task TraceQueueLengthAsync(CancellationToken cancellationToken)
+		{
+			while (!cancellationToken.IsCancellationRequested)
+			{
+				_logger.Information("Service Bus queue length is {QueueLength}", Interlocked.Read(ref _queueCount));
+
+				await Task.Delay(TimeSpan.FromSeconds(60), cancellationToken).ConfigureAwait(false);
 			}
 		}
 
