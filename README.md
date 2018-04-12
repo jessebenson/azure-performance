@@ -29,7 +29,7 @@ Throughput performance analysis finds the optimal throughput numbers by using a 
 | --------------- | :-------------------------: | :-------------------------: | :--------------: | :----------: | ----- |
 | DocumentDB      |              1,480          |            1,980            |       20.5       | $876 | strong consistency, no indexing, 1 region, 15000 RUs, TTL = 1 day |
 | Event Hub       |             13,800          |           37,000            |       12.0       | ~$1,059* | 32 partitions, 10 throughput units, 1 day message retention |
-| Service Bus     |             10,500*         |           17,200*           |       12.0*      | $690 | Premium, 1 messaging unit, 80 GB queue, partitioning enabled, TTL = 1 hour |
+| Service Bus     |              6,600          |            9,500            |        8.0       | $690 | Premium, 1 messaging unit, 80 GB queue, partitioning enabled, TTL = 1 hour |
 | Redis           |            104,000          |          112,000            |       10.1       | $810 | P2 Premium (async replication, no data persistence, dedicated service, redis cluster, moderate network bandwidth) |
 | SQL             |             10,400          |           11,500            |        3.1       | $913 | P2 Premium (250 DTUs), 1 region, insert-only writes |
 | ServiceFabric Queue |          9,000          |           10,300            |        3.7       | $924 | IReliableConcurrentQueue, D3v2 (SSD), 3 replicas, POD class with DataContract serialization, BatchAcknowledgementInterval = 15ms, MaxPrimaryReplicationQueueSize/MaxSecondaryReplicationQueueSize = 1M, writes measured from the stateful service |
