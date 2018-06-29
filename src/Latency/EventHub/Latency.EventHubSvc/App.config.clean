@@ -11,12 +11,6 @@
   </appSettings>
   <runtime>
     <gcServer enabled="true" />
-    <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
-      <dependentAssembly>
-        <assemblyIdentity name="Elasticsearch.Net" publicKeyToken="96c599bbe3e70f5d" culture="neutral" />
-        <bindingRedirect oldVersion="0.0.0.0-5.0.0.0" newVersion="5.0.0.0" />
-      </dependentAssembly>
-    </assemblyBinding>
   </runtime>
   <system.serviceModel>
     <extensions>

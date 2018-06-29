@@ -84,12 +84,20 @@ namespace Azure.Performance.Throughput.ServiceBusSvc
 
 			if (Interlocked.Read(ref _queueCount) > QueueThreshold)
 			{
-				var messages = await reader.ReceiveAsync(batchSize).ConfigureAwait(false);
-				if (messages != null)
+				try
 				{
-					await reader.CompleteAsync(messages.Select(m => m.SystemProperties.LockToken)).ConfigureAwait(false);
-					Interlocked.Add(ref _queueCount, -messages.Count);
-					return messages.Count;
+					var messages = await reader.ReceiveAsync(batchSize).ConfigureAwait(false);
+					if (messages != null)
+					{
+						await reader.CompleteAsync(messages.Select(m => m.SystemProperties.LockToken)).ConfigureAwait(false);
+						Interlocked.Add(ref _queueCount, -messages.Count);
+						return messages.Count;
+					}
+				}
+				catch (Exception)
+				{
+					Interlocked.Exchange(ref _queueCount, 0);
+					throw;
 				}
 			}
 			else
