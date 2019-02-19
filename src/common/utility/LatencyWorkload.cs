@@ -97,7 +97,7 @@ namespace Azure.Performance.Common
 
 					lock (_latency)
 					{
-						_latency.AddSample(timer.ElapsedMilliseconds);
+						_latency.AddSample(timer.Elapsed.TotalMilliseconds);
 					}
 
 					// Delay between workload invocations.
@@ -116,7 +116,7 @@ namespace Azure.Performance.Common
 					Interlocked.Increment(ref _errors);
 					lock (_latency)
 					{
-						_latency.AddSample(timer.ElapsedMilliseconds);
+						_latency.AddSample(timer.Elapsed.TotalMilliseconds);
 					}
 
 					// Exponential delay after exceptions.
