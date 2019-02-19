@@ -1,6 +1,10 @@
 # Azure Performance Analysis
 
-This repository contains a number of services used to measure the latency and throughput of various Azure services.  Last update: 6/20/2018.  Service Fabric cluster version: 6.2.283.9494.
+This repository contains a number of projects used to measure the latency and throughput of various Azure services.
+
+I am currently rewriting these projects to be easier to run.  Each project will be a simple .NET Core application, packaged into a Linux Docker container, and deployed to Azure Container Instances.  The containers can be ran anywhere (locally, Kubernetes, etc.) as they simply require environment variables to configure.  Throughput and/or latency metrics are printed to standard out.
+
+*Note: Service Fabric performance numbers are removed until stateful services are supported in Service Fabric Mesh on Linux.*
 
 ## Latency Performance Analysis
 
