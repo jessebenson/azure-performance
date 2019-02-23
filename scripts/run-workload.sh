@@ -10,6 +10,7 @@ SRC=$(realpath $(dirname $0)/../src)
 COSMOSDB=$(realpath $SRC/cosmosdb)
 EVENTHUB=$(realpath $SRC/eventhub)
 REDIS=$(realpath $SRC/redis)
+SERVICEBUS=$(realpath $SRC/servicebus)
 
 #
 # CosmosDB workloads
@@ -69,6 +70,25 @@ redis_throughput=`$REDIS/run.sh \
     -s $DURATION`
 
 #
+# ServiceBus workloads
+#
+echo "Starting ServiceBus latency workload ..."
+servicebus_latency=`$SERVICEBUS/run.sh \
+    -a $ACR \
+    -g $PREFIX-servicebus-latency \
+    -w latency \
+    -t 10 \
+    -s $DURATION`
+
+echo "Starting ServiceBus throughput workload ..."
+servicebus_throughput=`$SERVICEBUS/run.sh \
+    -a $ACR \
+    -g $PREFIX-servicebus-throughput \
+    -w throughput \
+    -t 32 \
+    -s $DURATION`
+
+#
 # Wait for all workloads to complete
 #
 echo "Waiting for workloads to complete ..."
@@ -86,3 +106,6 @@ echo `az container logs --id $eventhub_throughput | tr -s "\n" | tail -n 1`
 
 echo `az container logs --id $redis_latency | tr -s "\n" | tail -n 1`
 echo `az container logs --id $redis_throughput | tr -s "\n" | tail -n 1`
+
+echo `az container logs --id $servicebus_latency | tr -s "\n" | tail -n 1`
+echo `az container logs --id $servicebus_throughput | tr -s "\n" | tail -n 1`

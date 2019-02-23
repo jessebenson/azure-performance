@@ -21,5 +21,10 @@ az group delete --name $PREFIX-redis-latency --no-wait --yes
 echo "Deleting Redis throughput resource group ..."
 az group delete --name $PREFIX-redis-throughput --no-wait --yes
 
+echo "Deleting ServiceBus latency resource group ..."
+az group delete --name $PREFIX-servicebus-latency --no-wait --yes
+echo "Deleting ServiceBus throughput resource group ..."
+az group delete --name $PREFIX-servicebus-throughput --no-wait --yes
+
 echo "Deleting shared resource group ..."
 az group delete --name $PREFIX --no-wait --yes

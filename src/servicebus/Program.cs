@@ -1,5 +1,6 @@
 ﻿using Azure.Performance.Common;
-using Microsoft.Azure.EventHubs;
+using Microsoft.Azure.ServiceBus;
+using Microsoft.Azure.ServiceBus.Core;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
@@ -9,53 +10,53 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Azure.Performance.EventHub
+namespace Azure.Performance.ServiceBus
 {
     class Program
     {
         static async Task Main(string[] args)
         {
             int threads = AppConfig.GetOptionalSetting<int>("Threads") ?? 32;
-            ILogger logger = AppConfig.CreateLogger("EventHub");
+            ILogger logger = AppConfig.CreateLogger("ServiceBus");
             string workloadType = AppConfig.GetSetting("Workload");
             CancellationToken cancellationToken = AppConfig.GetCancellationToken();
 
-            string connectionString = AppConfig.GetSetting("EventHubConnectionString");
+            string connectionString = AppConfig.GetSetting("ServiceBusConnectionString");
 
-            var client = EventHubClient.CreateFromConnectionString(connectionString);
+            var client = new MessageSender(new ServiceBusConnectionStringBuilder(connectionString), RetryPolicy.NoRetry);
 
             if (workloadType == "latency")
             {
-                var workload = new LatencyWorkload(logger, "EventHub");
+                var workload = new LatencyWorkload(logger, "ServiceBus");
                 await workload.InvokeAsync(threads, (value) => WriteAsync(client, value, cancellationToken), cancellationToken).ConfigureAwait(false);
             }
             if (workloadType == "throughput")
             {
-                var workload = new ThroughputWorkload(logger, "EventHub", IsThrottlingException);
+                var workload = new ThroughputWorkload(logger, "ServiceBus", IsThrottlingException);
                 await workload.InvokeAsync(threads, (random) => WriteAsync(client, random, cancellationToken), cancellationToken).ConfigureAwait(false);
             }
         }
 
-        private static Task WriteAsync(EventHubClient client, PerformanceData value, CancellationToken cancellationToken)
+        private static Task WriteAsync(MessageSender client, PerformanceData value, CancellationToken cancellationToken)
         {
             var content = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(value));
-            var data = new EventData(content);
+            var data = new Message(content);
 
             return client.SendAsync(data);
         }
 
-        private static async Task<long> WriteAsync(EventHubClient client, Random random, CancellationToken cancellationToken)
+        private static async Task<long> WriteAsync(MessageSender client, Random random, CancellationToken cancellationToken)
         {
             const int batchSize = 16;
 
-            var values = new EventData[batchSize];
+            var values = new Message[batchSize];
             for (int i = 0; i < batchSize; i++)
             {
                 var value = RandomGenerator.GetPerformanceData();
                 var serialized = JsonConvert.SerializeObject(value);
                 var content = Encoding.UTF8.GetBytes(serialized);
 
-                values[i] = new EventData(content);
+                values[i] = new Message(content);
             }
 
             await client.SendAsync(values).ConfigureAwait(false);
@@ -65,7 +66,7 @@ namespace Azure.Performance.EventHub
 
         private static TimeSpan? IsThrottlingException(Exception e)
         {
-            var sbe = e as ServerBusyException;
+            var sbe = e as ServiceBusException;
             if (sbe == null)
                 return null;
 

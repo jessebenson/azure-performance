@@ -9,6 +9,7 @@ SRC=$(realpath $(dirname $0)/../src)
 COSMOSDB=$(realpath $SRC/cosmosdb)
 EVENTHUB=$(realpath $SRC/eventhub)
 REDIS=$(realpath $SRC/redis)
+SERVICEBUS=$(realpath $SRC/servicebus)
 
 #
 # Create shared resources
@@ -16,6 +17,21 @@ REDIS=$(realpath $SRC/redis)
 echo "Creating shared resources ..."
 rg=`az group create --name $PREFIX --location $LOCATION`
 acr=`az acr create --resource-group $PREFIX --name $ACR --sku Standard --admin-enabled true`
+
+#
+# Redis Workloads
+#
+echo "Creating Redis latency workload ..."
+$REDIS/deploy.sh \
+    -g $PREFIX-redis-latency \
+    -l $LOCATION \
+    -p '{ "sku": "Standard", "size": "c2" }'
+
+echo "Creating Redis throughput workload ..."
+$REDIS/deploy.sh \
+    -g $PREFIX-redis-throughput \
+    -l $LOCATION \
+    -p '{ "sku": "Standard", "size": "c5" }'
 
 #
 # CosmosDB workloads
@@ -48,16 +64,16 @@ $EVENTHUB/deploy.sh \
     -p '{ "sku": "Standard", "capacity": 10, "partitions": 32 }'
 
 #
-# Redis Workloads
+# ServiceBus workloads
 #
-echo "Creating Redis latency workload ..."
-$REDIS/deploy.sh \
-    -g $PREFIX-redis-latency \
+echo "Creating ServiceBus latency workload ..."
+$SERVICEBUS/deploy.sh \
+    -g $PREFIX-servicebus-latency \
     -l $LOCATION \
-    -p '{ "sku": "Standard", "size": "c2" }'
+    -p '{ "sku": "Standard" }'
 
-echo "Creating Redis throughput workload ..."
-$REDIS/deploy.sh \
-    -g $PREFIX-redis-throughput \
+echo "Creating ServiceBus throughput workload ..."
+$SERVICEBUS/deploy.sh \
+    -g $PREFIX-servicebus-throughput \
     -l $LOCATION \
-    -p '{ "sku": "Standard", "size": "c5" }'
+    -p '{ "sku": "Premium" }'
