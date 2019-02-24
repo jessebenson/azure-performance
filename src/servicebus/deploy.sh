@@ -54,7 +54,9 @@ namespace=`az servicebus namespace create \
 servicebus=`az servicebus queue create \
     --resource-group $RESOURCE_GROUP \
     --namespace-name $NAME \
-    --name $NAME`
+    --name $NAME \
+    --enable-partitioning true \
+    --default-message-time-to-live P1D`
 auth_rule=`az servicebus queue authorization-rule create \
     --resource-group $RESOURCE_GROUP \
     --namespace-name $NAME \

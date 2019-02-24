@@ -32,7 +32,7 @@ namespace Azure.Performance.EventHub
             if (workloadType == "throughput")
             {
                 var workload = new ThroughputWorkload(logger, "EventHub", IsThrottlingException);
-                await workload.InvokeAsync(threads, (random) => WriteAsync(client, random, cancellationToken), cancellationToken).ConfigureAwait(false);
+                await workload.InvokeAsync(threads, () => WriteAsync(client, cancellationToken), cancellationToken).ConfigureAwait(false);
             }
         }
 
@@ -44,7 +44,7 @@ namespace Azure.Performance.EventHub
             return client.SendAsync(data);
         }
 
-        private static async Task<long> WriteAsync(EventHubClient client, Random random, CancellationToken cancellationToken)
+        private static async Task<long> WriteAsync(EventHubClient client, CancellationToken cancellationToken)
         {
             const int batchSize = 16;
 

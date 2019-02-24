@@ -32,7 +32,7 @@ namespace Azure.Performance.Sql
             if (workloadType == "throughput")
             {
                 var workload = new ThroughputWorkload(logger, "SQL");
-                await workload.InvokeAsync(threads, (random) => WriteAsync(connectionString, random, cancellationToken), cancellationToken).ConfigureAwait(false);
+                await workload.InvokeAsync(threads, () => WriteAsync(connectionString, cancellationToken), cancellationToken).ConfigureAwait(false);
             }
         }
 
@@ -88,7 +88,7 @@ namespace Azure.Performance.Sql
             }
         }
 
-        private static async Task<long> WriteAsync(string connectionString, Random random, CancellationToken cancellationToken)
+        private static async Task<long> WriteAsync(string connectionString, CancellationToken cancellationToken)
         {
             const int batchSize = 16;
             var commandText = @"

@@ -17,6 +17,7 @@ namespace Azure.Performance.Common
 		public double Median => _values.Median();
 		public double Sum => _values.Sum();
 		public double StdDev => _values.StandardDeviation();
+		public double P5 => _values.Percentile(5);
 		public double P25 => _values.Percentile(25);
 		public double P50 => _values.Percentile(50);
 		public double P75 => _values.Percentile(75);

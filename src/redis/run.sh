@@ -76,6 +76,7 @@ docker logout $ACR.azurecr.io > /dev/null 2>&1
 docker rmi $IMAGE > /dev/null 2>&1
 
 # Create container instance
+az container delete --resource-group $RESOURCE_GROUP --name $NAME --yes > /dev/null 2>&1
 container=`az container create \
     --resource-group $RESOURCE_GROUP \
     --name $NAME \

@@ -3,6 +3,29 @@ set -eu
 
 PREFIX="azure-performance"
 
+usage() {
+    echo "Usage: $0 [-p name-prefix]"
+    echo ""
+    echo "Example:"
+    echo "  $0 -p $PREFIX"
+    echo ""
+    exit
+}
+
+while getopts ":p:" options; do
+    case "${options}" in
+        p)
+            PREFIX=${OPTARG}
+            ;;
+        :)
+            usage
+            ;;
+        *)
+            usage
+            ;;
+    esac
+done
+
 #
 # Delete resources
 #

@@ -33,7 +33,7 @@ namespace Azure.Performance.ServiceBus
             if (workloadType == "throughput")
             {
                 var workload = new ThroughputWorkload(logger, "ServiceBus", IsThrottlingException);
-                await workload.InvokeAsync(threads, (random) => WriteAsync(client, random, cancellationToken), cancellationToken).ConfigureAwait(false);
+                await workload.InvokeAsync(threads, () => WriteAsync(client, cancellationToken), cancellationToken).ConfigureAwait(false);
             }
         }
 
@@ -45,7 +45,7 @@ namespace Azure.Performance.ServiceBus
             return client.SendAsync(data);
         }
 
-        private static async Task<long> WriteAsync(MessageSender client, Random random, CancellationToken cancellationToken)
+        private static async Task<long> WriteAsync(MessageSender client, CancellationToken cancellationToken)
         {
             const int batchSize = 16;
 

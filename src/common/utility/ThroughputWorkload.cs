@@ -14,6 +14,7 @@ namespace Azure.Performance.Common
 		private readonly string _workloadName;
 		private readonly Func<Exception, TimeSpan?> _throttle;
 
+		private readonly Metric _throughput = new Metric("throughput");
 		private long _errors = 0;
 		private long _operations = 0;
 		private long _latency = 0;
@@ -22,10 +23,10 @@ namespace Azure.Performance.Common
 		{
 			_logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			_workloadName = workloadName ?? throw new ArgumentNullException(nameof(workloadName));
-			_throttle = throttle ?? new Func<Exception, TimeSpan?>((e) => null);
+			_throttle = throttle ?? new Func<Exception, TimeSpan?>(e => null);
 		}
 
-		public async Task InvokeAsync(int taskCount, Func<Random, Task<long>> workload, CancellationToken cancellationToken)
+		public async Task InvokeAsync(int taskCount, Func<Task<long>> workload, CancellationToken cancellationToken)
 		{
 			var timer = Stopwatch.StartNew();
 
@@ -46,7 +47,7 @@ namespace Azure.Performance.Common
 			timer.Stop();
 
 			metrics.Join();
-			
+
 			// Log final metrics.
 			double throughput = ((double)_operations * 1000) / (double)timer.ElapsedMilliseconds;
 			double latencyPerOperation = (double)_latency / (double)_operations;
@@ -57,8 +58,13 @@ namespace Azure.Performance.Common
 				elapsed = timer.ElapsedMilliseconds,
 				operations = _operations,
 				errors = _errors,
-				throughput = throughput,
-				operationLatency = latencyPerOperation,
+				throughput = new
+				{
+					overall = throughput,
+					low = _throughput.P5,
+					high = _throughput.P95,
+					latency = latencyPerOperation,
+				},
 			}));
 		}
 
@@ -74,7 +80,7 @@ namespace Azure.Performance.Common
 				try
 				{
 					timer.Restart();
-					Thread.Sleep(TimeSpan.FromSeconds(1));
+					Thread.Sleep(TimeSpan.FromSeconds(5));
 					timer.Stop();
 
 					// Read the latest metrics.
@@ -89,7 +95,7 @@ namespace Azure.Performance.Common
 						continue;
 
 					// Log metrics - operations/sec and latency/operation.
-					double throughput = ((double)operations * 1000) / Math.Max((double)timer.ElapsedMilliseconds, 1000);
+					double throughput = ((double)operations * 1000) / Math.Max((double)timer.ElapsedMilliseconds, 5000);
 					double latencyPerOperation = (double)latency / (double)operations;
 					_logger.LogInformation(JsonConvert.SerializeObject(new
 					{
@@ -103,6 +109,7 @@ namespace Azure.Performance.Common
 					}));
 
 					// Update tracked matrics.
+					_throughput.AddSample(throughput);
 					startOperations = endOperations;
 					startLatency = endLatency;
 					startErrors = endErrors;
@@ -114,11 +121,10 @@ namespace Azure.Performance.Common
 			}
 		}
 
-		private async Task CreateWorkerAsync(Func<Random, Task<long>> workload, int taskId, CancellationToken cancellationToken)
+		private async Task CreateWorkerAsync(Func<Task<long>> workload, int taskId, CancellationToken cancellationToken)
 		{
 			var timer = new Stopwatch();
 			var retry = new RetryHandler();
-			var random = new Random();
 
 			while (!cancellationToken.IsCancellationRequested)
 			{
@@ -126,7 +132,7 @@ namespace Azure.Performance.Common
 				try
 				{
 					// Invoke the workload.
-					long operations = await workload.Invoke(random).ConfigureAwait(false);
+					long operations = await workload.Invoke().ConfigureAwait(false);
 					timer.Stop();
 					retry.Reset();
 

@@ -12,6 +12,35 @@ REDIS=$(realpath $SRC/redis)
 SERVICEBUS=$(realpath $SRC/servicebus)
 SQL=$(realpath $SRC/sql)
 
+usage() {
+    echo "Usage: $0 [-a azure-container-registry] [-p name-prefix] [-l location]"
+    echo ""
+    echo "Example:"
+    echo "  $0 -a $ACR -p $PREFIX -l $LOCATION"
+    echo ""
+    exit
+}
+
+while getopts ":a:p:l:" options; do
+    case "${options}" in
+        a)
+            ACR=${OPTARG}
+            ;;
+        p)
+            PREFIX=${OPTARG}
+            ;;
+        l)
+            LOCATION=${OPTARG}
+            ;;
+        :)
+            usage
+            ;;
+        *)
+            usage
+            ;;
+    esac
+done
+
 #
 # Create shared resources
 #

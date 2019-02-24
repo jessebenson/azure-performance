@@ -44,7 +44,7 @@ namespace Azure.Performance.CosmosDB
             if (workloadType == "throughput")
             {
                 var workload = new ThroughputWorkload(logger, "CosmosDB", IsThrottlingException);
-                await workload.InvokeAsync(threads, (random) => WriteAsync(client, collection, random, cancellationToken), cancellationToken).ConfigureAwait(false);
+                await workload.InvokeAsync(threads, () => WriteAsync(client, collection, cancellationToken), cancellationToken).ConfigureAwait(false);
             }
         }
 
@@ -53,7 +53,7 @@ namespace Azure.Performance.CosmosDB
             var response = await client.UpsertDocumentAsync(collection.SelfLink, value).ConfigureAwait(false);
         }
 
-        private static async Task<long> WriteAsync(IDocumentClient client, DocumentCollection collection, Random random, CancellationToken cancellationToken)
+        private static async Task<long> WriteAsync(IDocumentClient client, DocumentCollection collection, CancellationToken cancellationToken)
         {
             long key = Interlocked.Increment(ref _id) % 1000000;
             var value = RandomGenerator.GetPerformanceData(key.ToString());

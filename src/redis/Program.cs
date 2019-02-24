@@ -35,7 +35,7 @@ namespace Azure.Performance.Redis
             if (workloadType == "throughput")
             {
                 var workload = new ThroughputWorkload(logger, "Redis");
-                await workload.InvokeAsync(threads, (random) => WriteAsync(client, random, cancellationToken), cancellationToken).ConfigureAwait(false);
+                await workload.InvokeAsync(threads, () => WriteAsync(client, cancellationToken), cancellationToken).ConfigureAwait(false);
             }
         }
 
@@ -44,7 +44,7 @@ namespace Azure.Performance.Redis
             return client.StringSetAsync(value.Id, JsonConvert.SerializeObject(value));
         }
 
-        private static async Task<long> WriteAsync(IDatabase client, Random random, CancellationToken cancellationToken)
+        private static async Task<long> WriteAsync(IDatabase client, CancellationToken cancellationToken)
         {
             const int batchSize = 16;
 
