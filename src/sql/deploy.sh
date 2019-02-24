@@ -58,3 +58,9 @@ database=`az sql db create \
     --server $NAME \
     --name $NAME \
     --service-objective $SKU`
+firewall=`az sql server firewall-rule create \
+    --resource-group $RESOURCE_GROUP \
+    --server $NAME \
+    --name AllowAllWindowsAzureIps \
+    --start-ip-address 0.0.0.0 \
+    --end-ip-address 0.0.0.0`
