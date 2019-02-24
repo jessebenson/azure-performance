@@ -53,13 +53,13 @@ acr=`az acr create --resource-group $PREFIX --name $ACR --sku Standard --admin-e
 # Redis Workloads
 #
 echo "Creating Redis latency workload ..."
-$REDIS/deploy.sh \
+$REDIS/create-resources.sh \
     -g $PREFIX-redis-latency \
     -l $LOCATION \
     -p '{ "sku": "Standard", "size": "c2" }'
 
 echo "Creating Redis throughput workload ..."
-$REDIS/deploy.sh \
+$REDIS/create-resources.sh \
     -g $PREFIX-redis-throughput \
     -l $LOCATION \
     -p '{ "sku": "Standard", "size": "c5" }'
@@ -68,13 +68,13 @@ $REDIS/deploy.sh \
 # CosmosDB workloads
 #
 echo "Creating CosmosDB latency workload ..."
-$COSMOSDB/deploy.sh \
+$COSMOSDB/create-resources.sh \
     -g $PREFIX-cosmosdb-latency \
     -l $LOCATION \
     -p '{ "kind": "GlobalDocumentDB", "throughput": 400 }'
 
 echo "Creating CosmosDB throughput workload ..."
-$COSMOSDB/deploy.sh \
+$COSMOSDB/create-resources.sh \
     -g $PREFIX-cosmosdb-throughput \
     -l $LOCATION \
     -p '{ "kind": "GlobalDocumentDB", "throughput": 15000 }'
@@ -83,13 +83,13 @@ $COSMOSDB/deploy.sh \
 # EventHub workloads
 #
 echo "Creating EventHub latency workload ..."
-$EVENTHUB/deploy.sh \
+$EVENTHUB/create-resources.sh \
     -g $PREFIX-eventhub-latency \
     -l $LOCATION \
     -p '{ "sku": "Standard", "capacity": 1, "partitions": 10 }'
 
 echo "Creating EventHub throughput workload ..."
-$EVENTHUB/deploy.sh \
+$EVENTHUB/create-resources.sh \
     -g $PREFIX-eventhub-throughput \
     -l $LOCATION \
     -p '{ "sku": "Standard", "capacity": 10, "partitions": 32 }'
@@ -98,13 +98,13 @@ $EVENTHUB/deploy.sh \
 # ServiceBus workloads
 #
 echo "Creating ServiceBus latency workload ..."
-$SERVICEBUS/deploy.sh \
+$SERVICEBUS/create-resources.sh \
     -g $PREFIX-servicebus-latency \
     -l $LOCATION \
     -p '{ "sku": "Standard" }'
 
 echo "Creating ServiceBus throughput workload ..."
-$SERVICEBUS/deploy.sh \
+$SERVICEBUS/create-resources.sh \
     -g $PREFIX-servicebus-throughput \
     -l $LOCATION \
     -p '{ "sku": "Premium" }'
@@ -113,13 +113,13 @@ $SERVICEBUS/deploy.sh \
 # SQL workloads
 #
 echo "Creating SQL latency workload ..."
-$SQL/deploy.sh \
+$SQL/create-resources.sh \
     -g $PREFIX-sql-latency \
     -l $LOCATION \
     -p '{ "sku": "S2" }'
 
 echo "Creating SQL throughput workload ..."
-$SQL/deploy.sh \
+$SQL/create-resources.sh \
     -g $PREFIX-sql-throughput \
     -l $LOCATION \
     -p '{ "sku": "P2" }'
@@ -128,13 +128,13 @@ $SQL/deploy.sh \
 # Storage workloads
 #
 echo "Creating Storage latency workload ..."
-$STORAGE/deploy.sh \
+$STORAGE/create-resources.sh \
     -g $PREFIX-storage-latency \
     -l $LOCATION \
     -p '{ "sku": "Standard_LRS", "kind": "StorageV2" }'
 
 echo "Creating Storage throughput workload ..."
-$STORAGE/deploy.sh \
+$STORAGE/create-resources.sh \
     -g $PREFIX-storage-throughput \
     -l $LOCATION \
-    -p '{ "sku": "Premium_LRS", "kind": "StorageV2" }'
+    -p '{ "sku": "Standard_LRS", "kind": "StorageV2" }'
