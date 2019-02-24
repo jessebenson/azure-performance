@@ -10,6 +10,7 @@ COSMOSDB=$(realpath $SRC/cosmosdb)
 EVENTHUB=$(realpath $SRC/eventhub)
 REDIS=$(realpath $SRC/redis)
 SERVICEBUS=$(realpath $SRC/servicebus)
+SQL=$(realpath $SRC/sql)
 
 #
 # Create shared resources
@@ -77,3 +78,18 @@ $SERVICEBUS/deploy.sh \
     -g $PREFIX-servicebus-throughput \
     -l $LOCATION \
     -p '{ "sku": "Premium" }'
+
+#
+# SQL workloads
+#
+echo "Creating SQL latency workload ..."
+$SQL/deploy.sh \
+    -g $PREFIX-sql-latency \
+    -l $LOCATION \
+    -p '{ "sku": "S2" }'
+
+echo "Creating SQL throughput workload ..."
+$SQL/deploy.sh \
+    -g $PREFIX-sql-throughput \
+    -l $LOCATION \
+    -p '{ "sku": "P2" }'
