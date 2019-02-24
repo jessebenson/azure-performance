@@ -11,6 +11,7 @@ EVENTHUB=$(realpath $SRC/eventhub)
 REDIS=$(realpath $SRC/redis)
 SERVICEBUS=$(realpath $SRC/servicebus)
 SQL=$(realpath $SRC/sql)
+STORAGE=$(realpath $SRC/storage)
 
 usage() {
     echo "Usage: $0 [-a azure-container-registry] [-p name-prefix] [-l location]"
@@ -122,3 +123,18 @@ $SQL/deploy.sh \
     -g $PREFIX-sql-throughput \
     -l $LOCATION \
     -p '{ "sku": "P2" }'
+
+#
+# Storage workloads
+#
+echo "Creating Storage latency workload ..."
+$STORAGE/deploy.sh \
+    -g $PREFIX-storage-latency \
+    -l $LOCATION \
+    -p '{ "sku": "Standard_LRS", "kind": "StorageV2" }'
+
+echo "Creating Storage throughput workload ..."
+$STORAGE/deploy.sh \
+    -g $PREFIX-storage-throughput \
+    -l $LOCATION \
+    -p '{ "sku": "Premium_LRS", "kind": "StorageV2" }'

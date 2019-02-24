@@ -13,6 +13,7 @@ EVENTHUB=$(realpath $SRC/eventhub)
 REDIS=$(realpath $SRC/redis)
 SERVICEBUS=$(realpath $SRC/servicebus)
 SQL=$(realpath $SRC/sql)
+STORAGE=$(realpath $SRC/storage)
 
 usage() {
     echo "Usage: $0 [-a azure-container-registry] [-p name-prefix] [-s seconds] [-c cpu] [-m memory]"
@@ -165,6 +166,29 @@ sql_throughput=`$SQL/run.sh \
     -m $MEMORY`
 
 #
+# Storage workloads
+#
+echo "Starting Storage latency workload ..."
+storage_latency=`$STORAGE/run.sh \
+    -a $ACR \
+    -g $PREFIX-storage-latency \
+    -w latency \
+    -t 10 \
+    -s $DURATION \
+    -c $CPU \
+    -m $MEMORY`
+
+echo "Starting Storage throughput workload ..."
+storage_throughput=`$STORAGE/run.sh \
+    -a $ACR \
+    -g $PREFIX-storage-throughput \
+    -w throughput \
+    -t 32 \
+    -s $DURATION \
+    -c $CPU \
+    -m $MEMORY`
+
+#
 # Wait for all workloads to complete
 #
 echo "Waiting for workloads to complete ..."
@@ -188,3 +212,6 @@ echo `az container logs --id $servicebus_throughput | tr -s "\n" | tail -n 1`
 
 echo `az container logs --id $sql_latency | tr -s "\n" | tail -n 1`
 echo `az container logs --id $sql_throughput | tr -s "\n" | tail -n 1`
+
+echo `az container logs --id $storage_latency | tr -s "\n" | tail -n 1`
+echo `az container logs --id $storage_throughput | tr -s "\n" | tail -n 1`
