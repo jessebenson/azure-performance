@@ -23,14 +23,14 @@ Latency performance analysis finds the optimal (lowest) latency by using a low t
 
 Throughput performance analysis finds the optimal throughput numbers by using a high throughput write-only workload with no write contention (~1 KB writes).  The Azure services are sized to provide an approximately equivalent operating cost.  Cost shown is based on public Azure pricing for South Central US as calculated by https://azure.microsoft.com/en-us/pricing/calculator.
 
-| Azure Service   | Throughput (writes/sec) |   Low  |  High  | Errors | Cost / month | Notes |
-| --------------- | :---------------------: | :----: | :----: | :----: | :----------: | ----- |
-| CosmosDB        |          1,323          |  1,272 |  1,367 |    2   |     $876     | Session consistency, default indexing, 1 region, 15000 RUs, TTL = 1 day |
-| Event Hub       |          9,452          |    998 | 25,028 |    0   |    ~$900*    | Standard, 32 partitions, 8 throughput units, 1 day message retention |
-| Redis           |         72,795          | 68,496 | 77,366 |    0   |     $810     | P2 Premium (async replication, no data persistence, dedicated service, redis cluster, moderate network bandwidth) |
-| Service Bus     |         14,713          | 12,747 | 15,923 |    0   |     $677     | Premium, 1 messaging unit, 1 GB queue, partitioning enabled, TTL = 1 day |
-| SQL Database    |          9,714          |  8,098 | 10,506 |    0   |     $913     | P2 Premium (250 DTUs), 1 region, insert-only writes |
-| Storage (Blob)  |          3,456          |  3,138 |  3,623 |    0   | ~$38,000*    | General Purpose v2, Standard, Locally-redundant storage (LRS), Hot |
+| Azure Service   | Throughput (writes/sec) | Low (writes/sec) | High (writes/sec) | Errors | Cost / month | Notes |
+| --------------- | :---------------------: | :--------------: | :---------------: | :----: | :----------: | ----- |
+| CosmosDB        |          1,323          |       1,272      |        1,367      |    2   |      $876    | Session consistency, default indexing, 1 region, 15000 RUs, TTL = 1 day |
+| Event Hub       |          9,452          |         998      |       25,028      |    0   |     ~$900*   | Standard, 32 partitions, 8 throughput units, 1 day message retention |
+| Redis           |         72,795          |      68,496      |       77,366      |    0   |      $810    | P2 Premium (async replication, no data persistence, dedicated service, redis cluster, moderate network bandwidth) |
+| Service Bus     |         14,713          |      12,747      |       15,923      |    0   |      $677    | Premium, 1 messaging unit, 1 GB queue, partitioning enabled, TTL = 1 day |
+| SQL Database    |          9,714          |       8,098      |       10,506      |    0   |      $913    | P2 Premium (250 DTUs), 1 region, insert-only writes |
+| Storage (Blob)  |          3,456          |       3,138      |        3,623      |    0   |  ~$38,000*   | General Purpose v2, Standard, Locally-redundant storage (LRS), Hot |
 
 *Note: Event Hub pricing is $175/mo for 8 throughput units plus $725/mo for 850M messages/day (approximate throughput at this load).*
 
