@@ -57,9 +57,9 @@ namespace Azure.Performance.Common
 				latency = new
 				{
 					average = _latency.Average,
+					stddev = _latency.StdDev,
 					min = _latency.Min,
 					max = _latency.Max,
-					median = _latency.Median,
 					p25 = _latency.P25,
 					p50 = _latency.P50,
 					p75 = _latency.P75,

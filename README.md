@@ -12,12 +12,12 @@ Latency performance analysis finds the optimal (lowest) latency by using a low t
 
 | Azure Service   |   Min   |   Max   |   P50   |   P95   |   P99   |  P99.9  | Errors | Notes |
 | --------------- | :-----: | :-----: | :-----: | :-----: | :-----: | :-----: | :----: | ----- |
-| CosmosDB        |     3.9 |   687.1 |     5.7 |     9.3 |    56.1 |   555.6 |    2   | Session consistency, default indexing, 1 region, 400 RUs, TTL = 1 day |
-| Event Hub       |    13.4 |  1709.3 |    15.9 |    79.3 |   178.4 |  1387.6 |    0   | Standard, 2 partitions, 10 throughput units, 1 day message retention |
-| Redis           |     0.9 |   175.1 |     1.5 |    2.3  |    58.1 |    99.4 |    0   | C2 Standard (async replication, no data persistence, dedicated service, moderate network bandwidth) |
-| Service Bus     |     8.0 |   929.6 |    15.3 |    94.0 |   667.3 |   926.6 |    0   | Premium, 1 messaging unit, 1 GB queue, partitioning enabled, TTL = 1 day |
-| SQL Database    |     3.8 |   127.7 |     4.6 |    21.0 |   105.1 |   127.7 |    0   | S2 Standard (50 DTUs), 1 region, insert-only writes |
-| Storage (Blob)  |         |         |         |         |         |         |        | General Purpose v2, Standard, Locally-redundant storage (LRS), Hot |
+| CosmosDB        |     3.9 |   675.5 |     5.5 |     9.5 |    59.3 |   546.9 |    3   | Session consistency, default indexing, 1 region, 400 RUs, TTL = 1 day |
+| Event Hub       |    13.7 |   927.7 |    16.7 |    94.6 |   198.0 |   739.8 |    0   | Standard, 2 partitions, 10 throughput units, 1 day message retention |
+| Redis           |     0.9 |   207.9 |     1.5 |     3.5 |    71.8 |    99.6 |    0   | C2 Standard (async replication, no data persistence, dedicated service, moderate network bandwidth) |
+| Service Bus     |     7.1 |  1439.2 |    14.1 |   109.9 |   359.9 |  1157.2 |    0   | Premium, 1 messaging unit, 1 GB queue, partitioning enabled, TTL = 1 day |
+| SQL Database    |     3.4 |   142.7 |     4.6 |     9.5 |    40.5 |    95.5 |    0   | S2 Standard (50 DTUs), 1 region, insert-only writes |
+| Storage (Blob)  |     6.0 |   260.7 |     7.7 |    30.0 |    68.7 |   133.7 |    0   | General Purpose v2, Standard, Locally-redundant storage (LRS), Hot |
 
 ## Throughput Performance Analysis
 
@@ -25,14 +25,14 @@ Throughput performance analysis finds the optimal throughput numbers by using a 
 
 | Azure Service   | Throughput (writes/sec) |   Low  |  High  | Errors | Cost / month | Notes |
 | --------------- | :---------------------: | :----: | :----: | :----: | :----------: | ----- |
-| CosmosDB        |          1,437          |  1,374 |  1,481 |    3   |     $876     | Session consistency, default indexing, 1 region, 15000 RUs, TTL = 1 day |
-| Event Hub       |         10,024          |    486 | 31,313 |    0   |    ~$900*    | Standard, 32 partitions, 8 throughput units, 1 day message retention |
-| Redis           |         79,068          | 65,056 | 84,144 |    0   |     $810     | P2 Premium (async replication, no data persistence, dedicated service, redis cluster, moderate network bandwidth) |
-| Service Bus     |         15,077          |  9,840 | 20,416 |    0   |     $677     | Premium, 1 messaging unit, 1 GB queue, partitioning enabled, TTL = 1 day |
-| SQL Database    |          9,686          |  8,112 | 10,944 |    0   |     $913     | P2 Premium (250 DTUs), 1 region, insert-only writes |
-| Storage (Blob)  |                         |        |        |        | ~$38,000*    | General Purpose v2, Standard, Locally-redundant storage (LRS), Hot |
+| CosmosDB        |          1,323          |  1,272 |  1,367 |    2   |     $876     | Session consistency, default indexing, 1 region, 15000 RUs, TTL = 1 day |
+| Event Hub       |          9,452          |    998 | 25,028 |    0   |    ~$900*    | Standard, 32 partitions, 8 throughput units, 1 day message retention |
+| Redis           |         72,795          | 68,496 | 77,366 |    0   |     $810     | P2 Premium (async replication, no data persistence, dedicated service, redis cluster, moderate network bandwidth) |
+| Service Bus     |         14,713          | 12,747 | 15,923 |    0   |     $677     | Premium, 1 messaging unit, 1 GB queue, partitioning enabled, TTL = 1 day |
+| SQL Database    |          9,714          |  8,098 | 10,506 |    0   |     $913     | P2 Premium (250 DTUs), 1 region, insert-only writes |
+| Storage (Blob)  |          3,456          |  3,138 |  3,623 |    0   | ~$38,000*    | General Purpose v2, Standard, Locally-redundant storage (LRS), Hot |
 
-*Note: Event Hub pricing is $175/mo for 10 throughput units plus $725/mo for 850M messages/day (approximate throughput at this load).*
+*Note: Event Hub pricing is $175/mo for 8 throughput units plus $725/mo for 850M messages/day (approximate throughput at this load).*
 
 *Note: Storage pricing is ~$0.02/GB/mo plus ~$1300/day for 250M writes/day (approximate throughput at this load).  Storage is not meant for this type of workload.*
 
@@ -47,7 +47,7 @@ The scripts are separated into three phases:  create Azure resources, build and 
 The `scripts/create-resources.sh` will create all necessary Azure resources for all workloads measured above.  Shared resources (e.g. Azure Container Registry) will be placed in 'azure-performance' resource group.  A resource group is created for each Azure service and workload.  E.g. 'azure-performance-cosmosdb-latency' and 'azure-performance-cosmosdb-throughput' for CosmosDB, 'azure-performance-redis-latency' and 'azure-performance-redis-throughput' for Redis, etc.  The default location is West US 2.  Usage:
 
 ```bash
-# Creates resource groups in West US 2
+# Creates resources in West US 2
 ~$ ./create-resources.sh
 
 # The resource location and resource group name prefix can be specified
@@ -65,8 +65,8 @@ Starting CosmosDB latency workload ...
 Starting CosmosDB throughput workload ...
    ...
 Waiting for workloads to complete ...
-{"workload":"CosmosDB","type":"latency","elapsed":58895,"operations":581,"errors":2,"latency":{"average":16.334128055077453,"min":4.4103,"max":665.24750000000006,"median":5.5774,"p25":5.2095,"p50":5.5774,"p75":6.0096333333333334,"p95":42.997640000000018,"p99":542.34722933333342,"p999":665.24750000000006,"p9999":665.24750000000006}}
-{"workload":"CosmosDB","type":"throughput","elapsed":59174,"operations":72459,"errors":3,"throughput":{"overall":1224.5073850001691,"low":610.6,"high":1334.6,"latency":25.533901930747042}}
+{"workload":"CosmosDB","type":"latency","elapsed":598994,"operations":5915,"errors":3,"latency":{"average":7.5846483685545332,"min":3.901,"max":675.52690000000007,"median":5.5326,"p25":5.1924333333333337,"p50":5.5326,"p75":5.9329,"p95":9.5226499999999739,"p99":59.322623333331926,"p999":546.89786566666635,"p9999":675.52690000000007}}
+{"workload":"CosmosDB","type":"throughput","elapsed":599003,"operations":792653,"errors":2,"throughput":{"overall":1323.2871955566166,"low":1271.81,"high":1367.4,"latency":23.673405639037512}}
    ...
 
 # The resource group name prefix, duration, container cpu and memory (GB) can be specified
